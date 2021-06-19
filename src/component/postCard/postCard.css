@@ -1,0 +1,178 @@
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.post-card-main-div{
+    width:40%;
+    border-radius: 5px;
+    background-color: white;
+    margin:10px auto;
+    box-shadow: 4px 4px 4px rgba(128, 128, 128, 0.548);
+    padding: 20px 0;
+    max-width: 570px;
+}
+
+.post-card-header{
+    text-align: left;
+    position: relative;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.post-author-image{
+    display: inline-block;
+}
+
+.post-card-author{
+    position: absolute;
+    display: inline-block;
+    top: 0;
+    margin-left: 15px;
+}
+.post-card-author h4{
+    margin: 0;
+}
+
+.post-card-date{
+    position: absolute;
+    display: inline-block;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+}
+
+#post-author-pic{
+    height: 4rem;
+    width: 4rem;
+    border-radius: 4rem;
+    box-shadow: 3px 3px 5px rgba(128, 128, 128, 0.52);
+}
+
+.post-card-underline{
+    height: 1.5px;
+    width: 80%;
+    background-color:#CED0D4;
+    margin: 10px auto 0 auto;
+    /* box-shadow: 2px 2px 3px rgba(128, 128, 128, 0.568); */
+    
+}
+
+.post-card-title-div{
+    margin-top:10px;
+    border-radius: 5px;
+    padding:5px 2px;
+    -webkit-box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
+    box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
+    margin-right: 20px;
+    margin-left: 20px;
+    background-color: #F0F2F5;
+}
+
+.post-card-title{
+    font-family: 'Dancing Script', cursive;
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.post-card-content-div{
+    margin-top: 10px;
+    text-align: left;
+    padding: 10px 20px;
+    border-radius: 5px;
+    -webkit-box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
+    box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
+    margin-right: 20px;
+    margin-left: 20px;
+    background-color: #F0F2F5;
+}
+
+.post-card-content{
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.post-card-readmore{
+    margin-top: 0;
+    color: rgb(69, 131, 182);
+    cursor: pointer;
+}
+
+.post-card-img-div{
+    margin-top: 10px;
+    width: 100%;
+}
+
+.post-card-img{
+    width: 100%;
+    border-top: 1.5px solid #CED0D4;
+    border-bottom: 1.5px solid #CED0D4;
+    padding-top: 0.5px;
+    padding-bottom: 0.5px;
+    /* box-shadow: 4px 4px 3px rgba(128, 128, 128, 0.568); */
+}
+
+.post-card-like-count-div{
+    text-align: left;
+    margin-top:10px;
+    margin-bottom: 10px;
+    margin-left: 5px;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.post-card-like-div{
+    text-align: left;
+    position: relative;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.post-card-random-comment-div{
+    color: grey;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.post-card-random-comment{
+    text-align: left;
+}
+
+.post-card-random-comment img{
+    height: 2rem;
+    width: 2rem;
+    border-radius: 2rem;
+    display: inline-block;
+}
+
+.post-card-random-comment h4{
+    display: inline-block;
+    margin: 0;
+}
+
+
+.post-card-random-comment p{
+    color: grey;
+    border-radius: 0 50px 50px  50px;
+    margin: 0 auto;
+    padding: 20px 20px;
+    -webkit-box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
+    box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
+    max-width: 80%;
+    background-color: #F0F2F5;
+}
+
+@media(max-width:56.25rem)
+{
+    .post-card-main-div{
+        width:70%
+    }
+}
+
+@media(max-width:30rem)
+{
+    .post-card-main-div{
+        width:100%
+    }
+}

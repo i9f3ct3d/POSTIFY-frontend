@@ -1,0 +1,119 @@
+.login-div-container{
+    width: 100%;
+}
+
+.logo-div
+{
+    position: relative;
+}
+
+.login-div form .input-wrapper-outside p
+{
+    margin: 0;
+    padding: 0;
+    color: rgb(223, 45, 0);
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+.login-div form  p
+{
+    margin: 0;
+    padding: 0;
+    color: rgb(223, 45, 0);
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.login-fulldiv
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.login-fulldiv h1
+{
+    color: #8f8f8f;
+    margin: 0;
+    padding: 0;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+    font-weight: 400;
+}
+.input-wrapper-outside
+{
+    margin: 3px;
+}
+.input-wrapper
+{
+    width: 15rem;
+    margin: 0;
+    padding: 0;
+    border: 1.5px solid #82df84;
+    border-radius: 10px;
+    text-align: left;
+    margin: 0 auto;
+}
+.input-wrapper input
+{
+    
+    background: transparent;
+    border: 0;
+    margin-left: 10px;
+    height: 30px;
+    width: 12rem;
+}
+.input-wrapper input::placeholder
+{
+    color: #000;
+    font-weight: 400;
+    letter-spacing: 1px;
+}
+.input-wrapper input:focus,.input-wrapper input:hover
+{
+    outline: 0;
+}
+.input-wrapper i
+{
+    margin: 0 0 0 auto;
+    cursor: pointer;
+}
+.login-div form button
+{
+    background: transparent;
+    /* width: 8rem;
+    height: 2rem; */
+    cursor:pointer;
+    border: 2px solid #82df84;
+    color: #82df84;
+    border-radius: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+    transition: background-color 400ms ease-in-out;
+    font-size: 1.4rem;
+    padding: 0.5rem 1.5rem;
+}
+.login-div form button:hover,.login-div form button:focus
+{
+    background-color: #82df84;
+    color: white;
+    outline: none;
+}
+
+.login-div form span
+{
+    color: #2c2828f8;
+}
+.login-div form span a
+{
+    text-decoration: none;
+    color: rgb(24, 126, 209);
+    font-weight: 600;
+}
+.login-div form span a:focus,.login-div form span a:hover
+{
+    color: rgb(9, 46, 77);
+}

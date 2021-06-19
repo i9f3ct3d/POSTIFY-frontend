@@ -1,0 +1,53 @@
+.comment-component-main-div
+{
+    background-color: #fff;
+    width: 95%;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 1px solid #000;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+.comment-component-comment-div
+{
+    min-height: 2rem;
+    max-height: fit-content;
+    position: relative;
+}
+.comment-component-comment-div p
+{
+    margin: 0;
+    padding: 0;
+    font-size: 1rem;
+    font-weight: 400;
+    word-spacing: 2px;
+    padding: 1.5rem 10px;
+}
+.comment-component-author-div
+{
+    position: absolute;
+    right: 5%;
+    bottom: 0;
+    border: 1px solid #000;
+    border-radius: 10px;
+    background-color: #8f8f88;
+    transform: translateY(50%);
+    cursor: default;
+}
+.comment-component-author-div p
+{
+    margin: 0;
+    padding: 0;
+    padding: 0 10px;
+    color: #fff;
+    font-size: 1.2rem;
+    
+}
+
+@media(max-width:64rem)
+{
+    .comment-component-author-div p{
+        font-size: 0.7rem;
+    }
+}

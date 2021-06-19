@@ -1,0 +1,259 @@
+
+.welcome-page-div{
+    height: 100%;
+}
+
+.welcome-page-content-div{
+    height: 100%;
+    /* padding-top: 5rem; */
+}
+
+.welcome-page-header{
+    padding-top: 4rem;
+    height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.664), rgba(0, 0, 0, 0.692)), url("../../images/welcomepageimg.jpg") no-repeat;
+    background-position:center;
+    background-size: cover;
+    position: relative;
+    box-sizing: border-box;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Dancing+Script:wght@700&family=Mate+SC&family=Pattaya&display=swap');
+.welcome-page-header h1,.welcome-page-header h2{
+    color: white;
+    font-family: 'Mate SC', serif;
+    font-size: 3rem;
+    margin: 0;
+}
+
+.header-top-line-div h1, .header-top-line-div h2{
+    color: white;
+    font-family: 'Pattaya', sans-serif !important;
+    font-size: 3rem;
+    margin: 0;
+}
+
+
+
+.welcome-page-button-div{
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.header-tag-line{
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+}
+
+.header-tag-line h1{
+    font-family: 'Dancing Script', cursive;
+}
+
+.welcome-page-buttons{
+    padding: 1rem 2rem;
+    border : 1px solid white;
+    color: white;
+    background: transparent;
+    cursor: pointer;
+
+}
+
+.welcome-page-signup-button:hover,
+.welcome-page-signup-button:active{
+    background-color: tomato;
+    transition: background-color 2s;
+}
+
+.welcome-page-login-button:hover,
+.welcome-page-login-button:active{
+    background-color: rgba(154, 231, 38, 0.753);
+    transition: background-color 2s;
+}
+
+
+
+.feature-section{
+    /* padding: 0 2rem; */
+    width: 100%;
+    box-sizing: border-box;
+    /* margin: 0 auto; */
+    margin: 0;
+    background: linear-gradient(white , rgba(220, 20, 60, 0.534));
+}
+
+.feature-section-div{
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 90rem;
+    margin : 0 auto;
+}
+
+.feature-section-top-line{
+    font-family: 'Pattaya', sans-serif ;
+    color:crimson;
+    font-size: 3rem;
+    margin-top: 5rem;
+}
+
+.welcome-page-top-underline{
+    height: 2px;
+    width: 50%;
+    background-color: crimson;
+    margin: 0 auto;
+    margin-bottom: 2rem;
+}
+
+.welcome-page-underline{
+    height: 2px;
+    width: 50%;
+    background-color: grey;
+    margin: 0 auto;
+    margin-bottom: 2rem;
+    
+}
+
+
+
+.feature-img-container{
+    width: 80%;
+    box-sizing: border-box;
+    margin: 0 auto;
+    max-width:830px;
+}
+
+.feature img{
+    width: 100%;
+    border: 2px solid crimson;
+    border-radius: 10px;
+    box-sizing: border-box;
+    max-width:830px;
+    
+}
+
+.feature-info h4{
+    font-family: 'Pattaya', sans-serif ;
+    color:crimson;
+    font-size: 2rem;
+}
+
+.feature-info h5{
+    font-family: 'Roboto', sans-serif ;
+    color:grey;
+    font-size: 1.5rem;
+    display: none !important;
+}
+
+.feature-writeposts .feature-img-container{
+    background: url("../../images/newpost.png") no-repeat;
+    background-position: center;
+    background-size: cover;
+    border-radius: 10px;
+    border: 3px solid crimson;
+    box-shadow: 4px 4px 4px rgba(220, 20, 60, 0.575);
+}
+
+.feature-commentposts .feature-img-container{
+    background: url("../../images/comments2.png") no-repeat;
+    background-position: center;
+    background-size: cover;
+    border-radius: 10px;
+    border: 3px solid crimson;
+    box-shadow: 4px 4px 4px rgba(220, 20, 60, 0.575);
+    
+}
+.feature-viewposts .feature-img-container{
+    background:  url("../../images/feature1.png") no-repeat;
+    background-position: center;
+    background-size: cover;
+    border-radius: 10px;
+    border: 3px solid crimson;
+    box-shadow: 4px 4px 4px rgba(220, 20, 60, 0.575);
+}
+.feature-deleteposts .feature-img-container{
+    background: url("../../images/deletepost.png") no-repeat;
+    background-position: center;
+    background-size: cover;
+    border-radius: 10px;
+    border: 3px solid crimson;
+    box-shadow: 4px 4px 4px rgba(220, 20, 60, 0.575);
+    
+}
+
+.welcome-page-contact-section h1{
+    color: rgb(228, 228, 9);
+    font-family: 'Pattaya', sans-serif ;
+    font-size: 2rem;
+    margin: 0;
+}
+
+.welcome-page-contact-section button{
+    border: 2px solid rgb(228, 228, 9);
+    padding: 0.5rem 1rem;
+    color: rgb(228, 228, 9);
+    font-size: 1.5rem;
+    background: none;
+    cursor: pointer;
+}
+
+.welcome-page-contact-section button:hover{
+    color: white;
+    border: 2px solid white;
+    background: rgb(228, 228, 9);
+}
+
+.feature-commentposts{
+    margin-bottom: 10rem;
+}
+
+@media(min-width:64rem){
+    .welcome-page-underline{
+        display: none;
+    }
+
+    .header-top-line-div h1{
+        display: inline-block;
+        font-size: 5rem;
+        margin-right: 10px;
+    }
+
+    .welcome-page-buttons{
+        padding: 1rem 4rem;
+        margin-right: 5rem;
+    }
+    
+    .feature-viewposts,.feature-deleteposts{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content:space-evenly;
+        margin-bottom: 10rem;
+    }
+    
+    .feature-writeposts,.feature-commentposts{
+        display: flex;
+        flex-direction: row-reverse;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        margin-bottom: 10rem;
+    }
+
+    .feature-img-container{
+        width: 700px;
+        margin: 0;
+    }
+
+
+    .feature-info{
+        width: 40%;
+    }
+    
+    .welcome-page-contact-section h1{
+        font-size: 3rem;
+    }
+    .feature-info h5{
+        display: block !important;
+    }
+}

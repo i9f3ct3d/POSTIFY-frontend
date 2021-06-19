@@ -1,0 +1,129 @@
+.popup-fulldiv
+{
+    position: relative;
+}
+.popup-background
+{
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    background-color: transparent;
+    z-index: 20;
+    top: 0;
+}
+.popup-card
+{
+    position: fixed;
+    width: 30rem;
+    height: 15rem;
+    background-color:rgba(176, 196, 222, 0.521);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 21;
+    /* top: -50%; */
+    border: 1px solid #000;
+    border-radius: 20px;
+    transition: all 400ms ease-in-out;
+    text-align: center;
+    top:0;
+    max-width: 410px;
+}
+.popup-card-title
+{
+    height: 50%;
+    width: 90%;
+    border: 1px solid #000;
+    border-radius: 20px;
+    background-color: #fff;
+    overflow-y: scroll;
+    padding: 5px;
+    margin:0 auto;
+}
+::-webkit-scrollbar {
+    width: 0; 
+    background: transparent; 
+}
+.popup-card-title h1
+{
+    font-size: 1rem;
+    margin: 0;
+    padding: 0;
+    font-weight: 400;
+    display: inline-flex;
+}
+.popup-card-title h2
+{
+    font-size: 1rem;
+    margin: 0;
+    padding: 0;
+}
+.popup-card-button p
+{
+    /* position: absolute; */
+    font-size: .8rem;
+    margin: 0;
+    padding: 0;
+    font-weight: 600;
+    color: red;
+    letter-spacing: 1px;
+    left: 20%;
+    margin-right: 1rem;
+    text-align: left;
+    padding-left: 2rem;
+}
+.popup-card-button
+{
+    height: 35%;
+    width: 90%;
+    border: 1px solid #000;
+    border-radius: 20px;
+    position: relative;
+    /* left: 50%; */
+    /* transform: translate(-50%,10%); */
+    background-color: rgb(255, 255, 255);
+    text-align: right;
+    margin:0 auto;
+}
+
+.popup-card-buttons{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.popup-card-button button
+{
+    width: 5rem;
+    height: 2rem;
+    border: 1px solid;
+    border-radius: 10px;
+    border-color: transparent;
+    /* position: absolute; */
+    bottom: 0;
+    /* transform: translateY(-40%); */
+    margin-right: 10px;
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 200ms ease-in-out;
+}
+.popup-card-button button:hover,.popup-card-button button:focus{
+    outline: none;
+    background-color: #fff;
+    color: #000;
+    border-color: #000;
+}
+.popup-button-confirm
+{
+    background-color: rgb(0, 172, 0);
+}
+.popup-button-cancle
+{
+    background-color: red;
+}
+@media only screen and (max-width: 1000px) {
+    .popup-card
+    {
+        width: 80%;
+    }
+}

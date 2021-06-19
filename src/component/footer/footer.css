@@ -1,0 +1,48 @@
+
+.footer-full-container{
+    background-color: grey;
+    padding: 0.1rem 0;
+    margin-top: 6rem;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400&display=swap');
+.footer-full-container h1{
+    font-family: 'Pattaya', sans-serif ;
+    color: white;
+}
+
+
+.footer-icons{
+    height: 5rem;
+    width: 10rem;
+    margin: 0 0.5rem;
+}
+
+.icon-first-div{
+    display: inline-block;
+}
+
+.icon-second-div{
+    display: inline-block;
+}
+
+#express-icon,#react-icon{
+    height: 5rem;
+    width: 5rem;
+}
+
+.footer-links{
+    margin-top: 2rem;
+}
+
+.footer-links a{
+    color: yellow;
+    margin: 0 1rem;
+}
+
+@media(max-width:34rem){
+    #express-icon,#react-icon,.footer-icons{
+        height: 3rem;
+        width: 3rem;
+    }
+}
