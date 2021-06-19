@@ -119,7 +119,6 @@ const WelcomePage=()=>{
         <h1>We would ❤ to hear from you</h1>
         <button onClick={welcomeContactButtonCLickHandler} >Contact Us</button>
     </section>
-    <h1>Bal</h1>
     <footer className="welcome-page-footer">
          <Footer/>
     </footer>
