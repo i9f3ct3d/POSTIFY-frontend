@@ -13,6 +13,9 @@ import WelcomePage from "./Pages/Welcomepage/WelcomePage"
 import FriendSuggestion from './Pages/FriendSuggestionPage/FriendSuggestion';
 import FriendRequest from './Pages/FrinedRequest/FriendRequest';
 import Notification from './Pages/Notification/Notification';
+import ProfilePage from './Pages/profilePage/profilePage';
+import MyProfile from './Pages/MyProfile/MyProfile';
+import MessagePage from './Pages/messagePage/messagePage';
 
 
 function App() {
@@ -52,6 +55,15 @@ function App() {
         </Route>
         <Route path="/notification" exact>
           <Notification/>
+        </Route>
+        <Route path="/profilepage" exact>
+          <ProfilePage/>
+        </Route>
+        <Route path="/myprofile" exact>
+          <MyProfile/>
+        </Route>
+        <Route path="/messagepage" exact>
+          <MessagePage/>
         </Route>
         <Route path="/error" exact>
           <ErrorPage/>

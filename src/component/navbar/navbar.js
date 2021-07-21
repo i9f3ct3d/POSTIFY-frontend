@@ -1,15 +1,23 @@
 import react, { useEffect, useState } from "react";
 import axios from "axios";
 import "./navbar.css";
+import { BsHouse } from "react-icons/bs";
+import { FiUsers } from "react-icons/fi";
+import { BiUserPlus } from "react-icons/bi";
+import { BsPen } from "react-icons/bs";
+import {TiArrowBackOutline} from "react-icons/ti";
+
+import NavbarLogo from '../../images/Post-ify.gif';
+
 
 import Cookies from "js-cookie"
 
 import Logo from "../logo/logo";
+import NavbarDropDownDesk from "./components/navbarDropDownDesk";
 
 const Navbar=props=>
 {
     const cookie=Cookies.get('x-auth-token');
-    const [isNavbarButtonClicked,changeisNavbarButtonClicked]=useState(false);
     const [isLoggedin,changeIsLoggedin]=useState(true);
 
     const [userName,changeUserName]=useState("");
@@ -20,11 +28,16 @@ const Navbar=props=>
     const [matchedUsers , setMatchedUsers] = useState();
     const [mobileNavbarOpen , setMobileNavbarOpen] = useState(false);
 
+    const [searchInputValue , setSearchInputValue] = useState("");
+
+
+
+
 
     const removeBottomBorder=()=>{
         const  pathUrl = window.location.pathname;
         const navbarIcon=document.getElementsByClassName(getIconClass[pathUrl]);
-        navbarIcon[0].classList.remove("color-bottom-border");
+        navbarIcon[0] && navbarIcon[0].classList.remove("color-bottom-border");
     }
 
     const getIconClass={
@@ -33,12 +46,12 @@ const Navbar=props=>
         "/friendrequest":"navbar-friend-req-icon",
         "/newpost":"navbar-newpost-icon",
     }
+    const  pathUrl = window.location.pathname;
 
     useEffect(()=>{
         const fetch=async()=>{
 
 
-            const  pathUrl = window.location.pathname;
             const navbarIcon=document.getElementsByClassName(getIconClass[pathUrl]);
             navbarIcon[0] !== undefined && navbarIcon[0].classList.add("color-bottom-border");
 
@@ -57,7 +70,7 @@ const Navbar=props=>
             }
         
         }
-        fetch();
+        
         
         if(cookie)
         {
@@ -67,6 +80,8 @@ const Navbar=props=>
         {
             changeIsLoggedin(false);
         }
+
+        fetch();
     },[])
 
     const handleButtonClick=e=>
@@ -109,62 +124,13 @@ const Navbar=props=>
             window.location="/login"
         }
     }
-    const handleNavbarSliderButtonClick=(event)=>
-    {
-        const pointer=document.getElementsByClassName("fa-chevron-right")[0];
-
-        const homeButton=document.getElementsByName("home")[0];
-        const makePostButton=document.getElementsByName("makepost")[0];
-        const myPostButton=document.getElementsByName("mypost")[0];
-        const signinButton=document.getElementsByName("signup")[0];
-        const loginButton=document.getElementsByName("login")[0];
-        const logoutButton=document.getElementsByName("logout")[0];
-        changeisNavbarButtonClicked(!isNavbarButtonClicked);
-        if(pointer)
-        {
-            if(!isNavbarButtonClicked)
-            {
-                pointer.style.left="75%";
-                setTimeout(() => {
-                    pointer.style.transform="rotatez(-180deg)";
-                    
-                    homeButton.style.left="50%";
-                    setTimeout(() => {
-                        makePostButton.style.left="50%";
-                        setTimeout(() => {
-                            myPostButton.style.left="50%";
-                            setTimeout(() => {
-                                signinButton.style.left="20%";
-                                loginButton.style.left="80%";
-                                setTimeout(() => {
-                                    logoutButton.style.top="85%";
-                                }, 200);
-                            }, 200);
-                        }, 200);
-                    }, 200);
-                }, 200);
-            }
-            else
-            {
-                pointer.style.left="0%";
-                homeButton.style.left="-50%";
-                makePostButton.style.left="-50%";
-                myPostButton.style.left="-50%";
-                signinButton.style.left="-50%";
-                loginButton.style.left="-50%";
-                logoutButton.style.top="185%";
-                setTimeout(() => {
-                    pointer.style.transform="rotatez(0deg)";
-
-
-                }, 200);
-            }
-        }
-    }
+    
 
     const searchBarOnChangeHandler=async(event)=>{
         event.preventDefault();
         const searchedName = event.target.value;
+
+        setSearchInputValue(searchedName);
 
         try {
             
@@ -191,54 +157,79 @@ const Navbar=props=>
 
     return(
         <div>
-            <div className="navbar-left-slider"
-            
-                style={{left:isNavbarButtonClicked?"0":"-50%"}}
-                >
-                <div className="navbar-left-slider-content">
-                <div className="navabar-left-logo-div">
-                    <Logo scale=".4"/>
-                </div>
-                <button className="navabr-left-slider-button__home" onClick={handleButtonClick} name="home">HOME</button>
-                <button className="navabr-left-slider-button__home" onClick={handleButtonClick} name="contact">CONTACT US</button>
-                <button className="navabr-left-slider-button__makepost" style={{display:!isLoggedin?"none":"table-cell"}} onClick={handleButtonClick} name="makepost">MAKE POST</button>
-                <button className="navabr-left-slider-button__mypost" style={{display:!isLoggedin?"none":"table-cell"}} onClick={handleButtonClick} name="mypost">MY POSTS</button>
-                <button className="navabr-left-slider-button__signin" style={{display:isLoggedin?"none":"table-cell"}} onClick={handleButtonClick} name="signup">SIGN UP</button>
-                <button className="navabr-left-slider-button__login" style={{display:isLoggedin?"none":"table-cell"}} onClick={handleButtonClick} name="login">LOG IN</button>
-                <button className="navabr-left-slider-button__logout" style={{display:!isLoggedin?"none":"table-cell"}} onClick={handleButtonClick} name="logout">LOG OUT</button>
-                </div>
-            </div>
-            <div className="navbar-right-slider"
+            <NavbarDropDownDesk
+                profileImg = {userProfilePic && userProfilePic}
+                userName = {userName ? userName : null}
+            />
+
+            <div className="navbar-mobile-icons-div">
                 
-            >
-            </div>
-            <div className="navbar-top">
-                <div className="navbar-slider-button" onClick={handleNavbarSliderButtonClick}>
-                    <i className="fas fa-chevron-right"></i>
-                    <p style={{left:!isNavbarButtonClicked?"30%":"10%"}}>MENU</p>
+                <div className="navbar-mobile-icons-inside-div">
+                
+                <div className="navbar-mobile-icon navbar-mobile-feed-icon" style={{color:pathUrl === "/home" && "blue"}} onClick={()=>{window.location="/home";removeBottomBorder();}}>
+
+                    <BsHouse/>
                 </div>
-                {cookie!==undefined && <div className="navbar-search-div">
-                    <input autoComplete="off" required className="navbar-search-input" type="text" name="searchedUserName" onChange={searchBarOnChangeHandler}/>
+                <div className="navbar-mobile-icon navbar-mobile-friend-suggestion-icon" style={{color:pathUrl === "/friendsuggestion" && "blue"}} onClick={()=>{window.location="/friendsuggestion";removeBottomBorder();}}>
+                    {/* <i  className="fas fa-users"></i> */}
+                    <FiUsers/>
+                </div>
+                <div className="navbar-mobile-icon navbar-mobile-friend-req-icon" style={{color:pathUrl === "/friendrequest" && "blue"}} onClick={()=>{window.location="/friendrequest";removeBottomBorder();}}>
+                    {/* <i  className="fas fa-user-plus"></i> */}
+                    <BiUserPlus/>
+                </div>
+                <div className="navbar-mobile-icon navbar-mobile-newpost-icon" style={{color:pathUrl === "/newpost" && "blue"}} onClick={()=>{window.location="/newpost";removeBottomBorder();}}>
+                    {/* <i  className="far fa-edit"></i> */}
+                    <BsPen/>
+                </div>
+                </div>
+
+
+            </div>
+
+
+
+            {cookie!==undefined && <div className="navbar-search-div" style={{zIndex:matchedUsers!== undefined && matchedUsers.length>0 && "12"}}>
+                    <input value={searchInputValue} autoComplete="off" required className="navbar-search-input" type="text" name="searchedUserName" onChange={searchBarOnChangeHandler}/>
                     <span className="placeholder" ><i className="fas fa-search"></i>Search Users</span>
-                    <div className="navbar-searched-users-div" style={{left : matchedUsers!== undefined && matchedUsers.length>0 && "0" , boxShadow : matchedUsers!== undefined && matchedUsers.length>0 && "5px 5px 3px rgba(128, 128, 128, 0.719)"}}>
+                    
+                </div>}
+
+
+
+
+
+            <div className="navbar-searched-users-div" style={{left : matchedUsers!== undefined && searchInputValue && matchedUsers.length>0 && "0" }}>
+                    <div className="search-bar-back-icon" onClick={()=>{setSearchInputValue("")}}><TiArrowBackOutline/></div>
+                    {/* <div className="post-card-underline" style={{height:"1px",marginLeft:"0",marginTop:"2.5px",width:"90%"}}></div> */}
+                    <div className="searched-users-outer-div">
                     {
                         (matchedUsers!== undefined && matchedUsers.length > 0) &&
                         matchedUsers.map((eachUser)=>{
                             return(
-                                <div>
-                                <div className="searched-users" key={eachUser._id}>
+                                <div onClick={(e)=>{
+                                        e.preventDefault();
+                                        window.location="/profilepage?searcheduserid="+eachUser._id;
+                                        }} key={eachUser._id}>
+                                <div className="searched-users">
                                     <img src ={eachUser.profilePic?process.env.REACT_APP_BACKEND_API_URL+eachUser.profilePic:"https://qph.fs.quoracdn.net/main-qimg-2b21b9dd05c757fe30231fac65b504dd"} />
                                     <h5>{eachUser.username}</h5>
                                 </div>
-                                <div className="post-card-underline" style={{height:"1px",marginLeft:"0",marginTop:"2.5px",marginBottom:"2.5px"}}></div>
+                                
                                 </div> 
                             );
                         })
                     }
-
-
                     </div>
-                </div>}
+                    </div>
+
+            <div className="navbar-top">
+                <div className="navbar-logo-div">
+                    <img src={NavbarLogo}/>
+                </div>
+
+                
+
                 {cookie !== undefined && 
                 <div onClick={mobileNavButtonClickHandler} className="mobile-navigation-switch">
                     
@@ -248,25 +239,30 @@ const Navbar=props=>
                     
                 </div>}
                 
-                <div className="navbar-icons-div">
+                <div style={{display : !cookie && "none"}} className="navbar-icons-div">
                     <div className="navbar-icon navbar-feed-icon" onClick={()=>{window.location="/home";removeBottomBorder();}}>
-                        <i  className="fas fa-rss fa-2x"></i>
+                        <BsHouse/>
                     </div>
                     <div className="navbar-icon navbar-friend-suggestion-icon" onClick={()=>{window.location="/friendsuggestion";removeBottomBorder();}}>
-                        <i  className="fas fa-users fa-2x"></i>
+                        
+                        <FiUsers/>
                     </div>
                     <div className="navbar-icon navbar-friend-req-icon" onClick={()=>{window.location="/friendrequest";removeBottomBorder();}}>
-                        <i  className="fas fa-user-plus fa-2x"></i>
+                        
+                        <BiUserPlus/>
                     </div>
                     <div className="navbar-icon navbar-newpost-icon" onClick={()=>{window.location="/newpost";removeBottomBorder();}}>
-                        <i  className="far fa-edit fa-2x"></i>
+                        
+                        <BsPen/>
                     </div>
                 </div>
+
+                
                 
                 <div className="navbar-login-signup-logout-div">
                     <div className="navbar-userdetatil" style={{display:isLoggedin?"inline-flex":"none"}}>
-                        <div className="navbar-userpic" onMouseOver={
-                                async()=>{
+                        <div className="navbar-userpic" onClick={()=>{window.location="/myprofile"}} onMouseOver={
+                                ()=>{
                                     changeIsUserdivVisible(true);
                                 }
                             }
@@ -282,15 +278,16 @@ const Navbar=props=>
                                 <h2>{userEmail}</h2>
                             </div>
                         </div>
-                        <button type="button" id="navbar-top-button__logout" className="navbar-top-button" name="logout" onClick={handleButtonClick}>LogOut</button>
+                        {/* <button type="button" id="navbar-top-button__logout" className="navbar-top-button" name="logout" onClick={handleButtonClick}>LogOut</button> */}
                     </div>
                     <button type="button" id="navbar-top-button__signup" className="navbar-top-button" name="signup" style={{display:isLoggedin?"none":"inline-flex"}} onClick={handleButtonClick}>Sign up</button>
-                    <button type="button" id="navbar-top-button__login" className="navbar-top-button" name="login" style={{display:isLoggedin?"none":"inline-flex"}} onClick={handleButtonClick}><i className="fas fa-sign-in-alt "></i>  Login</button>
+                    <button type="button" id="navbar-top-button__login" className="navbar-top-button" name="login" style={{display:isLoggedin?"none":"inline-flex"}} onClick={handleButtonClick}>Login</button>
+                    
                 </div>
             </div>
-            <div className="navbar-block-touch" style={{display:isNavbarButtonClicked?"block":"none"}} onClick={handleNavbarSliderButtonClick}>
+            {/* <div className="navbar-block-touch" style={{display:isNavbarButtonClicked?"block":"none"}} onClick={handleNavbarSliderButtonClick}>
 
-            </div>
+            </div> */}
         </div>
         
     )

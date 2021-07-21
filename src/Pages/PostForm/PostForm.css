@@ -1,58 +1,269 @@
-.title-input-area {
-  height: 2rem;
-  border: none;
-  border: 2px solid grey;
-  border-radius: 20px;
-  outline: none;
-  padding: 0.3rem 1rem;
-  font-size: 1.5rem;
-  width: 14rem;
-  text-align: center;
-  font-weight: bold;
-  margin-top: 1.25rem;
-  color: grey;
-  font-family: 'Dancing Script', cursive;
-  /* margin-bottom: 3rem; */
+
+.post-form-div{
+  width: 90%;
+  margin: 0 auto;
+  border-radius: 10px;
+  background-color: white;
+  filter: drop-shadow(0 0 30px grey);
+  /* padding: 1rem; */
+  font-family: 'Roboto';
 }
 
-::placeholder{
-    color: rgba(128, 128, 128, 0.445);
-    font-weight: lighter;
+.content-tagline{
+  display: inline-block;
+  color: rgba(54, 53, 53, 0.849);
+  text-shadow: 2px 2px 2px rgba(128, 128, 128, 0.548);
+  letter-spacing: 1px;
+  word-spacing: 2px;
+  margin-bottom: 0;
+}
+
+.content-tagline-h1{
+  margin-bottom: 0;
+  display: inline-block;
+  margin-left: 20px;
+  color: rgb(0, 195, 255);
+  font-size: 3rem;
+  text-shadow: 2px 2px 2px rgba(128, 128, 128, 0.609);
+}
+
+.postform-header-div{
+  width: 95%;
+  text-align: left;
+  margin:0 auto;
+}
+
+.postform-user-image-div{
+  height: 4rem;
+  width: 4rem;
+  border-radius: 4rem;
+  border:2px solid white;
+  box-shadow: 3px 3px 3px rgba(128, 128, 128, 0.589);
+  display: inline-block;
+}
+
+.postform-user-image{
+  height: 4rem;
+  width: 4rem;
+  border-radius: 4rem;
+}
+
+.postform-username{
+  display: inline-block;
+  color: rgb(0, 195, 255);
+  margin: 0;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  margin-left: 10px;
+  transform: translateY(-190%);
+}
+
+.postform-title-input-div{
+  position: relative;
+  margin:0 auto;
+}
+
+.title-input-area{
+  height: 1rem;
+  width: 100%;
+  max-width: 15rem;
+  padding:20px;
+  border-radius: 100px;
+  border: 2px solid white;
+  border-radius: 3px 3px 5px rgba(128, 128, 128, 0.63);
+  outline: none;
+  font-family: 'Dancing Script';
+  font-size: 2rem;
+  text-align: center;
+  -webkit-box-shadow:inset 2px 2px 10px 0 rgba(0, 217, 255, 0.589);
+    box-shadow:inset 2px 2px 10px 0 rgba(0, 204, 255, 0.712);
+  
+  background-color: #F0F2F5;
+  transition: all 700ms ease-in-out;
+  margin-top: 10px;
+}
+
+.postform-title-placeholder{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.5rem;
+  text-shadow: 2px 2px 3px rgba(128, 128, 128, 0.541);
+  transition: all 800ms ease-in-out;
+  pointer-events: none;
+}
+
+.title-input-area:focus{
+  border-color: #189af1;
+}
+
+.title-input-area:focus~ .postform-title-placeholder{
+color: white;
+text-shadow: none;
+visibility: hidden;
+}
+
+.postform-img-preview-div{
+  width: 100%;
+  max-height: 40rem;
+  overflow: hidden;
+  overflow-y: scroll;
+  margin-top:20px;
+  /* display: inline-block; */
+  filter: drop-shadow(0 0 15px rgb(90, 89, 89));
+  background-color: black;
+}
+
+.postform-img-preview{
+  width: 100%;
+  max-width: 800px;
+  border-top: 4px solid black;
+  /* border-radius: 20px; */
+  /* border: 2px solid white; */
+  /* box-shadow: 4px 4px 4px grey; */
+  
+  /* display: inline-block; */
 }
 
 #post-content-span {
   display: inline-block;
   border: solid 1px black;
   width: 80%;
-  border: 2px solid rgb(78, 77, 77);
+  border: 2px solid white;
+  box-shadow: 6px 6px 10px rgba(128, 128, 128, 0.555);
   border-radius: 20px;
   outline: none;
-  padding: 0.3rem 1rem;
+  padding: 1rem 1rem;
   min-height: 14rem;
   font-size: 1.3rem;
+  transition: all 500ms ease-in-out;
+
+  background: #f0f2f5;
+background: linear-gradient(1deg,#f0f2f5 0%, #00c3ffa6 220%);
+background: -webkit-linear-gradient(1deg,#f0f2f5 0%, #00d9ffa8 220%);
+background: -moz-linear-gradient(1deg,#f0f2f5 0%, #00ccffb2 220%);
+
 }
 
-.content-tagline{
-    display: inline-block;
-    /* line-height: 1px; */
-    color: grey;
-    margin: 0;
-    margin-top: 2rem;
+#post-content-span:focus{
+  border-color: white;
+  box-shadow: none;
+  filter: drop-shadow(0 0 10px rgba(128, 128, 128, 0.555));
 }
 
-.content-tagline-h1{
-    display: inline-block;
-    color: rgb(218, 218, 26);
-    margin: 0;
-    margin: 0 5px;
+.post-form-image-picker-icon{
+  font-size: 5rem;
+  filter: drop-shadow(0 0 5px grey);
+  cursor: pointer;
+  transition: all 500ms ease-in-out;
 }
 
+.post-form-image-picker-icon:hover{
+  font-size: 6rem;
+  filter: drop-shadow(0 0 8px rgba(93, 93, 93, 0.938));
+}
+
+.post-form-image-picker-icon:hover~.post-form-image-picker-p{
+  font-size: 1.8rem;
+  text-shadow: 4px 4px 4px #18d0f163;
+}
+
+.post-form-image-picker-p{
+  display: inline-block;
+  font-family: 'Roboto';
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-shadow: 2px 2px 2px #18d0f163;
+  cursor: pointer;
+  transition: all 500ms ease-in-out;
+  color: #189af1;
+}
+
+.post-form-image-picker-p:hover{
+  font-size: 1.8rem;
+  text-shadow: 4px 4px 4px #18d0f163;
+}
+
+.post-form-image-picker-p:hover~.post-form-image-picker-icon{
+  font-size: 6rem;
+  filter: drop-shadow(0 0 8px rgba(93, 93, 93, 0.938));
+}
 
 .new-post-submit-button{
-    outline: none;
-    border: none;
-    color: greenyellow;
-    margin-top: 0.625rem;
-    background-color: white;
-    cursor: pointer;
+  outline: none;
+  border: none;
+  color: greenyellow;
+  background-color: white;
+  cursor: pointer;
+  font-size: 5rem;
+  transition: all 500ms ease-in-out;
+}
+
+
+.new-post-submit-button i{
+  text-shadow: 3px 3px 4px rgba(128, 128, 128, 0.609);
+  animation: animate 2.5s infinite linear;
+}
+
+@keyframes animate{
+0%{
+  transform:rotate(0deg)
+}
+20%{
+  transform:rotate(-20deg)
+}
+28%{
+  transform:rotate(0deg)
+}
+35%{
+  transform:rotate(-20deg)
+}
+40%{
+  transform:rotate(0deg)
+}
+100%{
+  transform:rotate(0deg)
+}
+}
+
+@media(max-width : 900px){
+  .post-form-div{
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  #post-content-span {
+    border-radius: 0 !important;
+    width: 90%;
+    text-align: left;
+  }
+
+  .postform-img-preview-div{
+    max-height: 20rem;
+  }
+  .post-form-image-picker-p{
+    display: none;
+  }
+  .post-form-image-picker-icon{
+    margin-left: 0;
+    display: inline-block;
+  }
+  .post-form-image-picker-icon:hover{
+    font-size: 5rem;
+  }
+}
+
+
+@media(max-width : 304px)
+{
+  
+
+
+  .title-input-area{
+    width: 10rem;
+  }
 }

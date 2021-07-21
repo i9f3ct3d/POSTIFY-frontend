@@ -6,6 +6,7 @@ import Logo from "../../component/logo/logo";
 import "./SignUp.css";
 import Navbar from "../../component/navbar/navbar";
 import BackImg from "../../images/icon.svg";
+import SignupLoginButton from '../../component/signup_login_buttons/signupLoginButton'
 
 const SignUp = () => {
   const [isUsernameValid, setisUsernameValid] = useState(true);
@@ -167,7 +168,7 @@ const SignUp = () => {
                 <img className="profile-pic-image-preview" src={preview}  />
                 <br/>
                 <input style={{display:"none"}} ref={filePickerRef} type="file" accept=".jpg , .jpeg , .png" onChange={(e)=>{setFile(e.target.files[0])}}/>
-                <button onClick={pickFileHandler} id="file-picker-button">Pick Image</button>
+                <button onClick={pickFileHandler} id="file-picker-button"><i className="far fa-images"></i>{"          Pick Image"}</button>
               </div>
 
             <div className="written-input" >
@@ -184,7 +185,10 @@ const SignUp = () => {
               {
                 <p
                   style={{
-                    visibility: `${isUsernameValid ? "hidden" : "visible"}`,
+                    visibility: isUsernameValid ? "hidden" : "visible",
+                    margin:"0",
+                    padding:"0",
+                    height :"17px"
                   }}
                 >
                   UserName must be 5 to 10 characters long
@@ -246,10 +250,14 @@ const SignUp = () => {
                 </p>
               }
             </div>
-            <button type="submit">
-              <i className="fas fa-user-plus"></i> Sign up
-            </button>
-            
+              <SignupLoginButton
+                iconClassName="fas fa-user-plus"
+                buttonText="Signup"
+                borderColor="green"
+                textColor="rgb(53, 155, 13)"
+                shadowColor="rgba(191, 253, 98, 0.63)"
+                background="greenyellow"
+              />
             </div>
           </form>
           <br />

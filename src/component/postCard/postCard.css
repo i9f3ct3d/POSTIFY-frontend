@@ -29,9 +29,22 @@ html, body {
     display: inline-block;
     top: 0;
     margin-left: 15px;
+    cursor: pointer;
 }
+.post-card-author h4:hover{
+
+    font-size: 1.2rem;
+    text-shadow: 4px 4px 5px rgb(128, 128, 128);
+}
+
+
 .post-card-author h4{
     margin: 0;
+    font-family: 'Roboto';
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 3px rgba(128, 128, 128, 0.602);
+    transition: all 300ms ease-in-out;
+    color: #2D88FE;
 }
 
 .post-card-date{
@@ -40,6 +53,9 @@ html, body {
     right: 0;
     bottom: 0;
     margin: 0;
+    font-size: 0.8rem;
+    font-family: 'Roboto';
+
 }
 
 #post-author-pic{
@@ -47,6 +63,7 @@ html, body {
     width: 4rem;
     border-radius: 4rem;
     box-shadow: 3px 3px 5px rgba(128, 128, 128, 0.52);
+    border:3px solid white;
 }
 
 .post-card-underline{
@@ -74,6 +91,8 @@ html, body {
     font-weight: bold;
     font-size: 1.5rem;
     margin: 0;
+    letter-spacing: 0.5px;
+    text-shadow: 2px 2px 3px rgba(128, 128, 128, 0.719);
 }
 
 .post-card-content-div{
@@ -91,6 +110,9 @@ html, body {
 .post-card-content{
     margin-bottom: 0;
     margin-top: 0;
+    font-family: 'Roboto';
+    letter-spacing: 0.7px;
+    word-spacing: 3px;
 }
 
 .post-card-readmore{
@@ -102,6 +124,9 @@ html, body {
 .post-card-img-div{
     margin-top: 10px;
     width: 100%;
+    max-height: 30rem;
+    overflow: hidden;
+    display: inline-block;
 }
 
 .post-card-img{
@@ -110,8 +135,13 @@ html, body {
     border-bottom: 1.5px solid #CED0D4;
     padding-top: 0.5px;
     padding-bottom: 0.5px;
-    /* box-shadow: 4px 4px 3px rgba(128, 128, 128, 0.568); */
+    cursor: pointer;
+    
 }
+
+/* .post-card-img:hover{
+    box-shadow: 5px 5px 7px rgba(128, 128, 128, 0.568);
+} */
 
 .post-card-like-count-div{
     text-align: left;
@@ -135,20 +165,52 @@ html, body {
     margin-left: 20px;
 }
 
+.post-card-random-comment-div h3{
+    font-family: 'Dancing Script' , cursive;
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 10px;
+    text-shadow: 3px 3px 5px rgba(128, 128, 128, 0.616);
+    transition: all 300ms ease-in-out;
+    cursor: pointer;
+    margin-top: 15px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.post-card-random-comment-div h3:hover{
+    /* margin-top: 35px; */
+    font-size: 2.5rem;
+    text-shadow: 4px 4px 5px rgba(128, 128, 128, 0.76);
+}
+
 .post-card-random-comment{
     text-align: left;
+}
+
+.post-card-random-comment div{
+    display: inline-block;
+    height: 2rem;
+    width: 2rem;
+    border-radius: 2rem;
+    border:2px solid white;
+    box-shadow: 2px 2px 3px rgba(128, 128, 128, 0.534);
 }
 
 .post-card-random-comment img{
     height: 2rem;
     width: 2rem;
     border-radius: 2rem;
-    display: inline-block;
 }
 
 .post-card-random-comment h4{
     display: inline-block;
     margin: 0;
+    font-family: 'Roboto';
+    letter-spacing: 1px;
+    color: #2D88FE;
+    text-shadow: 2px 2px 2px rgba(128, 128, 128, 0.445);
+    padding-left: 10px;
 }
 
 
@@ -161,6 +223,11 @@ html, body {
     box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
     max-width: 80%;
     background-color: #F0F2F5;
+    padding-top: 10px;
+    margin-top:10px;
+    font-family: 'Roboto';
+    letter-spacing: 0.7px;
+    word-spacing: 3px;
 }
 
 @media(max-width:56.25rem)
