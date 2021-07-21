@@ -1,0 +1,55 @@
+.inputfield-input-div{
+    display: inline-block;
+    position: relative;
+}
+
+.inputfield-input{
+    height: 2.5rem;
+    width: 15rem;
+    border: 2px solid rgba(0, 110, 255, 0.664);
+    outline: none;
+    border-radius: 10px;
+    transition: all 300ms ease-in-out;
+    text-align: center;
+    font-family: 'Roboto';
+    letter-spacing: 1px;
+    font-size: 1.2rem;
+    color: rgb(0, 68, 255);
+    font-weight: 700;
+    padding: 0 1rem;
+}
+
+.inputfield-input-placeholder{
+    color: grey;
+    transition: all 500ms ease-in-out;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    font-family: 'Roboto';
+    letter-spacing: 1px;
+    font-size: 1.1rem;
+    width: 100%;
+    pointer-events: none;
+    /* font-weight: 700; */
+}
+
+.inputfield-input:focus{
+    border-color: rgb(0, 89, 255);
+    filter: drop-shadow(0 0 5px rgba(128, 128, 128, 0.609));
+}
+
+.password-viewer{
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: grey;
+}
+
+@media(min-width : 500px){
+    .inputfield-input:focus{
+        width: 20rem;
+    }
+}

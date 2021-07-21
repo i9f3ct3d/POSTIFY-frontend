@@ -1,5 +1,36 @@
 .login-div-container{
     width: 100%;
+    min-height: 100vh;
+    background-image:linear-gradient(rgba(0, 0, 0, 0.15) ,rgba(0, 0, 0, 0.15) ), url("https://www.stepondigital.com/wp-content/uploads/2019/10/social-media-marketing.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background: linear-gradient(rgba(0, 0, 0, 0.308) ,rgba(0, 0, 0, 0.308)); */
+}
+
+.loginPage-background-image{
+    width: auto;
+    height: auto;
+    /* position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%); */
+    display: none;
+    /* background: linear-gradient(black ,black); */
+}
+@media(min-width : 1200px){
+    .login-div-container{
+        background: none;
+        background-color: #F0F2F5;
+        /* justify-content: space-around; */
+    }
+    .loginPage-background-image{
+        display: block;
+        margin-right: 50px;
+    }
 }
 
 .logo-div
@@ -11,13 +42,14 @@
 {
     margin: 0;
     padding: 0;
-    color: rgb(223, 45, 0);
+    /* color: rgb(223, 45, 0); */
     font-size: .8rem;
     font-weight: 600;
     letter-spacing: 1px;
 }
-.login-div form  p
-{
+
+
+.warning-messages{
     margin: 0;
     padding: 0;
     color: rgb(223, 45, 0);
@@ -28,19 +60,36 @@
 
 .login-fulldiv
 {
-    position: absolute;
+    /* position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%); */
 }
+@media(min-width : 900px){
+    .login-fulldiv{
+        padding: 5rem;
+        border-radius: 10px;
+        box-shadow: 5px 5px 15px rgba(128, 128, 128, 0.541);
+        background: white;
+    }
+}
+
 .login-fulldiv h1
 {
-    color: #8f8f8f;
+    color: blue;
     margin: 0;
     padding: 0;
+    border-radius: 10px;
     letter-spacing: 3px;
     margin-bottom: 20px;
-    font-weight: 400;
+    font-family: 'Roboto';
+    font-weight: 700;
+    /* background-color: white;
+    border: 2px solid blue;
+    text-align: left;
+    -webkit-box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
+    box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568); */
+    text-shadow: 3px 3px 5px grey;
 }
 .input-wrapper-outside
 {
@@ -80,40 +129,19 @@
     margin: 0 0 0 auto;
     cursor: pointer;
 }
-.login-div form button
-{
-    background: transparent;
-    /* width: 8rem;
-    height: 2rem; */
-    cursor:pointer;
-    border: 2px solid #82df84;
-    color: #82df84;
-    border-radius: 10px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    margin-bottom: 10px;
-    transition: background-color 400ms ease-in-out;
-    font-size: 1.4rem;
-    padding: 0.5rem 1.5rem;
-}
-.login-div form button:hover,.login-div form button:focus
-{
-    background-color: #82df84;
-    color: white;
-    outline: none;
-}
 
-.login-div form span
+
+.login-page-signup-link
 {
     color: #2c2828f8;
 }
-.login-div form span a
+.login-page-signup-link a
 {
     text-decoration: none;
     color: rgb(24, 126, 209);
     font-weight: 600;
 }
-.login-div form span a:focus,.login-div form span a:hover
+.login-div a:focus,.login-div a:hover
 {
     color: rgb(9, 46, 77);
 }

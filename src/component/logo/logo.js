@@ -9,10 +9,10 @@ const Logo=props=>
                 <span>O</span>{/*2*/}
                 <span>S</span>{/*3*/}
                 <span>T</span>{/*4*/}
-                <span>B</span>{/*5*/}
-                <span>O</span>{/*6*/}
-                <span>O</span>{/*7*/}
-                <span>K</span>{/*8*/}
+                <span>-</span>{/*5*/}
+                <span>I</span>{/*6*/}
+                <span>F</span>{/*7*/}
+                <span>Y</span>{/*8*/}
             </div>
     )
 }

@@ -1,0 +1,218 @@
+.profilepage-full-div{
+    width: 100%;
+    padding-top: 64px;
+    background-color: #F0F2F5;
+    min-height: calc(100vh - 64px);
+}
+
+.profilepage-inner-div{
+    width: 100%;
+}
+
+.profilepage-section-1{
+    width: 40%;
+    margin: 0 auto;
+    max-width: 570px;
+}
+
+.profilepage-avatar-div{
+    position: relative;
+}
+
+.profilepage-cover-pic{
+    height: 15rem;
+    width: 100%;
+    background-color: rgb(216, 216, 216);
+    border: 2px solid grey;
+    box-sizing:border-box !important;
+}
+
+.profilepage-profile-pic img{
+    height: 7rem;
+    width: 7rem;
+    border-radius: 7rem;
+    border : 2px solid white;
+    box-shadow: 2px 2px 2px rgba(128, 128, 128, 0.596);
+    position: absolute;
+    top: calc(15rem - 3.5rem);
+    right: 10px;
+}
+
+.profilepage-section-2{
+    background-color: white;
+    width: 40%;
+    max-width: 570px;
+    margin: 0 auto;
+    padding-top: 4rem ;
+    text-align: right;
+    /* border-radius: 5px; */
+    border-radius: 0 0 5px 5px;
+    box-shadow: 3px 3px 3px rgba(128, 128, 128, 0.527);
+    padding-bottom: 1rem;
+}
+
+.profilepage-section-2 p{
+    margin-right: 10px;
+    font-family: 'Roboto';
+    letter-spacing: 1px;
+    word-spacing: 2px;
+    color: #1877F1;
+}
+
+.profilepage-section-2-username{
+    font-size: 2rem;
+    font-weight: 900;
+    text-shadow: 2px 2px 2px rgba(128, 128, 128, 0.459);
+}
+
+.profilepage-section-2-useremail{
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.add-friend-button{
+    font-size: 0.8rem;
+    border-radius: 50px;
+    padding: 0.5rem;
+    outline: none;
+    border: none;
+    background-color: #1877F1;
+    color: white;
+    font-family: 'Roboto';
+    letter-spacing: 1px;
+    border : 2px solid white;
+    box-shadow: 2px 2px 2px rgba(128, 128, 128, 0.596);
+    cursor: pointer;
+    transition: all 300ms ease-in-out;
+}
+
+.add-friend-button:hover{
+    background-color: white;
+    border-color: #1877F1;
+    color: #1877F1 !important;
+}
+
+.send-message-icon{
+    color: #1877F1;
+    border-radius: 100%;
+    background: white;
+    border : 2px solid #1877F1;
+    padding: 7px;
+    margin-left: 10px;
+    box-shadow: 3px 3px 5px rgba(128, 128, 128, 0.411);
+    transition: all 500ms ease-in-out;
+    cursor: pointer;
+}
+
+.send-message-icon:hover{
+    border-color: white;
+    background: #1877F1;
+    color: white;
+    transform: scale(1.2);
+}
+
+.send-message-icon:active{
+    transition: none !important;
+    -webkit-box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
+    box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
+    transform: scale(0.9);
+}
+
+
+.add-friend-dots{
+    margin-right: 10px;
+    margin-left: 20px;
+    color: #CED0D4;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.req-sent-button{
+    font-size: 0.8rem;
+    border-radius: 50px;
+    padding: 0.5rem;
+    outline: none;
+    border: none;
+    background-color: #F0F2F5;
+    color: #777777;
+    font-family: 'Roboto';
+    letter-spacing: 1px;
+    border : 2px solid white;
+    box-shadow: 2px 2px 2px rgba(128, 128, 128, 0.596);
+    cursor: pointer;
+}
+
+.friends-button{
+    font-size: 0.8rem;
+    border-radius: 50px;
+    padding: 0.5rem;
+    outline: none;
+    border: none;
+    background-color: #1877F1;
+    color: white;
+    font-family: 'Roboto';
+    letter-spacing: 1px;
+    border : 2px solid white;
+    box-shadow: 2px 2px 2px rgba(128, 128, 128, 0.596);
+}
+
+
+.profilepage-details-div{
+    box-sizing: border-box;
+    width: 97%;
+    margin: 0 auto;
+    border-radius: 5px;
+    text-align: left;
+    padding: 10px 20px;
+    -webkit-box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
+    box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
+    margin-top: 10px;
+}
+
+.friend-req-confirm-button{
+    font-size: 0.8rem;
+    border-radius: 50px;
+    padding: 0.5rem;
+    outline: none;
+    border: none;
+    background-color: #1877F1;
+    color: white;
+    font-family: 'Roboto';
+    letter-spacing: 1px;
+    border : 2px solid white;
+    box-shadow: 2px 2px 2px rgba(128, 128, 128, 0.596);
+    cursor: pointer;
+}
+
+.friend-req-confirm-button:hover{
+    background-color: white;
+    border-color: #1877F1;
+    color: #1877F1 !important;
+}
+
+.profilepage-details-div p{
+    color: rgb(87, 85, 85);
+    font-weight: 700;
+}
+
+
+@media(max-width:56.25rem)
+{
+    .profilepage-section-1,.profilepage-section-2{
+        width:70%
+    }
+}
+
+@media(max-width:30rem)
+{
+    .profilepage-section-1,.profilepage-section-2{
+        width:100%
+    }
+
+    .profilepage-profile-pic img{
+        height: 6rem;
+        width: 6rem;
+        border-radius: 6rem;
+        top: calc(15rem - 3rem);
+    }
+}

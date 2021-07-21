@@ -14,7 +14,6 @@ const PostCardPage=(props)=>{
         <div className="underline"></div>
                 {props.posts.length>0 && props.posts.map((eachPost)=>{
                     return (
-
                         <Postcard
                             userEmail={props.userEmail}
                             post={eachPost}

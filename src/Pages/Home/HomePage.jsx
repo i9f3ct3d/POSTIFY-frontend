@@ -107,8 +107,35 @@ const HomePage = (props) => {
 
   setInterval(rotatePostIcon, 5000);
 
+  const onScrollHandler = (event)=>{
+    if(window.innerWidth <= 900)
+    {const mobileNavLink = document.querySelector(".navbar-mobile-icons-div");
+    const navbarTop = document.querySelector(".navbar-top");
+
+    if(event.nativeEvent.wheelDelta > 0)
+    {
+      if(mobileNavLink.classList.contains("make-visible"))
+      {
+        mobileNavLink.classList.remove("make-visible");
+
+        if(navbarTop.classList.contains("give-navbar-top-border")){
+          navbarTop.classList.remove("give-navbar-top-border");
+        }
+      }
+    }
+    else{
+      if(!mobileNavLink.classList.contains("make-visible"))
+      {
+        mobileNavLink.classList.add("make-visible");
+        if(!navbarTop.classList.contains("give-navbar-top-border")){
+          navbarTop.classList.add("give-navbar-top-border");
+        }
+      }
+    }}
+  }
+
   return (
-    <div className="home-page-container">
+    <div onWheel={onScrollHandler} className="home-page-container">
     <div className="background-div"></div>
       <div className="background-image-container">
         <img src={BackImg} />

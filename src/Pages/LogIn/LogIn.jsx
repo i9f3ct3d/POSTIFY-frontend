@@ -8,14 +8,35 @@ import "./LogIn.css"
 import Logo from "../../component/logo/logo";
 import Navbar from "../../component/navbar/navbar";
 import BackImg from "../../images/icon.svg";
+import SignupLoginButton from "../../component/signup_login_buttons/signupLoginButton";
+import InputField from "../../component/inputField/inputField";
 
 const LogIn=(()=>{
 
 
     const [isValidEmail, setisValidEmail]=useState(true);
+
     const [isValidPassword, setisValidPassword]=useState(true);
     const [isAllCredentialsValid, setisAllCredentialsValid]=useState(true);
-    const [isCheckboxChecked, setisCheckboxChecked]=useState(false);
+    // const [isCheckboxChecked, setisCheckboxChecked]=useState(false);
+
+    const [formEmail , setFormEmail] = useState("");
+    const [formPassword , setFormPassword] = useState("");
+
+
+    const emailOnchangeHandler=(e)=>{
+        e.preventDefault();
+        const typedEmail = e.target.value.trim();
+        setFormEmail(typedEmail);
+        validateEmail(typedEmail) ? setisValidEmail(true): setisValidEmail(false);
+    }
+
+    const passwordOnchangeHandler=(e)=>{
+        e.preventDefault();
+        const typedPassword = e.target.value;
+        typedPassword.trim() ? setisValidPassword(true):setisValidPassword(false);
+        setFormPassword(typedPassword);
+    }
 
     let validateEmail = (email) => {
         let re =/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -29,41 +50,13 @@ const LogIn=(()=>{
 
     const onLogInSubmitHandler=async (event)=>{
         event.preventDefault();
-        const email=event.target.email.value;
-        const password=event.target.password.value;
+        
+        const email=formEmail.trim();
+        const password=formPassword.trim();
 
-        let allInformationValid=true;
 
-        const emailDiv=document.getElementsByName("input-wrapper-1")[0];
-        const passwordDiv=document.getElementsByName("input-wrapper-2")[0];
-        if(!validateEmail(email)){
-            setisValidEmail(false);
-            allInformationValid=false;
-
-            emailDiv.style.borderColor="rgb(223, 45, 0)";
-        }
-        else
-        {
-            setisValidEmail(true);
-            
-            emailDiv.style.borderColor="#82df84";
-        }
-
-        if(!password.trim()){
-            setisValidPassword(false);
-            allInformationValid=false;
-
-            passwordDiv.style.borderColor="rgb(223, 45, 0)";
-        }
-        else
-        {
-            setisValidPassword(true);
-            passwordDiv.style.borderColor="#82df84";
-        }
-
-        if(allInformationValid)
-        {
-            
+        if(validateEmail(email) && password){
+        
             try {
                 const response=await axios.post(process.env.REACT_APP_BACKEND_API_URL+"login",{
                     email:email,
@@ -77,54 +70,233 @@ const LogIn=(()=>{
                 }
                 else
                 {
-                    setisAllCredentialsValid(false); 
+                    setisAllCredentialsValid(false);
                 }
             } catch (error) {
                 setisAllCredentialsValid(false);
                 window.location="/error";
             }
+        }else{
+            !validateEmail(email) && setisValidEmail(false);
+            !password && setisValidPassword(false);
         }
     }
 
-    const checkboxHandler=()=>{
-        const isChecked=!isCheckboxChecked;
-        setisCheckboxChecked(!isCheckboxChecked);
-        const element=document.getElementsByClassName("far")[0];
-        if(isChecked)
-        {
-            if(element)
-            {
-                element.classList.add("fa-eye");
-                element.classList.remove("fa-eye-slash");
-            }
-        }
-        else
-        {
-            if(element)
-            {
-                element.classList.remove("fa-eye");
-                element.classList.add("fa-eye-slash");
-            }
-        }
+    const inputFieldClicked=()=>{
+        
     }
+
+    const SvgComponent = (props)=>{
+        return (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            baseProfile="basic"
+            width={100}
+            // height={382.907}
+            {...props}
+          >
+            <radialGradient
+              id="prefix__a"
+              cx={268.514}
+              cy={192.889}
+              r={221.366}
+              gradientUnits="userSpaceOnUse"
+            >
+              <stop offset={0.342} stopColor="#fff" />
+              <stop offset={0.867} stopColor="#e6e7e8" />
+            </radialGradient>
+            <path
+              fill="url(#prefix__a)"
+              stroke="#FFFFEB"
+              strokeMiterlimit={10}
+              d="M509.906 219.476c-7.652 24.219-19.195 47.656-24.576 72.284-4.494 20.568-4.771 44.978-15.614 63.596-20.017 34.368-54.34 33.273-85.035 14.779-34.728-20.924-60.748-64.06-100.451-75.543-48.432-14.007-82.674 39.047-121.805 58.556-53.146 26.496-105.547-13.658-90.592-71.31-3.748-14.98-10.076-29.623-28.932-40.163-42.316-23.653-20.74-68.984 17.113-80.513 37.852-11.531 51.182-9.489 52.946-42.896 2.394-41.105 22.164-85.726 59.582-106.069C208.632-7.42 249.05 8.55 285.481 18.01c33.597 8.725 71.183 10.39 101.647 28.275 27.24 15.992 48.837 41.11 75.209 58.795 30.528 20.473 57.018 36.722 54.848 77.68-.668 12.589-3.498 24.748-7.279 36.716z"
+            />
+            <path
+              fill="#D3D3D3"
+              d="M20.56 332.523c0 7.648 97.048 13.853 216.774 13.853 119.71 0 216.759-6.205 216.759-13.853 0-7.651-97.048-13.854-216.759-13.854-119.726-.001-216.774 6.203-216.774 13.854z"
+            />
+            <ellipse
+              fill="#D3D3D3"
+              cx={439.948}
+              cy={345.401}
+              rx={55.028}
+              ry={8.668}
+            />
+            <path fill="#A3A3A3" d="M264.185 292.632h96.071v25.845h-96.071z" />
+            <path
+              fill="#BCBCBC"
+              d="M461.24 301.071H164.213c-9.943 0-18.006-8.062-18.006-18.006V79.476c0-9.944 8.063-18.005 18.006-18.005H461.24c9.944 0 18.006 8.061 18.006 18.005v203.589c0 9.944-8.061 18.006-18.006 18.006z"
+            />
+            <path
+              fill="#FCFCFC"
+              d="M457.867 278.08H166.572c-6.107 0-11.063-4.952-11.063-11.062V81.27c0-6.109 4.956-11.062 11.063-11.062h291.295c6.11 0 11.063 4.953 11.063 11.062v185.749c0 6.109-4.952 11.061-11.063 11.061z"
+            />
+            <path
+              fill="#BCBCBC"
+              d="M401.549 332.521H222.892v-2.248c0-7.757 6.288-14.045 14.044-14.045h150.569c7.757 0 14.044 6.288 14.044 14.045v2.248z"
+            />
+            <path
+              fill="#2444B5"
+              d="M323.178 169.296H197.374a2.73 2.73 0 00-2.729 2.729v4.042a2.729 2.729 0 002.729 2.728h125.804a4.75 4.75 0 000-9.499z"
+            />
+            <path
+              fill="#FFF"
+              d="M348.996 114.719h-27.063a8.504 8.504 0 00-8.504 8.503v27.065a8.504 8.504 0 008.504 8.503h27.063a8.504 8.504 0 008.506-8.503v-27.065a8.504 8.504 0 00-8.506-8.503z"
+            />
+            <path
+              fill="#FF9569"
+              d="M348.006 132.148c-1.688.017-1.772.007-2.41-.129-1.353-.291.239-1.934-.603-4.951-.844-3.017-3.778-2.839-3.639-1.431.141 1.406.153 4.948-.829 5.821-.543.483-1.279 1.229-1.833 1.807a2.608 2.608 0 01-1.899.817l-.554-.002-.061 7.987 3.142.022c1.491 1.696 4.384 2 4.384 2l3.674.024c1.616.013 2.988-1.264 3.198-2.972l.629-5.141c.253-2.058-1.258-3.873-3.199-3.852z"
+            />
+            <path
+              fill="#2444B5"
+              d="M322.402 145.187l10.756.091.1-14.214-10.754-.092zm-34.694-30.468h-27.064a8.504 8.504 0 00-8.503 8.503v27.065a8.504 8.504 0 008.503 8.503h27.064a8.502 8.502 0 008.502-8.503v-27.065a8.502 8.502 0 00-8.502-8.503z"
+            />
+            <path
+              fill="#F6FCFF"
+              d="M274.399 122.323c-7.796-.059-14.162 6.217-14.218 14.015-.058 7.797 6.22 14.162 14.017 14.218 7.797.058 14.162-6.219 14.217-14.016.057-7.797-6.218-14.163-14.016-14.217zm6.042 14.044c-.284 1.601-1.469 5.743-6.189 6.829h-.006c-4.7-1.152-5.829-5.313-6.091-6.917-.11-.687-.058-1.4.208-2.042.537-1.293 1.776-2.194 3.217-2.185 1.119.007 2.108.568 2.741 1.427.639-.85 1.639-1.398 2.759-1.388 1.437.01 2.667.928 3.185 2.232.258.644.297 1.357.176 2.044z"
+            />
+            <path
+              fill="#45C6F6"
+              d="M407.366 114.719h-27.061a8.502 8.502 0 00-8.503 8.503v27.065a8.503 8.503 0 008.503 8.503h27.061a8.505 8.505 0 008.504-8.503v-27.065a8.504 8.504 0 00-8.504-8.503z"
+            />
+            <path
+              fill="#FFF"
+              d="M403.445 127.333c1.324-.984 2.618-1.699 2.618-1.699-.006-.002-.013-.002-.018-.005.007-.001.007-.004.007-.004l-.017.002c-1.627-.63-3.395-.509-4.827-.197-1.259-1.635-2.839-2.346-5.147-1.721-1.731.469-3.049 1.676-3.822 3.202a7.217 7.217 0 00-.521 5.096s.127.272.197.766c-2.708-.909-6.354-1.19-11.162.084 0 0 2.245 5.698 7.099 7.609a12.499 12.499 0 01-.165.146c-.096.084-.195.167-.296.254-.027.019-.051.04-.077.061-.124.104-.251.208-.383.312l-.062.049c-1.27 1.005-2.847 2.06-4.802 3.143 0 0 3.782 3.514 9.39 3.615 2.77.049 5.985-.736 9.412-3.19 6.743-4.834 1.907-16.379 1.716-16.831.278-.24.568-.472.86-.692z"
+            />
+            <path
+              fill="#45C6F6"
+              d="M227.438 114.719h-27.06a8.503 8.503 0 00-8.503 8.503v27.065a8.503 8.503 0 008.503 8.503h27.06a8.505 8.505 0 008.505-8.503v-27.065a8.505 8.505 0 00-8.505-8.503z"
+            />
+            <g fill="#F6FCFF">
+              <path d="M226.982 136.12l-.018 9.091a4.14 4.14 0 01-4.144 4.131l-17.755-.033a4.137 4.137 0 01-4.124-4.148l.015-9.042h4.924a8.14 8.14 0 00-.038.785c-.007 4.795 3.62 8.692 8.111 8.702 4.489.009 8.133-3.877 8.141-8.674 0-.274-.013-.545-.038-.813h4.926z" />
+              <path d="M213.978 130.384c-3.373-.007-6.113 2.913-6.12 6.521-.007 3.61 2.723 6.539 6.099 6.543 3.374.007 6.115-2.914 6.12-6.521.007-3.607-2.722-6.535-6.099-6.543zm-.783 10.101c-1.37 0-2.481-1.19-2.476-2.657 0-1.467 1.115-2.654 2.486-2.651 1.37.002 2.48 1.195 2.476 2.659 0 1.467-1.116 2.654-2.486 2.649zm2.945-5.372c-.592 0-1.073-.516-1.071-1.153 0-.635.483-1.148 1.077-1.148.595 0 1.076.519 1.076 1.153-.002.635-.484 1.15-1.082 1.148z" />
+              <path d="M223.004 124.614l-18.029-.034c-2.207-.003-4.002 1.91-4.004 4.271l-.011 3.298h6.215c1.454-2.365 3.963-3.923 6.807-3.921 2.834.004 5.333 1.565 6.775 3.921h6.231l.005-3.249c.006-2.36-1.781-4.281-3.989-4.286z" />
+            </g>
+            <path
+              fill="#2B2B2B"
+              d="M432.427 339.137v9.551h-25.954c-1.612 0-2.311-2.054-1.015-3.015 3.118-2.301 8.417-5.284 16.051-6.518l10.918-.018zm47.083 0v9.551h-25.955c-1.609 0-2.311-2.054-1.011-3.015 3.115-2.301 8.413-5.284 16.049-6.518l10.917-.018z"
+            />
+            <path
+              fill="#4F3F56"
+              d="M479.778 339.155c-1.787-12.292-13.953-95.436-16.395-97.237-2.637-1.951-21.204 19.371-21.204 19.371 1.908 1.912 20.97 64.977 26.512 77.866h11.087z"
+            />
+            <path
+              fill="#594A5F"
+              d="M432.193 339.155l.234-.018c4.143-13.878 13.993-58.157 25.861-73.529 5.658-7.331 5.618-25.641 5.618-25.641l-32.669 6.532c-5.388 10.778-8.909 75.94-9.729 92.656h10.685z"
+            />
+            <path
+              fill="#EFA44B"
+              d="M454.588 196.648c-2.082-5.449-30.979-41.867-30.979-41.867l-10.479 4.729s19.143 33.542 24.112 40.667l17.346-3.529z"
+            />
+            <path
+              fill="#3A3A3A"
+              d="M431.31 168.301s-9.275-4.982-2.049-15.233c0 0 3.906 6.394 11.081 4.197 22.785-6.973 23.876 16.7 19.775 25.194-1.785 3.699-6.347 6.642-7.323 6.348-.976-.294-5.37-8.69-5.37-8.69l-16.114-11.816z"
+            />
+            <path
+              fill="#FF9569"
+              d="M431.459 167.958c-1.2 1.815-1.073 5.528-1.073 7.958 0 6.05 4.016 10.563 9.455 10.563 3.804 0 7.104-2.402 8.745-5.919 1.964.403 4.141-1.251 4.829-3.408.724-2.263-.337-4.625-2.372-5.274-.643-.205-1.802.617-2.43.77 0 0-3.958-1.54-5.57-5.567l-11.584.877z"
+            />
+            <path fill="#FF9569" d="M452.109 179.14l-10.058 2.049v11.914h10.058z" />
+            <path
+              fill="#F9B253"
+              d="M466.884 241.918s-7.506-43.046-8.65-45.796c-1.149-2.75-5.418-4.469-16.852-4.385-6.654.052-28.14-3.693-31.582-5.298-3.437-1.605-22.696-24.759-22.696-24.759l-8.94 5.73s18.11 28.655 23.612 30.489c5.503 1.835 24.991 8.484 24.991 8.484l.687 41.954s26.593 12.38 39.43-6.419z"
+            />
+            <path
+              fill="#FF9569"
+              d="M386.877 162.079s-4.643-11.263-5.762-11.52c-1.117-.257-1.803 4.385-1.803 4.385s-4.301-10.661-6.622-10.746c-2.321-.088-4.469 12.55 6.103 23.039l8.084-5.158zm27.945-3.232s-8.317-9.631-6.79-9.997c1.528-.366 4.82 2.331 4.82 2.331s-5.724-13.229-1.966-13.71c3.758-.479 11.115 11.713 12.723 17.31l-8.787 4.066z"
+            />
+            <path
+              fill="#EFEFEF"
+              d="M346.756 83.074c0 1.074-1.483 1.944-3.313 1.944H191.441c-1.829 0-3.313-.871-3.313-1.944 0-1.074 1.483-1.945 3.313-1.945h152.002c1.829 0 3.313.871 3.313 1.945zm0 8.919c0 1.074-1.483 1.944-3.313 1.944H191.441c-1.829 0-3.313-.871-3.313-1.944 0-1.074 1.483-1.945 3.313-1.945h152.002c1.829 0 3.313.871 3.313 1.945zm0 8.642c0 1.073-1.483 1.944-3.313 1.944H191.441c-1.829 0-3.313-.871-3.313-1.944 0-1.074 1.483-1.945 3.313-1.945h152.002c1.829 0 3.313.871 3.313 1.945z"
+            />
+            <path
+              d="M276.424 195.529h-13.376c3.932 5.52 6.268 12.255 6.268 19.548 0 2.218-.216 4.386-.625 6.484l13.064 13.064V200.86a5.331 5.331 0 00-5.331-5.331zm-83.527 53.314l14.75-14.749a33.602 33.602 0 01-5.863-19.017c0-7.293 2.336-14.029 6.268-19.548h-9.822a5.332 5.332 0 00-5.332 5.332v47.982h-.001z"
+              fill="#B9EBFF"
+            />
+            <path
+              d="M256.875 215.078a21.5 21.5 0 01-.083 1.873 5.326 5.326 0 017.407.12l4.491 4.491a33.86 33.86 0 00.625-6.483c0-7.294-2.336-14.029-6.268-19.549H244.06c7.54 3.286 12.815 10.797 12.815 19.548zm-27.594 20.388l4.492 4.492 3.636-3.636a21.313 21.313 0 01-8.128-.856zm-27.497-20.388a33.6 33.6 0 005.863 19.017l6.362-6.361a5.306 5.306 0 013.338-1.542 21.221 21.221 0 01-3.123-11.114c0-8.75 5.276-16.262 12.815-19.548h-18.987c-3.933 5.519-6.268 12.254-6.268 19.548z"
+              fill="#D2F5F0"
+            />
+            <path
+              fill="#FCFFDC"
+              d="M214.224 215.078c0 4.073 1.142 7.878 3.123 11.115a5.318 5.318 0 014.202 1.541l7.733 7.733a21.344 21.344 0 008.127.856l19.251-19.251c.043-.042.089-.079.133-.12a21.5 21.5 0 00.083-1.873c0-8.75-5.275-16.261-12.814-19.548h-17.023c-7.54 3.285-12.815 10.796-12.815 19.547zm21.326-12.44c6.87 0 12.439 5.57 12.439 12.44s-5.569 12.439-12.439 12.439c-6.871 0-12.44-5.569-12.44-12.439s5.569-12.44 12.44-12.44z"
+            />
+            <path
+              fill="#B4EBBE"
+              d="M264.2 217.07a5.327 5.327 0 00-7.407-.12c-.044.041-.09.077-.133.12l-19.251 19.251-3.636 3.636 23.103 23.103h19.548a5.332 5.332 0 005.332-5.332v-23.103l-13.064-13.064-4.492-4.491z"
+            />
+            <path
+              fill="#A0D778"
+              d="M221.548 227.733a5.32 5.32 0 00-4.202-1.542 5.309 5.309 0 00-3.339 1.542l-6.361 6.361-14.749 14.749v8.886a5.332 5.332 0 005.332 5.332h58.646l-23.103-23.103-4.492-4.492-7.732-7.733z"
+            />
+            <path
+              fill="#FFF5A5"
+              d="M223.109 215.078c0 6.87 5.57 12.439 12.44 12.439 6.87 0 12.439-5.569 12.439-12.439s-5.569-12.44-12.439-12.44-12.44 5.57-12.44 12.44zm19.549 0a7.108 7.108 0 11-14.216 0 7.108 7.108 0 0114.216 0z"
+            />
+            <circle fill="#FFDC69" cx={235.55} cy={215.078} r={7.108} />
+            <path
+              d="M388.076 195.529H374.7c3.932 5.52 6.268 12.255 6.268 19.548 0 2.218-.217 4.386-.625 6.484l13.064 13.064V200.86a5.33 5.33 0 00-5.331-5.331zm-83.526 53.314l14.749-14.749a33.602 33.602 0 01-5.863-19.017c0-7.293 2.336-14.029 6.267-19.548h-9.822a5.33 5.33 0 00-5.331 5.332v47.982z"
+              fill="#B9EBFF"
+            />
+            <path
+              d="M368.527 215.078c0 .631-.028 1.255-.083 1.873a5.326 5.326 0 017.407.12l4.491 4.491a33.94 33.94 0 00.625-6.483c0-7.294-2.336-14.029-6.268-19.549h-18.986c7.539 3.286 12.814 10.797 12.814 19.548zm-27.594 20.388l4.492 4.492 3.636-3.636a21.316 21.316 0 01-8.128-.856zm-27.497-20.388a33.6 33.6 0 005.863 19.017l6.362-6.361a5.309 5.309 0 013.338-1.542 21.221 21.221 0 01-3.123-11.114c0-8.75 5.275-16.262 12.814-19.548h-18.987c-3.932 5.519-6.267 12.254-6.267 19.548z"
+              fill="#D2F5F0"
+            />
+            <path
+              fill="#FCFFDC"
+              d="M325.876 215.078a21.23 21.23 0 003.122 11.115 5.317 5.317 0 014.202 1.541l7.733 7.733a21.337 21.337 0 008.127.856l19.251-19.251c.042-.042.089-.079.133-.12a21.5 21.5 0 00.083-1.873c0-8.75-5.275-16.261-12.814-19.548H338.69c-7.539 3.285-12.814 10.796-12.814 19.547zm21.326-12.44c6.871 0 12.44 5.57 12.44 12.44s-5.569 12.439-12.44 12.439-12.44-5.569-12.44-12.439 5.569-12.44 12.44-12.44z"
+            />
+            <path
+              fill="#B4EBBE"
+              d="M375.852 217.07a5.327 5.327 0 00-7.407-.12c-.044.041-.091.077-.133.12l-19.251 19.251-3.636 3.636 23.103 23.103h19.548a5.332 5.332 0 005.331-5.332v-23.103l-13.064-13.064-4.491-4.491z"
+            />
+            <path
+              fill="#A0D778"
+              d="M333.2 227.733a5.32 5.32 0 00-4.202-1.542 5.306 5.306 0 00-3.338 1.542l-6.361 6.361-14.749 14.749v8.886a5.33 5.33 0 005.331 5.332h58.646l-23.103-23.103-4.492-4.492-7.732-7.733z"
+            />
+            <path
+              fill="#FFF5A5"
+              d="M334.762 215.078c0 6.87 5.569 12.439 12.44 12.439s12.44-5.569 12.44-12.439-5.569-12.44-12.44-12.44-12.44 5.57-12.44 12.44zm19.548 0a7.108 7.108 0 11-14.216 0 7.108 7.108 0 0114.216 0z"
+            />
+            <circle fill="#FFDC69" cx={347.202} cy={215.078} r={7.108} />
+          </svg>
+        )
+      }
 
     return(
+      <div style={{width : "100%" , minHeight : "100vh"}}>
+      <Navbar />
         <div className="login-div-container">
-            <Navbar />
-            <div className="background-image-container">
-        <img src={BackImg} />
-      </div>
+            
+            {/* <SvgComponent/> */}
+        <img className="loginPage-background-image" src="https://www.stepondigital.com/wp-content/uploads/2019/10/social-media-marketing.svg" />
             <div className="login-fulldiv">
                 <Logo scale="1"/>
                 <h1>Login Here</h1>
                 <div className="login-div">
                     <form onSubmit={onLogInSubmitHandler}>
-
-                        <div className="input-wrapper-outside">
+                        <InputField
+                            type="email"
+                            placeholder="Enter your email"
+                            onChange={emailOnchangeHandler}
+                            isCorrect={isValidEmail} 
+                        />
+                        <br/>
+                        <p  className="warning-messages" style={{visibility:`${isValidEmail?"hidden":"visible"}`}}>Invalid Email Entered</p>
+                        <InputField
+                            type="password"
+                            placeholder="Enter your password"
+                            onChange={passwordOnchangeHandler}
+                            isCorrect={isValidPassword}
+                        />
+                        <p className="warning-messages" style={{visibility:`${isValidPassword?"hidden":"visible"}`}}>Invalid Password Entered</p>
+                        
+                        
+                        {/* <div className="input-wrapper-outside">
                             <div className="input-wrapper" name="input-wrapper-1">
                                 <input type="email" name="email" placeholder="Enter your Email"/>
                             </div>
-                            {<p style={{visibility:`${isValidEmail?"hidden":"visible"}`}}>Invalid Email Entered</p>}
+                            {<p  className="warning-messages" style={{visibility:`${isValidEmail?"hidden":"visible"}`}}>Invalid Email Entered</p>}
                         </div>
 
                         <div className="input-wrapper-outside">
@@ -132,18 +304,28 @@ const LogIn=(()=>{
                                 <input type={isCheckboxChecked? "text":"password"} name="password" placeholder="Enter your Password"/>
                                 <i className="far fa-eye-slash" onClick={checkboxHandler}></i>
                             </div>
-                            {<p style={{visibility:`${isValidPassword?"hidden":"visible"}`}}>Invalid Password Entered</p>}
-                        </div>
+                            {<p className="warning-messages" style={{visibility:`${isValidPassword?"hidden":"visible"}`}}>Invalid Password Entered</p>}
+                        </div> */}
 
-                        <button type="submit"><i className="fas fa-sign-in-alt"></i>  Login</button>
-                        {!isAllCredentialsValid && <p>Credentials Invalid</p>}
+
+                        <br/>
+                        <SignupLoginButton
+                            iconClassName="fas fa-sign-in-alt"
+                            buttonText="Login"
+                            borderColor="blue"
+                            textColor="blue"
+                            shadowColor="rgba(36, 143, 231, 0.335)"
+                            background="rgba(36, 104, 231, 0.596)"
+                        />
+                        {!isAllCredentialsValid && <p className="warning-messages">Credentials Invalid</p>}
                         <br/>
 
-                        <span>Not registered yet ?     <a href="/signup"><i className="fas fa-user-plus"></i>  Sign Up</a></span>
+                        <span className="login-page-signup-link">Not registered yet ?     <a href="/signup"><i className="fas fa-user-plus"></i>  Sign Up</a></span>
                     </form>
                 </div>
             </div>
             
+        </div>
         </div>
     );
 

@@ -24,7 +24,7 @@
 {
     margin: 0;
     padding: 0;
-    color: rgb(223, 45, 0);
+    /* color: rgb(223, 45, 0); */
     font-size: 1.2rem;
     font-weight: 600;
     letter-spacing: 1px;
@@ -79,9 +79,9 @@
 }
 .signup-div form button
 {
-    background: transparent;
-    /* width: 8rem;
-    height: 2rem; */
+    /* background: transparent;
+    width: 8rem;
+    height: 2rem;
     cursor:pointer;
     border: 2px solid #82df84;
     color: #82df84;
@@ -91,22 +91,45 @@
     font-weight: 600;
     letter-spacing: 1.5px;
     margin-bottom: 10px;
-    transition: background-color 400ms ease-in-out;
+    transition: background-color 400ms ease-in-out; */
 }
-.signup-div form button:hover,.signup-div form button:focus
+/* .signup-div form button:hover,.signup-div form button:focus
 {
     background-color: #82df84;
     color: white;
     outline: none;
     transition: background-color 0.7s, color 0.7s;
-}
+} */
 
 #file-picker-button{
     width: 9rem;
     height: 3rem;
     border-radius: 0;
-    font-size: 0.8rem;
+    font-size: 1rem;
     margin-top: 1rem;
+    transition: all 500ms ease-in-out;
+    font-family: 'Roboto';
+    letter-spacing: 1px;
+    word-spacing: 2px;
+    color: #45BD62;
+    background: white;
+    border: 2px solid #45BD62;
+    border-radius: 5px;
+    cursor: pointer;
+    text-shadow: 2px 2px 5px grey;
+    box-shadow: 4px 4px 7px rgba(128, 128, 128, 0.52);
+}
+#file-picker-button:hover{
+    color: white;
+    background-color: #45BD62;
+    transform: scale(1.1);
+}
+
+#file-picker-button:active{
+    background-color: white !important;
+    transition: none !important;
+    -webkit-box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
+    box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
 }
 
 .signup-div form span

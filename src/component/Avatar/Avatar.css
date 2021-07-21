@@ -1,0 +1,11 @@
+.avatar-image{
+    border-radius: 100%;
+    border: 2px solid white;
+    box-shadow: 3px 3px 5px rgba(128, 128, 128, 0.452);
+    transition: all 500ms ease-in-out;
+    cursor: pointer;
+}
+
+.avatar-image:hover{
+    transform: scale(1.1);
+}
