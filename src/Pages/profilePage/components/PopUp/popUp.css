@@ -3,29 +3,30 @@
     z-index: 14;
     top:50%;
     left: 50%;
-    transform: translate(-50%,-50%);
-    border-radius: 5px;
+    transform: translate(-50%,-42%);
+    border-radius: 2px;
     background-color: white;
-    box-shadow: 4px 4px 5px rgba(128, 128, 128, 0.568);
     font-family: 'Roboto';
     letter-spacing: 1px;
     font-weight: 700;
     padding : 2rem;
-    color: tomato;
-    border : 2px solid tomato;
+    color: #050505;
+    border : 1px solid tomato;
+    opacity: 0;
+    transition: all 500ms ease-in-out;
+    pointer-events: none;
 }
 
 
 .popup-button{
     padding: 0.5rem 1.2rem;
-    border-radius: 5px;
+    border-radius: 1px;
     outline: none;
     border: none;
     font-weight: 900;
     font-family: 'Roboto';
     letter-spacing: 1px;
     cursor: pointer;
-    filter: drop-shadow(0 0 5px grey);
     background-color: white;
 }
 
@@ -37,13 +38,13 @@
 
 .popup-cancel-button{
     color: grey;
-    border:2px solid grey;
+    border:0.5px solid grey;
     margin-right: 5px;
 }
 
 .popup-confirm-button{
     color: red;
-    border:2px solid red;
+    border:0.5px solid red;
     margin-left: 5px;
 }
 

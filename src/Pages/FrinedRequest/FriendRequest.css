@@ -1,0 +1,36 @@
+.friend-request-page-full-div{
+    width: 100%;
+    min-height: 100vh;
+    padding-top: 64px;
+}
+
+.friend-request-page-inner-div{
+    width: 40%;
+    height: 100%;
+    max-width: 750px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow-y: scroll;
+}
+
+@media(max-width : 900px){
+    .friend-request-page-full-div{
+        padding-top: 112px;
+    }
+}
+
+@media(max-width:56.25rem)
+{
+    .friend-request-page-inner-div{
+        width:70%
+    }
+}
+
+@media(max-width:30rem)
+{
+    .friend-request-page-inner-div{
+        width:100%
+    }
+}

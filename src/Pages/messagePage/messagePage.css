@@ -10,10 +10,7 @@
     padding-top: 65px;
     width: 40%;
     height: calc(100% - 66px);
-    /* border: 1px solid grey; */
     display: inline-block;
-    /* box-shadow: 10px 10px 20px rgba(128, 128, 128, 0.548); */
-    /* filter: drop-shadow(0 0 10px rgba(128, 128, 128, 0.548)); */
     max-width: 570px;
 }
 
@@ -43,13 +40,10 @@
     display: flex;
     padding: 0.2rem 0.5rem;
     background: #3256ce;
-    background: linear-gradient(#3256ce , black);
+    background: linear-gradient(350deg , #3256ce 50% , #5CA3DF 50%);
     align-items:flex-end;
-    /* box-shadow: 0 4px 5px grey; */
     border-radius: 20px 20px 0 0;
-    /* border: 2px solid white; */
     border-top: none;
-    /* border-bottom: 1px solid grey; */
     filter: drop-shadow(0 0 5px grey);
 }
 
@@ -57,11 +51,11 @@
     margin: 0;
     margin-left: 20px;
     color: white;
-    font-family: 'Dancing Script';
+    font-family: 'Comfortaa' , cursive;
     letter-spacing: 1px;
     word-spacing: 2px;
     font-size: 2rem;
-    text-shadow: 3px 3px 5px grey;
+    text-shadow: 1px 1px 2px black;
 }
 
 .messagepage-friend-status-inner-div{
@@ -96,9 +90,6 @@
     -webkit-box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
     box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
     border-radius: 0 0 10px 10px;
-    /* background: #DEF2F8;
-    background: linear-gradient(#DEF2F8 , rgba(0, 153, 255, 0.863) , black); */
-    /* background: linear-gradient(rgba(163, 211, 230, 0.835) , rgba(47, 255, 92, 0.603)); */
 }
 
 .message-inner-div{
@@ -138,18 +129,6 @@
     box-sizing: border-box;
 }
 
-/* .message-send-textarea::before{
-    content: "";
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    left: 0;
-    top: 0;
-    transition: all 500ms ease-in-out;
-    background: rgba(81, 188, 250, 0.548);
-    z-index: 3;
-} */
-
 .message-send-textarea::placeholder{
     text-align: left;
 }
@@ -187,7 +166,6 @@
 .message-send-button-icon{
     font-size: 2rem;
     color: #184bf1;
-    /* text-shadow: 3px 3px 3px grey; */
 }
 
 .message-send-button-background{

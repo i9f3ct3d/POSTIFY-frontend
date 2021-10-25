@@ -8,11 +8,12 @@
     /* width: 50%; */
     border-radius: 0 10px 10px 10px;
     background-color: #F0F2F5;
-    -webkit-box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
-    box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
+    /* -webkit-box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
+    box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568); */
     color: grey;
     font-family: 'Roboto';
     letter-spacing: 1px;
+    /* color : #2ac3f1; */
     word-spacing: 2px;
     margin: 0;
     word-break: break-all;

@@ -8,28 +8,28 @@ import axios from 'axios';
 import Avatar from '../../component/Avatar/Avatar';
 import ChatBubble from './chatBubble';
 
-const MessagePage=()=>{
-    
-    const [myUserid , setMyUserId] = useState("");
-    const [searchedUserid , setSearchedUserid] = useState("");
-    const [searchedUsername , setSearchedUsername] = useState();
-    const [searchedUserPic , setSearchedUserPic] = useState();
-    
+const MessagePage=(props)=>{
+
+
+    const search = window.location.search;
+    const query = new URLSearchParams(search);
+
+    const myUserid = query.get('myuserid');
+    const searchedUserid = query.get('searcheduserid');
+
+
+    const [searchedUser , setSearchedUser] = useState(null);
     const [runUseEffect , setRunUseEffect] = useState(false);
-    
     const [conversationId , setConversationId] = useState("");
     
     
     const [ arrivalMessage , setArrivalMessage] = useState(null)
     const [allChats , setAllChats] = useState([]);
-    
     const [onlineUsers , setOnlineUsers] = useState(null);
-    
     const [typedText , setTypedText] = useState("");
     
     
     const socket  = useRef();
-    
     const cookie = Cookies.get('x-auth-token');
     
     useEffect(()=>{
@@ -83,15 +83,6 @@ const MessagePage=()=>{
             window.location="/login";
         }else{
 
-            const search = window.location.search;
-            const query = new URLSearchParams(search);
-
-            const myUserid = query.get('myuserid');
-            const searchedUserid = query.get('searcheduserid');
-
-            setMyUserId(myUserid);
-            setSearchedUserid(searchedUserid);
-
             const fetch=async()=>{
                 try {
                     //////////////////// Getting ConversationId ////////////////////
@@ -106,7 +97,7 @@ const MessagePage=()=>{
                         setConversationId(res.data.conversation._id);
                     }
                     
-                //////////////////// Getting useDetails ////////////////////
+                //////////////////// Getting userDetails ////////////////////
                     const response =await axios.post(process.env.REACT_APP_BACKEND_API_URL+"getonlyuserdata/?token="+cookie,{
                         "userId" : searchedUserid,
                     });
@@ -114,8 +105,7 @@ const MessagePage=()=>{
                     if(response.status===204){
                         window.location="/login";
                     }else if(response.status === 200){
-                        setSearchedUsername(response.data.username);
-                        setSearchedUserPic(response.data.userProfilePic);
+                        setSearchedUser(response.data.user);
                     }
 
 
@@ -163,6 +153,7 @@ const MessagePage=()=>{
     useEffect(()=>{
 
             let flag = false;
+
 
             onlineUsers && onlineUsers.forEach(user => {
 
@@ -229,15 +220,16 @@ const MessagePage=()=>{
     return(
         <div className="messagepage-full-div">
             <Navbar/>
+
             <div className="messagepage-inner-div">
                 <div className="messagepage-friend-div">
                     <Avatar
                         height="4rem"
                         width="4rem"
-                        image={searchedUserPic}
+                        image={searchedUser && searchedUser.profilePic}
                     />
                     <div className="messagepage-friend-status-outer-div">
-                        <p className="messagepage-friend-username">{searchedUsername}</p>
+                        <p className="messagepage-friend-username">{searchedUser && searchedUser.username}</p>
                         <div className="messagepage-friend-status-inner-div">
                             <i style={{color : isFriendOnline && "greenYellow"}} className="far fa-circle friend-status-icon"></i>
                             <p style={{color : isFriendOnline && "greenYellow"}} className="friend-status-text">{isFriendOnline ?"online" : "offline"}</p>

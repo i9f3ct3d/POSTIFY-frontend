@@ -10,7 +10,8 @@ html, body {
     margin:10px auto;
     box-shadow: 4px 4px 4px rgba(128, 128, 128, 0.548);
     padding: 20px 0;
-    max-width: 570px;
+    max-width: 750px;
+    position: relative;
 }
 
 .post-card-header{
@@ -45,6 +46,7 @@ html, body {
     text-shadow: 2px 2px 3px rgba(128, 128, 128, 0.602);
     transition: all 300ms ease-in-out;
     color: #2D88FE;
+    transform: translateZ(0);
 }
 
 .post-card-date{
@@ -54,7 +56,7 @@ html, body {
     bottom: 0;
     margin: 0;
     font-size: 0.8rem;
-    font-family: 'Roboto';
+    font-family: 'Roboto' , sans-serif;
 
 }
 
@@ -180,7 +182,7 @@ html, body {
 
 .post-card-random-comment-div h3:hover{
     /* margin-top: 35px; */
-    font-size: 2.5rem;
+    transform: scale(1.1) translateZ(0);
     text-shadow: 4px 4px 5px rgba(128, 128, 128, 0.76);
 }
 
@@ -188,13 +190,9 @@ html, body {
     text-align: left;
 }
 
-.post-card-random-comment div{
+.post-card-random-comment-avatar-div{
     display: inline-block;
-    height: 2rem;
-    width: 2rem;
-    border-radius: 2rem;
-    border:2px solid white;
-    box-shadow: 2px 2px 3px rgba(128, 128, 128, 0.534);
+    transform: translateY(4px);
 }
 
 .post-card-random-comment img{
@@ -229,6 +227,108 @@ html, body {
     letter-spacing: 0.7px;
     word-spacing: 3px;
 }
+
+.post-card-dots-div{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    border-radius: 100%;
+    border: 1px solid transparent;
+    padding: 0.5rem;
+    color: rgb(107, 107, 107);
+    cursor: pointer;
+    transition: border 300ms ease-in-out;
+    z-index: 2;
+}
+
+.post-card-dots{
+    height: 1rem;
+    width: 1rem;
+}
+
+.post-card-dots-div:hover{
+    border-color: rgb(107, 107, 107);
+}
+
+.post-card-dots-div:active{
+    transition: none !important;
+    border-color: transparent;
+}
+
+
+.post-card-dots-bar{
+    display: none;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 15rem;
+    background: white;
+    padding: 20px 10px;
+    border-radius: 4px 0 4px 4px;
+    border: 1px solid #589CDC;
+    z-index: 3;
+    box-shadow: 1px 1px 15px rgba(128, 128, 128, 0.335);
+}
+
+.post-card-dots-bar-save-post-div{
+    width: 100%;
+    height: 3rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 5px;
+    transform: translateZ(0);
+    transition: background-color 500ms ease-in-out;
+}
+
+.post-card-dots-bar-save-post-div:hover{
+    background-color: #CEDEF2;
+}
+
+.post-card-dots-bar-save-post-icon-div{
+    width: 2rem;
+    height: 100%;
+    margin-right: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    color: #2B89DC;
+    margin-left: 10px;
+}
+
+.post-card-dots-bar-save-post-icon{
+    height: 1.7rem;
+    width: 1.7rem;
+    -webkit-text-stroke: 2px white;
+}
+
+.post-card-dots-bar-save-post-text-div{
+    font-family: 'Comfortaa' , cursive;
+    color: #2B89DC;
+}
+
+.post-card-dots-bar-save-post-div-close-cross-div{
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+.post-card-dots-bar-save-post-div-close-cross{
+    height: 1.3rem;
+    width: 1.3rem;
+    color: rgb(107, 107, 107);
+    transition: transform 300ms ease-in-out;
+    transform: translateZ(0);
+}
+
+.post-card-dots-bar-save-post-div-close-cross-div:hover .post-card-dots-bar-save-post-div-close-cross{
+    transform: rotate(180deg) translateZ(0);
+}
+
 
 @media(max-width:56.25rem)
 {

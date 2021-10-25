@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import Navbar from '../../component/navbar/navbar';
 import PostCard from '../../component/postCard/postCard';
+import LeftNavbar from '../../component/leftNavbar/leftNavbar';
 
 import './MyProfile.css';
 
@@ -54,6 +55,10 @@ const MyProfile=()=>{
     return(
         <div className="myprofile-full-div">
             <Navbar/>
+            <LeftNavbar
+                profilePic = {userData && userData.profilePic}
+                username = {userData && userData.username}
+            />
             <div className="myprofile-inner-div">
                 <section className="myprofile-section-1">
                     <div className="myprofile-avatar-div">
@@ -61,17 +66,17 @@ const MyProfile=()=>{
 
                         </div>
                         <div className="myprofile-profile-pic">
-                            <img src={userData && process.env.REACT_APP_BACKEND_API_URL+userData.profilePic} />
+                            <img src={userData && userData.profilePic && (userData.profilePic[0] === "u" ? process.env.REACT_APP_BACKEND_API_URL+userData.profilePic : userData.profilePic)} />
                         </div>
                     </div>
                 </section>
                 <section className="myprofile-section-2">
                     <p className="myprofile-section-2-username">{userData && userData.username}</p>
                     <p className="myprofile-section-2-useremail">{userData && userData.email}</p>
-                    <div className="myProfile-details-div">
+                    {/* <div className="myProfile-details-div">
                         <p style={{cursor:"pointer"}}>Friends : {userData && userData.friends && userData.friends.length}</p>
                         <p>Posts : {userPosts && userPosts.length}</p>
-                    </div>
+                    </div> */}
                 </section>
                 <section className="myprofile-section-3">
                 {

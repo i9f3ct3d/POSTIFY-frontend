@@ -4,13 +4,13 @@ import './signupLoginButton.css'
 
 const SignupLoginButton = (props) =>{
 
-    const [onHover , setOnHover] = useState(false);
+    // const [onHover , setOnHover] = useState(false);
 
     return(
         <button
-            style={{background:props.background, borderColor:props.borderColor, transform:onHover && "scale(1.05)" , filter: onHover && `drop-shadow(0 0 10px ${props.shadowColor})`}} 
-            onMouseOver={()=>{setOnHover(true)}} 
-            onMouseOut={()=>{setOnHover(false)}} 
+            style={{background:props.background, borderColor:props.borderColor}} 
+            // onMouseOver={()=>{setOnHover(true)}} 
+            // onMouseOut={()=>{setOnHover(false)}} 
             className="signup-login-button-div"
             >
             <div className="button-gloss">

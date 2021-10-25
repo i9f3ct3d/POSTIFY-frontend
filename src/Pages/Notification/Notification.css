@@ -1,0 +1,86 @@
+.notification-page-full-div{
+    height: 100vh;
+    width: 100vw;
+}
+
+.notification-div{
+    padding-top: 64px;
+    margin: 0 auto;
+    width: 40%;
+    max-width: 750px;
+    /* width: 100%;
+    max-width: 50%; */
+}
+
+
+.notification-inner-div{
+    width: 100%;
+    overflow-y: scroll;
+}
+
+.eachnotification-div{
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px;
+    background-color: #7fa8dd62;
+    cursor: pointer;
+    transition: transform 300ms ease-in-out;
+
+}
+
+.eachnotification-div:hover{
+    transform: scale(1.02) translateZ(0);
+    box-shadow: 2px 2px 5px rgba(128, 128, 128, 0.548);
+}
+
+.eachnotification-avatar-div{
+    margin-right: 20px;
+}
+
+.eachnotification-info-div{
+    width: calc(100% - calc(4.5rem - 20px));
+    text-align: left;
+}
+
+.eachnotification-text-div{
+    width: 100%;
+}
+
+.eachnotification-text{
+    font-family: 'Roboto';
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+    color: #2E89FF;
+}
+
+.eachnotification-time-div{
+
+    width: 100%;
+    font-family: 'Comfortaa' , cursive;
+    font-size: 0.8rem;
+    
+}
+
+.eachnotification-time-div span:nth-child(1){
+    color: white;
+}
+
+.eachnotification-div-react-icon{
+    position: absolute;
+    left: 4rem;
+    top: 4rem;
+    font-size: 1.3rem;
+}
+
+@media(max-width : 900px){
+    .notification-div{
+        max-width: 100%;
+        width: 100%;
+        padding-top: 112px;
+    }
+}

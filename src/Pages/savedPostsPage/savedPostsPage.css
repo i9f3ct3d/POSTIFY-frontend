@@ -1,0 +1,12 @@
+.saved-posts-page-full-div{
+    padding-top: 64px;
+    background-color: #F0F2F5;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+@media(max-width : 900px){
+    .saved-posts-page-full-div{
+        padding-top: 112px;
+    }
+}

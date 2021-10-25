@@ -1,4 +1,4 @@
-import react from "react";
+import React from "react";
 import "./logo.css";
 
 const Logo=props=>
@@ -17,4 +17,4 @@ const Logo=props=>
     )
 }
 
-export default Logo;
+export default React.memo(Logo);
