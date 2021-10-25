@@ -1,4 +1,4 @@
-import react from "react";
+import React from "react";
 import "./http-error.css";
 
 const Httperror=props=>
@@ -15,4 +15,4 @@ const Httperror=props=>
         </div>
     )
 }
-export default Httperror;
+export default React.memo(Httperror);

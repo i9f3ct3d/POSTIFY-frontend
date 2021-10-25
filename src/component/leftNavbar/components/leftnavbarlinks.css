@@ -1,0 +1,34 @@
+.left-navbar-link-full-div{
+    width: 15rem;
+    height: 3rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    transform: translate3d(-90%, 0, 0);
+    transition: transform 200ms ease-in-out;
+}
+
+.left-navbar-link-icon-div{
+    width: 2rem;
+    height: 2rem;
+    margin-right: 10px;
+}
+
+.left-navbar-link-text-div{
+    width: calc(100% - calc(2rem + 10px));
+    text-align: left;
+
+}
+
+.left-navbar-link-text{
+    font-family: 'Comfortaa' , cursive;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+
+.left-navbar-link-full-div:hover{
+    transform: rotate(-9deg) translate3d(0, -15px, 0) !important;
+}

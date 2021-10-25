@@ -17,6 +17,7 @@
     color: rgb(0, 68, 255);
     font-weight: 700;
     padding: 0 1rem;
+    transform: translateZ(0);
 }
 
 .inputfield-input-placeholder{
@@ -29,9 +30,7 @@
     font-family: 'Roboto';
     letter-spacing: 1px;
     font-size: 1.1rem;
-    width: 100%;
     pointer-events: none;
-    /* font-weight: 700; */
 }
 
 .inputfield-input:focus{
@@ -50,6 +49,6 @@
 
 @media(min-width : 500px){
     .inputfield-input:focus{
-        width: 20rem;
+        transform: scale(1.1) translateZ(0);
     }
 }

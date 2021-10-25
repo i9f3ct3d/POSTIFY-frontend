@@ -1,6 +1,12 @@
-import react, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios"
 import "./postCard.css"
+import {BiDotsHorizontalRounded} from 'react-icons/bi'
+import {IoSaveOutline} from 'react-icons/io5'
+import {IoCloseOutline} from 'react-icons/io5'
+import {AiOutlineEye} from 'react-icons/ai'
+import Cookies from 'js-cookie'
+import Avatar from '../Avatar/Avatar'
 
 const PostCard = props => {
 
@@ -32,14 +38,13 @@ const PostCard = props => {
 
 
     const handleLikeClick = async (event) => {
-        changeisLiked(!isLiked);
-        if (isLiked) {
 
-            changeLikeCount(likeCount - 1);
-
+        changeisLiked(prev => !prev);
+        if (isLiked && likeCount > 0) {
+            changeLikeCount(prev => prev - 1);
         }
         else {
-            changeLikeCount(likeCount + 1);
+            changeLikeCount(prev => prev + 1);
 
         }
 
@@ -49,7 +54,9 @@ const PostCard = props => {
         try {
             const response = await axios.post(process.env.REACT_APP_BACKEND_API_URL + "likepost", {
                 postid: postId,
-                userid: userId
+                userid: userId,
+                username: props.viewingUsername,
+                userProfilePic : props.viewingUserProfilePic,
             })
 
             changeLikeCount(response.data.length);
@@ -74,19 +81,58 @@ const PostCard = props => {
         checkLikeCount();
     }, [props])
 
-    //viewPostHandler => postClicker
-    //props.heading => title
-    //props.content => post content
-    //props.author => post writter
-    //props.date => post date
-    //props.comment => post's arbitary comment
-    //props.commentAuthor => props.comment 's author
+    const postCardDotsClickHanlder=()=>{
+        const postCardBar = document.querySelector(".post-card-dots-bar");
+        postCardBar.style.display = "block";
+    }
+
+    const postCardBarCrossClickHanlder=()=>{
+        const postCardBar = document.querySelector(".post-card-dots-bar");
+        postCardBar.style.display = "none";
+    }
+
+    const savePostButtonClickHanlder=async()=>{
+
+        try {
+            
+            const cookie = Cookies.get("x-auth-token");
+            const res = await axios.post(process.env.REACT_APP_BACKEND_API_URL+"savepost/?token="+cookie,{
+                "post" : props.post,
+            });
+
+            if(res.status === 200){
+                postCardBarCrossClickHanlder()
+            }
 
 
+        } catch (error) {
+            window.location ="/error"
+        }
 
+    }
 
     return (
         <div className="post-card-main-div">
+            <div onClick={postCardDotsClickHanlder} className="post-card-dots-div">
+                <BiDotsHorizontalRounded
+                    className="post-card-dots"
+                />
+            </div>
+            <div className="post-card-dots-bar">
+                <div onClick={savePostButtonClickHanlder} className="post-card-dots-bar-save-post-div">
+                    <div className="post-card-dots-bar-save-post-icon-div"><IoSaveOutline className="post-card-dots-bar-save-post-icon"/></div>
+                    <div className="post-card-dots-bar-save-post-text-div">Save post</div>
+                </div>
+                <div onClick={viewPostHandler} className="post-card-dots-bar-save-post-div">
+                    <div className="post-card-dots-bar-save-post-icon-div"><AiOutlineEye className="post-card-dots-bar-save-post-icon"/></div>
+                    <div className="post-card-dots-bar-save-post-text-div">View post</div>
+                </div>
+                <div onClick={postCardBarCrossClickHanlder} className="post-card-dots-bar-save-post-div-close-cross-div">
+                    <IoCloseOutline
+                        className="post-card-dots-bar-save-post-div-close-cross"
+                    />
+                </div>
+            </div>
             <div className="post-card-header">
                 <div className="post-author-image">
                     <img id="post-author-pic" src={(props.post.authorProfilePic && props.post.authorProfilePic !== undefined) ? process.env.REACT_APP_BACKEND_API_URL + props.post.authorProfilePic : "https://qph.fs.quoracdn.net/main-qimg-2b21b9dd05c757fe30231fac65b504dd"} />
@@ -104,8 +150,8 @@ const PostCard = props => {
                 <p className="post-card-content">{props.post.postcontent.length > 410 ? props.post.postcontent.substr(0, 410) + "...." : props.post.postcontent}</p>
                 {props.post.postcontent.length > 410 && <p onClick={viewPostHandler} className="post-card-readmore">Read more</p>}
             </div>
-            {props.post.postImage && <div className="post-card-img-div">
-                <img className="post-card-img" src={process.env.REACT_APP_BACKEND_API_URL + props.post.postImage} />
+            {props.post.postImage && props.post.postImage!=="false" && <div className="post-card-img-div">
+                <img onClick={viewPostHandler} className="post-card-img" src={process.env.REACT_APP_BACKEND_API_URL + props.post.postImage} />
             </div>}
             <div className="post-card-like-count-div">
                 <i className="fa-star fas" style={{ color: "gold" }}>{"    " + likeCount}</i>
@@ -122,8 +168,13 @@ const PostCard = props => {
                     <h3>Comments</h3>
                     <div className="post-card-underline" style={{ marginBottom: "10px", height: "1px" }}></div>
                     <div className="post-card-random-comment">
-                        <div>
-                            <img src={(randomComment.userProfilePic && randomComment.userProfilePic !== undefined) ? process.env.REACT_APP_BACKEND_API_URL + randomComment.userProfilePic : "https://qph.fs.quoracdn.net/main-qimg-2b21b9dd05c757fe30231fac65b504dd"} />
+                        <div className="post-card-random-comment-avatar-div">
+                            <Avatar
+                                height = "2rem"
+                                width = "2rem"
+                                image = {randomComment.userProfilePic}
+                                borderWidth = "2px"
+                            />
                         </div>
                         <h4>{randomComment.username}</h4>
                         <p style={{ paddingTop: randomComment.commentContent.length < 58 && "5px", paddingBottom: randomComment.commentContent.length < 58 && "10px" }}>{randomComment.commentContent}</p>

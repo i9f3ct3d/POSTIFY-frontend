@@ -11,7 +11,7 @@ const PopUp=(props)=>{
     },[props])
 
     return(
-        <div style={{display:recProps.show ? "block" : "none"}} className="popup-full-div">
+        <div style={{opacity:recProps.show && "1" , pointerEvents : recProps.show && "unset" , transform : recProps.show && "translate(-50%,-50%)"}} className="popup-full-div">
             <div className="popup-top-div">
                 <p>{recProps.statement}</p>
             </div>

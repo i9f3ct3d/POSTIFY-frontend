@@ -16,6 +16,8 @@ import Notification from './Pages/Notification/Notification';
 import ProfilePage from './Pages/profilePage/profilePage';
 import MyProfile from './Pages/MyProfile/MyProfile';
 import MessagePage from './Pages/messagePage/messagePage';
+import AuthCheck from './Pages/authcheck';
+import SavedPostsPage from './Pages/savedPostsPage/savedPostsPage';
 
 
 function App() {
@@ -62,8 +64,14 @@ function App() {
         <Route path="/myprofile" exact>
           <MyProfile/>
         </Route>
+        <Route path="/savedposts" exact>
+          <SavedPostsPage/>
+        </Route>
         <Route path="/messagepage" exact>
           <MessagePage/>
+        </Route>
+        <Route path="/authcheck/:token" exact>
+          <AuthCheck/>
         </Route>
         <Route path="/error" exact>
           <ErrorPage/>

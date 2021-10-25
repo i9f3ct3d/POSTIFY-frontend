@@ -12,7 +12,7 @@
 .myprofile-section-1{
     width: 40%;
     margin: 0 auto;
-    max-width: 570px;
+    max-width: 750px;
 }
 
 .myprofile-avatar-div{
@@ -41,11 +41,10 @@
 .myprofile-section-2{
     background-color: white;
     width: 40%;
-    max-width: 570px;
+    max-width: 750px;
     margin: 0 auto;
     padding-top: 4rem ;
     text-align: right;
-    /* border-radius: 5px; */
     border-radius: 0 0 5px 5px;
     box-shadow: 3px 3px 3px rgba(128, 128, 128, 0.527);
     padding-bottom: 1rem;
@@ -53,21 +52,23 @@
 
 .myprofile-section-2 p{
     margin-right: 10px;
-    font-family: 'Roboto';
+    /* font-family: 'Roboto';
     letter-spacing: 1px;
     word-spacing: 2px;
-    color: #1877F1;
+    color: #1877F1; */
 }
 
 .myprofile-section-2-username{
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: 900;
-    text-shadow: 2px 2px 2px rgba(128, 128, 128, 0.459);
+    font-family: 'Comfortaa' , cursive;
+    color: #050505;
 }
 
 .myprofile-section-2-useremail{
     font-size: 1rem;
     font-weight: 500;
+    font-family: 'Comfortaa' , cursive;
 }
 
 

@@ -1,0 +1,30 @@
+.left-navbar-full-div{
+    position: fixed;
+    left: 0;
+    top: 100px;
+    z-index: 10;
+}
+
+.left-navbar-profile-link-div{
+    width: 100%;
+    height: 3rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.left-navbar-profile-link-text{
+    margin-left: 10px;
+    font-family: 'Comfortaa' , cursive;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2B89DC;
+}
+
+@media (max-width : 900px){
+    .left-navbar-full-div{
+        display: none;
+    }
+}

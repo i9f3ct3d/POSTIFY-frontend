@@ -8,10 +8,9 @@ import Cookie from "js-cookie";
 import "./PostContentPage.css"
 import { useState, useEffect } from "react";
 
-
-import Comment from "./components/comment";
 import Navbar from "../../component/navbar/navbar";
 import BackImg from "../../images/icon.svg";
+import Avatar from "../../component/Avatar/Avatar";
 
 
 function useQuery() {
@@ -21,30 +20,14 @@ function useQuery() {
 const PostContentPage = () => {
     let query = useQuery();
     const postid = query.get("postid");
-    const userid = query.get("userid");
+    const viewingUserid = query.get("userid");
 
-    //count of the likes
-    const [likeCount, changeLikeCount] = useState(0)
-    //to check if the current user has liked this post or not
-    const [isLiked, changeisLiked] = useState(false);
-    const [comments, setComments] = useState();
+    const [post , setPost] = useState(null);
+    const [currentUser , setCurrentUser] = useState(null);
+    const [isLiked , setIsLiked] = useState(false);
+    const [runUseEffect , setRunUseEffect] = useState(false);
+    const [likeCount , setLikeCount] = useState(0);
 
-    const [isEmpty, changeisEmpty] = useState(false);
-
-
-    //heading of the of the post
-    const [heading, changeHeading] = useState("");
-    //body of the post 
-    const [content, changeContent] = useState("");
-    //name of the author who posted it
-    const [authorName, chnageName] = useState("");
-    //email of the author who posted it
-    const [authorEmail, chnageAuthorEmail] = useState("");
-    //date when the author has publihed this post
-    const [date, changeDate] = useState(new Date().toDateString());
-    const [userName, changeUserName] = useState("");
-    const [userEmail , setUserEmail] = useState("");
-    const [userProfilePic , setUserProfilePic] = useState("");
 
     useEffect(() => {
 
@@ -52,29 +35,24 @@ const PostContentPage = () => {
         const fetchData = async () => {
             try {
                 const cookie = Cookie.get("x-auth-token");
-                const res = await axios.get(process.env.REACT_APP_BACKEND_API_URL + 'home/?token=' + cookie);
+                const res = await axios.get(process.env.REACT_APP_BACKEND_API_URL + 'fetchuser/?token=' + cookie);
                 
                 if(res.data.credentials==="invalid")
                 {
                     window.location="/login";
                 }
-                changeUserName(res.data.username);
-                setUserEmail(res.data.useremail);
-                setUserProfilePic(res.data.profilePic);
+               setCurrentUser(res.data.user);
 
                 const response = await axios.get(process.env.REACT_APP_BACKEND_API_URL + 'postinfo?postid=' + postid);
-                changeHeading(response.data.heading);
-                setComments(response.data.comments);
-                changeContent(response.data.postcontent);
-                chnageName(response.data.username);
-                changeDate(response.data.postDate);
-                const isIncluded = response.data.likeArray.includes(userid);
-                changeLikeCount(response.data.likeArray.length);
+                setPost(response.data);
+                setLikeCount(response.data.likeArray.length)
+                
+                const isIncluded = response.data.likeArray.includes(viewingUserid);
 
                 if (isIncluded) {
-                    changeisLiked(true);
+                    setIsLiked(true);
                 } else {
-                    changeisLiked(false);
+                    setIsLiked(false);
                 }
 
             } catch (error) {
@@ -82,158 +60,176 @@ const PostContentPage = () => {
             }
         };
         fetchData();
-    }, []);
+    }, [runUseEffect]);
 
     //function triggers on click of the like button
     const handleLikeClick = async (event) => {
 
         //write the code
+        // cancel the axios request for liking if the previous one is still going on
+
         try {
             const res = await axios.post(process.env.REACT_APP_BACKEND_API_URL + "likepost", {
                 postid: postid,
-                userid: userid
+                userid: currentUser._id,
+                username: currentUser.username,
+                userProfilePic : currentUser.profilePic,
             })
+
+            // res.then
+            
+            if(res.status === 200){
+                setLikeCount(res.data.length);
+                setIsLiked(prev => !prev);
+            }
 
         } catch (error) {
             window.location="/error";
         }
 
-        if (isLiked) {
-            //user unliked the post
-
-
-            //changing the state
-            changeLikeCount(likeCount - 1);
-            changeisLiked(false);
-        }
-        else {
-            //user liked the post
-
-
-            //changing the state
-            changeLikeCount(likeCount + 1);
-            changeisLiked(true);
-        }
     }
-    //function triggers everytime user types something on the comment text area
-    const onTextareaChange = event => {
-        const textArea = document.getElementsByName("comment-area")[0];
-        textArea.style.height = (textArea.value.split(/\r*\n/).length) * 1.5.toLocaleString() + "rem";
+
+
+    const textAreaOnFocus=()=>{
+
+        const placeholder = document.querySelector(".postcard-content-page-comment-section-custom-placeholder");
+        placeholder.style.top = "-12px";
+        placeholder.innerHTML = "Comment";
+        placeholder.style.color = "rgb(24,119,241)";
+        placeholder.style.background = "white";
+        document.querySelector(".postcard-content-page-comment-section-div").style.borderColor = "rgb(24,119,241)";
+
     }
-    //function triggers whenever the user click the post a comment
-    const handlePostButtonClick = async (event) => {
-        const textArea = document.getElementsByName("comment-area")[0];
-        const comment = textArea.value.toLocaleString().trim();
-        textArea.value = "";
-        const button = document.getElementsByName("post-button")[0];
-        button.classList.toggle("postcontent-input-button-on-click");
-        setTimeout(() => {
-            button.classList.toggle("postcontent-input-button-on-click")
-        }, 200);
-        if (comment.length === 0) {
-            //comment is empty
-            changeisEmpty(true);//to display that user hasn't typed any comment
-        }
-        else {
-            changeisEmpty(false);
-            //comment has something
-            //write code
 
-            const username = userName;
+    const commentSubmitHandler=async(e)=>{
+        
+        if(e.key === "Enter" && !e.shiftKey){
 
-            try {
+            const typedComment = (e.target.value).trim();
+            if(typedComment.length > 0){
 
-                const response = await axios.post(process.env.REACT_APP_BACKEND_API_URL + "postinfo", {
-                    userEmail:userEmail,
-                    username: username,
-                    postid: postid,
-                    comment: comment,
-                    userProfilePic:userProfilePic,
-                });
-                if (response.status === 200) {
-                    const responseNew = await axios.get(process.env.REACT_APP_BACKEND_API_URL + 'postinfo?postid=' + postid);
-                    if (responseNew.status === 200) {
-                        setComments(responseNew.data.comments);
+                try {
+                    
+                    const res = await axios.post(process.env.REACT_APP_BACKEND_API_URL+"postinfo",{
+
+                        "postid" : postid,
+                        "comment":typedComment,
+                        "userEmail":currentUser.email,
+                        "username":currentUser.username,
+                        "userProfilePic":currentUser.profilePic,
+                        "userid":viewingUserid,
+
+                    })
+
+                    if(res.status === 200){
+
+                        setRunUseEffect(prev=>!prev);
+
+                    }else{
+                        window.location = "/error";
                     }
+
+                    e.target.value = "";
+                    textAreaOnInput(e);
+                    
+                } catch (error) {
+                    window.location = "/error";
                 }
 
-            } catch (error) {
-                window.location = "/error";
             }
 
         }
 
     }
-    const mapComment = eachComment => {
-        return (
-            <Comment key={Math.random()} commentContent={eachComment.commentContent} username={eachComment.username} />
-        )
+    
+    const textAreaOnInput=(e)=>{
+        e.target.style.height = "5px";
+        e.target.style.height = (e.target.scrollHeight)+"px";
+        document.querySelector(".postcard-content-page-comment-section-div").style.height = (e.target.scrollHeight + 8)+"px";
     }
+
+
     return (
-        <div>
+        <div className="postcard-content-page-full-div">
             <Navbar />
             <div className="background-image-container">
-        <img src={BackImg} />
-      </div>
-            <div className="postcontent-maindiv">
-                <div className="postcontent-topdiv">
-                    <div className="postcontent-heading">
-                        <div className="postcontent-title-placeholder">
-                            <p>TITLE</p>
-                        </div>
-                        <div className="postcontent-heading-content">
-                            <h1>{heading}</h1>
-                        </div>
-                        <div className="postcontent-post-date">
-                            <p>POSTED ON : {date}</p>
-                        </div>
-                    </div>
-                    <div className="postcontent-authorpic">
-                        <h1>{authorName.slice(0, 1).toUpperCase()}</h1>
-                    </div>
-                    <div className="postcontent-authordetails">
-                        <span>Posted By</span>
-                        <div>
-                            <p>{authorName}</p>
-                            <p>{authorEmail}</p>
-                        </div>
-                    </div>
-                    <div className="postcontent-content">
-                        <p>{content}</p>
-                    </div>
-
-                    <div className="postcontent-info-div">
-                        <div className="postcontent-info-div-top">
-                            <div className="postcontent-like-div">
-                                <i className={`like-icon fa-thumbs-up ${isLiked ? "fas" : "far"}`} onClick={handleLikeClick}></i>
-                                <div>
-                                    <p>{likeCount}</p>
-                                </div>
-                            </div>
-                            <p className="postcontent-like-info">{likeCount === 0 ? "no one liked this post yet" : likeCount === 1 && isLiked ? "you liked this post" : likeCount > 1 && isLiked ? `You and ${likeCount - 1} ${(likeCount - 1) > 1 ? "others" : "other"} Liked this post` : `${likeCount} ${likeCount > 1 ? "others" : "other"} Liked this post`}</p>
-                        </div>
-                        <div className="postcontent-comment-form-div">
-                            <div className="postcontent-input-wrapper" name="input-wrapper-1">
-                                <textarea type="text" name="comment-area" placeholder={`Write a comment....`} onChange={onTextareaChange} />
-                            </div>
-                            <div className="postcontent-input-button-div">
-                                <button type="button" name="post-button" onClick={handlePostButtonClick}><i className="fas fa-comment"></i></button>
-                                {/* <p style={{ visibility: isEmpty ? "visible" : "hidden" }}>Can't post an empty comment</p> */}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="postcontent-content-comment-div">
-                    <div className="postcontent-content-comment-div__comment-logo">
-                        <div>
-                            <h2>COMMENTS</h2>
-                        </div>
-                    </div>
-                    {
-                        comments && comments.map(mapComment)
-                    }
-                </div>
+                <img src={BackImg} />
             </div>
+            <div className="postcard-content-page-post-card-main-div">
+            <div className="postcard-content-page-post-card-header">
+                <div className="postcard-content-page-post-author-image">
+                    <img id="postcard-content-page-post-author-pic" alt="posterPic" src={post && (post.authorProfilePic ? ( post.authorProfilePic[0] === "u" ? process.env.REACT_APP_BACKEND_API_URL + post.authorProfilePic : post.authorProfilePic ): "https://qph.fs.quoracdn.net/main-qimg-2b21b9dd05c757fe30231fac65b504dd")} />
+                </div>
+                <div className="postcard-content-page-post-card-author">
+                    <h4>{post && post.username}</h4>
+                </div>
+                <p className="postcard-content-page-post-card-date">on {post && post.postDate}</p>
+            </div>
+            <div className="postcard-content-page-post-card-title-div">
+                <h3 className="postcard-content-page-post-card-title">{post && post.heading}</h3>
+            </div>
+            <div className="postcard-content-page-post-card-content-div">
+                <p className="postcard-content-page-post-card-content">{post && post.postcontent}</p>
+            </div>
+            {post && post.postImage && post.postImage!=="false" && <div className="postcard-content-page-post-card-img-div">
+                <img alt="postImage" className="postcard-content-page-post-card-img" src={process.env.REACT_APP_BACKEND_API_URL + post.postImage} />
+            </div>}
+            <div className="postcard-content-page-post-card-like-count-div">
+                <i className="fa-star fas" style={{ color: "gold" }}>{"             "}{likeCount}</i>
+            </div>
+            <div className="postcard-content-page-post-card-underline" style={{ width: "99%", height: "1px" }}></div>
+            <div className="postcard-content-page-post-card-like-div">
+                <i 
+                    className={`fa-star ${isLiked ? "fas" : "far"}`} 
+                    style={{ color: isLiked ? "gold" : "grey", cursor: "pointer", marginTop: "10px" }} 
+                    onClick={handleLikeClick}
+                >Star</i>
+
+                <i 
+                // onClick={viewPostHandler} 
+                className="fas fa-pen" style={{ position: "absolute", right: "0", marginTop: "10px", color: "grey", cursor: "pointer" }}>Comment</i>
+
+            </div>
+            {
+                <div className="postcard-content-page-post-card-comments-div">
+                    <h3>Comments</h3>
+                    <div className="postcard-content-page-comment-section-div">
+                        <div className="postcard-content-page-comment-section-avatar-div">
+                            <Avatar
+                                height = "1.5rem"
+                                width = "1.5rem"
+                                image = {currentUser && currentUser.profilePic}
+                            />
+                        </div>
+                        <div className = "postcard-content-page-comment-section-input-div">
+                            <textarea  onFocus={textAreaOnFocus} onKeyPress={commentSubmitHandler} onInput={textAreaOnInput} className="postcard-content-page-comment-section-textarea" type="text" required/>
+                        </div>
+                        <span className="postcard-content-page-comment-section-custom-placeholder">Comment ...</span>
+                    </div>
+                    <div className="postcard-content-page-post-card-underline" style={{ marginBottom: "10px", height: "1px" }}></div>
+                    {
+
+                        post && post.comments && post.comments.map((eachComment)=>{
+                            return(
+                                <div key={eachComment.index} className="postcard-content-page-post-card-each-comment">
+                                    <div>
+                                        <img alt="commenterPic" src={(eachComment.userProfilePic && eachComment.userProfilePic !== undefined) ? (eachComment.userProfilePic[0] === "u" ? process.env.REACT_APP_BACKEND_API_URL + eachComment.userProfilePic : eachComment.userProfilePic) : "https://qph.fs.quoracdn.net/main-qimg-2b21b9dd05c757fe30231fac65b504dd"} />
+                                    </div>
+                                    <h4>{eachComment.username}</h4>
+                                    <br/>
+                                    <p style={{ paddingTop: eachComment.commentContent.length < 58 && "5px", paddingBottom: eachComment.commentContent.length < 58 && "10px" }}>{eachComment.commentContent}</p>
+                                    <br/>
+                                    <br/>
+                                </div>
+                            );
+                        })
+
+                    }
+                    
+
+                </div>
+            }
+        </div>
         </div>
 
     )

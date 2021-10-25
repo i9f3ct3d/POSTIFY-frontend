@@ -8,24 +8,23 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* background: linear-gradient(rgba(0, 0, 0, 0.308) ,rgba(0, 0, 0, 0.308)); */
 }
 
 .loginPage-background-image{
     width: auto;
     height: auto;
-    /* position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%); */
     display: none;
-    /* background: linear-gradient(black ,black); */
+}
+
+.login-with-google-button-div{
+
+    margin-top: 40px;
+
 }
 @media(min-width : 1200px){
     .login-div-container{
         background: none;
         background-color: #F0F2F5;
-        /* justify-content: space-around; */
     }
     .loginPage-background-image{
         display: block;

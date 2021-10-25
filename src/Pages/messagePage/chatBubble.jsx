@@ -15,9 +15,9 @@ const ChatBubble = (props) =>{
         className="chatbubble-content-div"
         style={{
             margin: props && isUserMessage() && "0 2rem 10px auto",
-            boxShadow : props && isUserMessage() && "4px 4px 10px rgba(128,128,128,0.568)",
+            boxShadow : props && isUserMessage() && "2px 2px 10px rgba(128,128,128,0.568)",
             borderRadius: props && isUserMessage() && "10px 0 10px 10px",
-            background : props && isUserMessage() && " #66DE93 ",
+            background : props && isUserMessage() && " #2ac3f1 ",
         }}
         >
             <p style={{color :props && isUserMessage() && "white" }} className="chatbubble-content">{props.chatContent && props.chatContent}</p>
