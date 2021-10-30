@@ -27,26 +27,30 @@ html, body {
 
 .post-card-author{
     position: absolute;
-    display: inline-block;
+    display: inline-flex;
     top: 0;
     margin-left: 15px;
     cursor: pointer;
+    height: 100%;
+    align-items: center;
 }
-.post-card-author h4:hover{
+.post-card-author h4:nth-child(1):hover{
 
     font-size: 1.2rem;
     text-shadow: 4px 4px 5px rgb(128, 128, 128);
 }
 
 
-.post-card-author h4{
+.post-card-author h4:nth-child(1){
     margin: 0;
-    font-family: 'Roboto';
+    font-family: 'Comfortaa' , cursive;
     letter-spacing: 1px;
     text-shadow: 2px 2px 3px rgba(128, 128, 128, 0.602);
     transition: all 300ms ease-in-out;
-    color: #2D88FE;
+    color: #050505;
     transform: translateZ(0);
+    font-weight: 600;
+    font-size: 1.2rem;
 }
 
 .post-card-date{
@@ -73,8 +77,6 @@ html, body {
     width: 80%;
     background-color:#CED0D4;
     margin: 10px auto 0 auto;
-    /* box-shadow: 2px 2px 3px rgba(128, 128, 128, 0.568); */
-    
 }
 
 .post-card-title-div{
@@ -88,13 +90,15 @@ html, body {
     background-color: #F0F2F5;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 .post-card-title{
-    font-family: 'Dancing Script', cursive;
-    font-weight: bold;
-    font-size: 1.5rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 2rem;
     margin: 0;
     letter-spacing: 0.5px;
-    text-shadow: 2px 2px 3px rgba(128, 128, 128, 0.719);
 }
 
 .post-card-content-div{
@@ -112,9 +116,10 @@ html, body {
 .post-card-content{
     margin-bottom: 0;
     margin-top: 0;
-    font-family: 'Roboto';
-    letter-spacing: 0.7px;
-    word-spacing: 3px;
+    font-family: 'Comfortaa' , cursive;
+    letter-spacing: 1px;
+    word-spacing: 2.5px;
+    font-weight: 600;
 }
 
 .post-card-readmore{
@@ -141,9 +146,6 @@ html, body {
     
 }
 
-/* .post-card-img:hover{
-    box-shadow: 5px 5px 7px rgba(128, 128, 128, 0.568);
-} */
 
 .post-card-like-count-div{
     text-align: left;
@@ -154,11 +156,76 @@ html, body {
     margin-left: 20px;
 }
 
+.post-card-like-count-div i:nth-child(1){
+    font-size: 1.3rem;
+}
+
 .post-card-like-div{
     text-align: left;
     position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 4rem;
+    width: 100%;
+}
+
+
+.post-card-like-div-like-button{
+    height: 100%;
+    width: 4rem;
+    position: relative;
+    overflow:visible;
+}
+
+.post-card-like-div-like-button-touchable-div{
+    position: absolute;
+    height: 2rem;
+    width: 2rem;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50% , -50%);
+    /* background-color: rgba(128, 128, 128, 0.322); */
+    cursor: pointer;
+    z-index: 2;
+}
+
+.post-card-like-div-like-button-lottie-container{
+    width: 6rem;
+    height: 6rem;
+    padding: 0;
+    transform: translate(-1rem , -1rem);
+}
+
+.post-card-like-div-comment-button{
+    height: 100%;
+    width: fit-content;
+    display: flex;
+    align-items: center;
     margin-right: 20px;
-    margin-left: 20px;
+    color: grey;
+}
+
+.post-card-like-div-comment-button i:nth-child(1){
+    cursor: pointer;
+}
+
+
+@keyframes animateLikeButton {
+
+    0%{
+        transform: scale(1);
+    }
+    20%{
+        transform: scale(0.8);
+    }
+    80%{
+        transform: scale(1.2);
+    }
+    100%{
+        transform: scale(1);
+    }
+    
 }
 
 .post-card-random-comment-div{
@@ -204,9 +271,9 @@ html, body {
 .post-card-random-comment h4{
     display: inline-block;
     margin: 0;
-    font-family: 'Roboto';
+    font-family: 'Comfortaa' , cursive;
     letter-spacing: 1px;
-    color: #2D88FE;
+    color: #050505;
     text-shadow: 2px 2px 2px rgba(128, 128, 128, 0.445);
     padding-left: 10px;
 }
@@ -242,6 +309,7 @@ html, body {
     cursor: pointer;
     transition: border 300ms ease-in-out;
     z-index: 2;
+    color: #050505;
 }
 
 .post-card-dots{
@@ -250,7 +318,7 @@ html, body {
 }
 
 .post-card-dots-div:hover{
-    border-color: rgb(107, 107, 107);
+    border-color: #050505;
 }
 
 .post-card-dots-div:active{
@@ -268,7 +336,7 @@ html, body {
     background: white;
     padding: 20px 10px;
     border-radius: 4px 0 4px 4px;
-    border: 1px solid #589CDC;
+    border: 1px solid #050505;
     z-index: 3;
     box-shadow: 1px 1px 15px rgba(128, 128, 128, 0.335);
 }
@@ -308,21 +376,27 @@ html, body {
 
 .post-card-dots-bar-save-post-text-div{
     font-family: 'Comfortaa' , cursive;
-    color: #2B89DC;
+    color: #050505;
+    font-weight: 600;
 }
 
 .post-card-dots-bar-save-post-div-close-cross-div{
     position: absolute;
     right: 5px;
     top: 5px;
+    border-radius: 100%;
+    background-color: black;
+    height: 1.3rem;
+    width: 1.3rem;
 }
 
 .post-card-dots-bar-save-post-div-close-cross{
     height: 1.3rem;
     width: 1.3rem;
-    color: rgb(107, 107, 107);
+    color: whitesmoke;
     transition: transform 300ms ease-in-out;
     transform: translateZ(0);
+    cursor: pointer;
 }
 
 .post-card-dots-bar-save-post-div-close-cross-div:hover .post-card-dots-bar-save-post-div-close-cross{

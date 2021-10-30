@@ -1,5 +1,5 @@
 import axios from "axios";
-import React ,{useRef, useState}from "react";
+import React ,{useRef}from "react";
 import Cookies from "js-cookie";
 import "./LogIn.css"
 
@@ -7,62 +7,32 @@ import Logo from "../../component/logo/logo";
 import Navbar from "../../component/navbar/navbar";
 import SignupLoginButton from "../../component/signup_login_buttons/signupLoginButton";
 import InputField from "../../component/inputField/inputField";
+import LottiAnimation from "../lottiAnimation";
+import LoginPageLotti from '../../images/loginPageLottie.json'
+import BackgroundAnimation from "../../component/BackgroundAnimation/BackgroundAnimation";
 
-const LogIn=(()=>{
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const LogIn=()=>{
 
 
-  const isValidEmailRef = useRef(true);
-  const isValidPasswordRef = useRef(true);
   const formEmailRef = useRef("");
   const formPasswordRef = useRef("");
   
-    const [isValidEmail, setisValidEmail]=useState(true);
-    const [isValidPassword, setisValidPassword]=useState(true);
-    const [isAllCredentialsValid, setisAllCredentialsValid]=useState(true);
-
-
 
 
     const emailOnchangeHandler=(e)=>{
         e.preventDefault();
         const typedEmail = e.target.value.trim();
         formEmailRef.current = typedEmail;
-
-        if(validateEmail(typedEmail)){
-
-          if(!isValidEmailRef.current){
-            isValidEmailRef.current = true;
-            setisValidEmail(true);
-          }
-
-        }else{
-
-          if(isValidEmailRef.current){
-            isValidEmailRef.current = false;
-            setisValidEmail(false);
-          }
-        }
     }
 
     const passwordOnchangeHandler=(e)=>{
         e.preventDefault();
         const typedPassword = e.target.value;
         formPasswordRef.current=(typedPassword);
-
-        if(typedPassword.trim()){
-
-          if(!isValidPasswordRef.current){
-            isValidPasswordRef.current = true;
-            setisValidPassword(true)
-          }
-
-        }else{
-          if(isValidPasswordRef.current){
-            isValidPasswordRef.current = false;
-            setisValidPassword(false)
-          }
-
-        }
     }
 
     let validateEmail = (email) => {
@@ -81,8 +51,34 @@ const LogIn=(()=>{
         const email=formEmailRef.current.trim();//change
         const password=formPasswordRef.current.trim();//change
 
+        if(!validateEmail(email)){
+          // generate invalid email entered toast
+          toast.error('Invalid email entered!', {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            });
+          return;
+        }
 
-        if(validateEmail(email) && password){
+        if(!password){
+          // generate invalid password entered toast
+          toast.error('Invalid password entered!', {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            });
+          return;
+        }
+
         
             try {
                 const response=await axios.post(process.env.REACT_APP_BACKEND_API_URL+"login",{
@@ -91,22 +87,25 @@ const LogIn=(()=>{
                 })
                 if(response.data.credentials==="valid")
                 {
-                    setisAllCredentialsValid(true);
                     Cookies.set('x-auth-token', response.data.token,{ expires: 7 });
                     window.location="/home";
                 }
                 else
                 {
-                    setisAllCredentialsValid(false);
+                  toast.error('Invalid credentials!', {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
                 }
+
             } catch (error) {
-                setisAllCredentialsValid(false);
                 window.location="/error";
             }
-        }else{
-            !validateEmail(email) && setisValidEmail(false);
-            !password && setisValidPassword(false);
-        }
     }
 
     const googleSignUpHandler=async()=>{
@@ -192,31 +191,51 @@ const LogIn=(()=>{
     return(
       <div style={{width : "100%" , minHeight : "100vh"}}>
       <Navbar />
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme = "colored"
+      />
+      <div className="background-div"></div>
         <div className="login-div-container">
-        <img className="loginPage-background-image" src="https://www.stepondigital.com/wp-content/uploads/2019/10/social-media-marketing.svg" />
+        <BackgroundAnimation/>
+        <div className="loginPage-background-image-div">
+          <LottiAnimation
+            lotti = {LoginPageLotti}
+            className = "loginPage-background-image"
+          />
+        </div> 
             <div className="login-fulldiv">
-                <Logo scale="1"/>
+                
+                <div className="login-page-logo-div">
+                  <Logo 
+                  />
+                </div>
+
                 <h1>Login Here</h1>
+                <div style={{borderRadius : "0 50px 50px 0", height : "10px" , backgroundColor : "#45BD62", marginLeft : "0" , width : "90%"}} className="underline"></div>
                 <div className="login-div">
                     <form onSubmit={onLogInSubmitHandler}>
                         <InputField
-                            type="email"
+                            type="text"
                             placeholder="Email"
                             onChange={emailOnchangeHandler}
-                            isCorrect={isValidEmail} 
                         />
                         <br/>
-                        <p  className="warning-messages" style={{visibility:`${isValidEmail?"hidden":"visible"}`}}>Invalid Email Entered</p>
+                        <br/>
                         <InputField
                             type="password"
                             placeholder="Password"
                             onChange={passwordOnchangeHandler}
-                            isCorrect={isValidPassword}
                         />
-                        <p className="warning-messages" style={{visibility:`${isValidPassword?"hidden":"visible"}`}}>Invalid Password Entered</p>
-
-
-
+                        <br/>
                         <br/>
                         <SignupLoginButton
                             iconClassName="fas fa-sign-in-alt"
@@ -226,7 +245,6 @@ const LogIn=(()=>{
                             shadowColor="rgba(36, 143, 231, 0.335)"
                             background="rgba(36, 104, 231, 0.596)"
                         />
-                        {!isAllCredentialsValid && <p className="warning-messages">Credentials Invalid</p>}
                         <br/>
 
                     </form>
@@ -248,6 +266,6 @@ const LogIn=(()=>{
         </div>
     );
 
-})
+}
 
 export default React.memo(LogIn);

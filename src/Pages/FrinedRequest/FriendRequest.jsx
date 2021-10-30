@@ -6,6 +6,7 @@ import RightOnlineUsersBar from '../../component/rightOnlineUsersBar/rightOnline
 import Cookies from "js-cookie";
 import axios from "axios";
 import FriendRequestCard from "./components/FriendRequestCard";
+import BackgroundAnimation from '../../component/BackgroundAnimation/BackgroundAnimation'
 
 const FriendRequest=()=>{
 
@@ -77,6 +78,8 @@ const FriendRequest=()=>{
     return(
         <div className="friend-request-page-full-div">
             <Navbar/>
+            <div className="background-div"></div>
+            <BackgroundAnimation/>
             <LeftNavbar
                 profilePic = {user && user.profilePic}
                 username = {user && user.username}

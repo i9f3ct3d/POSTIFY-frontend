@@ -218,6 +218,8 @@
     left:0;
     height: 64px;
     width:64px;
+    z-index: 2;
+    overflow: hidden;
 }
 
 .navbar-logo-div img{
@@ -653,6 +655,14 @@ display: none;
 .navbar-mobile-icons-inside-div{
     width:70%;
     margin:0 auto;
+}
+
+
+
+@media (max-width : 600px){
+    .navbar-global-buttons{
+        display: none !important;
+    }
 }
 
 

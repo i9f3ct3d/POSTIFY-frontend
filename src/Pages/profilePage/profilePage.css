@@ -1,7 +1,6 @@
 .profilepage-full-div{
     width: 100%;
     padding-top: 64px;
-    background-color: #F0F2F5;
     min-height: calc(100vh - 64px);
 }
 

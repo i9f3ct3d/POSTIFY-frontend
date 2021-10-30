@@ -1,0 +1,20 @@
+.loader-page-full-div{
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.61);
+    backdrop-filter: blur(20px);
+    /* opacity: 0;
+    transition: opacity 500ms ease-in-out; */
+}
+
+.loader-page-loader-div{
+    width: fit-content;
+    height: fit-content;
+}

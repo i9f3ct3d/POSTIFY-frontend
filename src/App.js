@@ -1,23 +1,27 @@
 import './App.css';
+import React , { Suspense , lazy } from 'react';
 import { BrowserRouter as Router, Route , Switch,  Redirect} from "react-router-dom";
 
 import SignUp from "./Pages/SignUp/SignUp"
 import LogIn from "./Pages/LogIn/LogIn"
-import HomePage from "./Pages/Home/HomePage"
+
 import ErrorPage from "./Pages/http-error-page/http-error";
-import NewPostPage from "./Pages/NewPostPage/NewPostPage";
-import MyPost from "./Pages/MyPosts/Mypost";
-import PostContentPage from "./Pages/PostContentPage/PostContentPage";
 import Contact from "./Pages/Contact/Contact"
-import WelcomePage from "./Pages/Welcomepage/WelcomePage"
-import FriendSuggestion from './Pages/FriendSuggestionPage/FriendSuggestion';
-import FriendRequest from './Pages/FrinedRequest/FriendRequest';
-import Notification from './Pages/Notification/Notification';
-import ProfilePage from './Pages/profilePage/profilePage';
+// import WelcomePage from "./Pages/Welcomepage/WelcomePage"
 import MyProfile from './Pages/MyProfile/MyProfile';
-import MessagePage from './Pages/messagePage/messagePage';
 import AuthCheck from './Pages/authcheck';
-import SavedPostsPage from './Pages/savedPostsPage/savedPostsPage';
+import Loader from './component/Loader/Loader';
+
+
+const HomePage =  lazy(() => import("./Pages/Home/HomePage"));
+const NewPostPage = lazy(()=>import("./Pages/NewPostPage/NewPostPage"))
+const PostContentPage = lazy(()=>import("./Pages/PostContentPage/PostContentPage"));
+const FriendRequest = lazy(()=>import("./Pages/FrinedRequest/FriendRequest"));
+const Notification = lazy(()=>import("./Pages/Notification/Notification"));
+const ProfilePage = lazy(()=>import("./Pages/profilePage/profilePage"));
+const SavedPostsPage = lazy(()=>import("./Pages/savedPostsPage/savedPostsPage"));
+const MessagePage = lazy(()=>import("./Pages/messagePage/messagePage"));
+
 
 
 function App() {
@@ -31,52 +35,93 @@ function App() {
         <Route path = "/signup" exact>
           <SignUp/>
         </Route>
+
         <Route path="/home" exact>
-          <HomePage/>
+          <Suspense fallback={<Loader/>}>
+            <HomePage/>
+          </Suspense>
         </Route>
+
+
         <Route path="/newpost" exact>
+        <Suspense fallback={<Loader/>}>
           <NewPostPage/>
+        </Suspense>
         </Route>
-        <Route path="/mypost" exact>
-          <MyPost/>
-        </Route>
+
+
         <Route path="/postinfo" exact>
+          <Suspense fallback={<Loader/>}>
           <PostContentPage />
+          </Suspense>
         </Route>
+
+
         <Route path="/contact" exact>
           <Contact/>
         </Route>
-        <Route path="/welcomepage" exact>
+
+
+        {/* <Route path="/welcomepage" exact>
           <WelcomePage/>
-        </Route>
-        <Route path="/friendsuggestion" exact>
-          <FriendSuggestion/>
-        </Route>
+        </Route> */}
+
+
         <Route path="/friendrequest" exact>
+        <Suspense fallback={<Loader/>}>
           <FriendRequest/>
+        </Suspense>
         </Route>
+
+
+        
         <Route path="/notification" exact>
+          <Suspense fallback={<Loader/>}>
           <Notification/>
+          </Suspense>
         </Route>
+
+
+
         <Route path="/profilepage" exact>
+          <Suspense fallback={<Loader/>}>
           <ProfilePage/>
+          </Suspense>
         </Route>
+
+
         <Route path="/myprofile" exact>
-          <MyProfile/>
+            <Suspense fallback={<Loader/>}>
+              <MyProfile/>
+            </Suspense>
         </Route>
+
+
+
         <Route path="/savedposts" exact>
+            <Suspense fallback={<Loader/>}>
           <SavedPostsPage/>
+            </Suspense>
         </Route>
+
+
+
         <Route path="/messagepage" exact>
-          <MessagePage/>
+            <Suspense fallback={<Loader/>}>
+              <MessagePage/>
+            </Suspense>
         </Route>
+
+
         <Route path="/authcheck/:token" exact>
           <AuthCheck/>
         </Route>
+
+
         <Route path="/error" exact>
           <ErrorPage/>
         </Route>
-        <Redirect to="/welcomepage"/>
+        <Redirect to="/signup"/>
       </Switch>
       </Router>
     </div>

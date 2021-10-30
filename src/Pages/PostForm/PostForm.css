@@ -5,7 +5,6 @@
   border-radius: 10px;
   background-color: white;
   filter: drop-shadow(0 0 30px grey);
-  /* padding: 1rem; */
   font-family: 'Comfortaa' , cursive;
 }
 
@@ -111,7 +110,6 @@ visibility: hidden;
   overflow: hidden;
   overflow-y: scroll;
   margin-top:20px;
-  /* display: inline-block; */
   filter: drop-shadow(0 0 15px rgb(90, 89, 89));
   background-color: black;
 }
@@ -120,11 +118,6 @@ visibility: hidden;
   width: 100%;
   max-width: 800px;
   border-top: 4px solid black;
-  /* border-radius: 20px; */
-  /* border: 2px solid white; */
-  /* box-shadow: 4px 4px 4px grey; */
-  
-  /* display: inline-block; */
 }
 
 #post-content-span {
@@ -192,10 +185,6 @@ background: -moz-linear-gradient(1deg,#f0f2f5 0%, #00ccffb2 220%);
 }
 
 
-.new-post-submit-button i{
-  text-shadow: 3px 3px 4px rgba(128, 128, 128, 0.609);
-  animation: animate 2.5s infinite linear;
-}
 
 .post-form-add-image-svg-div{
   margin: 10px auto 0 auto;
@@ -217,26 +206,7 @@ background: -moz-linear-gradient(1deg,#f0f2f5 0%, #00ccffb2 220%);
   transform: translateY(-2px);
 }
 
-@keyframes animate{
-0%{
-  transform:rotate(0deg)
-}
-20%{
-  transform:rotate(-20deg)
-}
-28%{
-  transform:rotate(0deg)
-}
-35%{
-  transform:rotate(-20deg)
-}
-40%{
-  transform:rotate(0deg)
-}
-100%{
-  transform:rotate(0deg)
-}
-}
+
 
 @media(max-width : 900px){
   .post-form-div{

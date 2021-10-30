@@ -2,7 +2,7 @@ import react, { useState } from "react";
 import emailjs from 'emailjs-com';
 import "./Contact.css"
 import Navbar from "../../component/navbar/navbar"
-import BackImg from "../../images/icon.svg";
+import BackgroundAnimation from '../../component/BackgroundAnimation/BackgroundAnimation'
 
 const Contact=()=>{
 
@@ -77,9 +77,7 @@ const Contact=()=>{
 
     return(
     <div className="contact-page-div">
-    <div className="background-image-container">
-        <img src={BackImg} />
-      </div>
+        <BackgroundAnimation/>
         <Navbar/>
         <div className="contact-page-all-content">
         <h1>We are</h1>
