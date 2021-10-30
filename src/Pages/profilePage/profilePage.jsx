@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import Navbar from '../../component/navbar/navbar';
@@ -9,6 +9,8 @@ import './profilePage.css';
 import PopUp from './components/PopUp/popUp';
 import LeftNavbar from '../../component/leftNavbar/leftNavbar';
 import RightOnlineUsersBar from '../../component/rightOnlineUsersBar/rightOnlineUsersBar';
+import BackgroundAnimation from '../../component/BackgroundAnimation/BackgroundAnimation';
+import StarAnimation from '../../component/StarAnimation/StarAnimation';
 
 const ProfilePage = () => {
 
@@ -238,16 +240,28 @@ const ProfilePage = () => {
 
     }
 
-
-
+    const ref = useRef();
+    const starAnimationDivRef = useRef();
+    const timeoutRef = useRef(null);
 
     return(
-        <div  className="profilepage-full-div">
+        <div className="profilepage-full-div">
             <Navbar/>
+            <div className="background-div"></div>
+            <BackgroundAnimation/>
             <LeftNavbar
                 profilePic = {searchedUser && searchedUser.profilePic}
                 username = {searchedUser && searchedUser.username}
             />
+
+            <div
+                style={{display : "none"}} 
+                ref={starAnimationDivRef}>
+                <StarAnimation
+                    ref={ref}
+                />
+            </div>
+
             <PopUp
                 show={showPopUp}
                 closePopUp={setShowPopUp}
@@ -295,11 +309,6 @@ const ProfilePage = () => {
                     <BiDotsVerticalRounded
                         className = "add-friend-dots"
                     />
-                    {/* <i className="fas fa-ellipsis-v add-friend-dots"></i> */}
-                    {/* <div className="profilepage-details-div">
-                        <p style={{cursor:"pointer"}}>Friends : {searchedUser && searchedUser.friends && searchedUser.friends.length}</p>
-                        <p>Posts : {searchedUserPosts && searchedUserPosts.length}</p>
-                    </div> */}
                 </section>
                 <section className="profilepage-section-3">
                 {
@@ -310,6 +319,27 @@ const ProfilePage = () => {
                                 post={eachPost}
                                 key={eachPost._id}
                                 mainUserId={searchedUser._id}
+                                turnOnConfetti = {()=>{
+                                
+                                if(timeoutRef.current){
+                                    clearTimeout(timeoutRef.current)
+                                }
+
+                                ref.current.play(0 , 50);
+                                starAnimationDivRef.current.style.display = "block"
+
+                                timeoutRef.current = setTimeout(()=>{
+
+                                    starAnimationDivRef.current.style.display = "none"
+                                    ref.current.stop();
+
+                                },1950)
+
+                            }}
+                                turnOffConfetti = {()=>{
+                                    starAnimationDivRef.current.style.display = "none"
+                                    ref.current.stop();
+                                }}
                             />
                         );
                     })

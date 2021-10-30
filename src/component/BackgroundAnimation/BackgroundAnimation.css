@@ -1,0 +1,14 @@
+.background-image-container-full-page{
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -4;
+    height: 0;
+    width: 0;
+}
+
+.background-image-container{
+    position: fixed;
+    bottom: 0;
+    z-index: -4;
+}

@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import Avatar from '../Avatar/Avatar';
 import {io} from 'socket.io-client';
 import './rightOnlineUsersBar.css'
+import {IoCloseOutline} from 'react-icons/io5'
 
 const RightOnlineUsersBar=(props)=>{
 
@@ -37,8 +38,16 @@ const RightOnlineUsersBar=(props)=>{
     
       },[viewingUserid])
 
+    //   const onlineUsersBarRef = useRef();
 
-    
+
+    //   useEffect(()=>{
+
+    //     if(props && props.isOpen && onlineUsersBarRef.current){
+    //         onlineUsersBarRef.current.style.display = "block";
+    //     }
+
+    //   },[props])
 
 
     useEffect(()=>{
@@ -83,8 +92,25 @@ const RightOnlineUsersBar=(props)=>{
 
     }
 
+    const onlineUsersBarCloseButtonHandler = () => {
+
+        const allOnlineUsersBar = document.querySelectorAll(".right-online-users-bar-full-div");
+
+        allOnlineUsersBar.forEach(o => {
+          o.style.right = "-100%";
+        });
+
+    }
+
     return (
         <div className="right-online-users-bar-full-div">
+            
+            <div onClick = {onlineUsersBarCloseButtonHandler} className="mobile-right-online-users-bar-close-div">
+                <IoCloseOutline
+                    
+                />
+            </div>
+
             <p className="right-online-users-bar-title"><i className="far fa-circle right-online-users-bar-title-icon"></i>Online</p>
             <div style={{height : "1px" , backgroundColor : "#CED0D4" , width : "100%" , margin : "10px 0 0 0"}} className="underline"></div>
             <div className="right-online-users-bar-inner-div">

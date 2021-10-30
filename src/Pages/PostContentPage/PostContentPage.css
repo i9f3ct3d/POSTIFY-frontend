@@ -1,7 +1,6 @@
 .postcard-content-page-full-div{
     width: 100vw;
     min-height: 100vh;
-    background-color: #F0F2F5;
     padding-top: 5px;
 }
 
@@ -32,21 +31,23 @@
     margin-left: 15px;
     cursor: pointer;
 }
-.postcard-content-page-post-card-author h4:hover{
+.postcard-content-page-post-card-author h4:nth-child(1):hover{
 
     font-size: 1.2rem;
     text-shadow: 4px 4px 5px rgb(128, 128, 128);
 }
 
 
-.postcard-content-page-post-card-author h4{
+.postcard-content-page-post-card-author h4:nth-child(1){
     margin: 0;
-    font-family: 'Roboto';
+    font-family: 'Comfortaa' , cursive;
     letter-spacing: 1px;
     text-shadow: 2px 2px 3px rgba(128, 128, 128, 0.602);
     transition: all 300ms ease-in-out;
-    color: #2D88FE;
+    color: #050505;
     transform: translateZ(0);
+    font-weight: 600;
+    font-size: 1.2rem;
 }
 
 .postcard-content-page-post-card-date{
@@ -56,8 +57,9 @@
     bottom: 0;
     margin: 0;
     font-size: 0.8rem;
-    font-family: 'Roboto' , sans-serif;
-
+    font-family: 'Comfortaa' , cursive;
+    font-weight: 600;
+    color: #050505;
 }
 
 #postcard-content-page-post-author-pic{
@@ -88,12 +90,12 @@
 }
 
 .postcard-content-page-post-card-title{
-    font-family: 'Dancing Script', cursive;
-    font-weight: bold;
-    font-size: 1.5rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 2rem;
     margin: 0;
     letter-spacing: 0.5px;
-    text-shadow: 2px 2px 3px rgba(128, 128, 128, 0.719);
 }
 
 .postcard-content-page-post-card-content-div{
@@ -111,9 +113,10 @@
 .postcard-content-page-post-card-content{
     margin-bottom: 0;
     margin-top: 0;
-    font-family: 'Roboto';
-    letter-spacing: 0.7px;
-    word-spacing: 3px;
+    font-family: 'Comfortaa' , cursive;
+    letter-spacing: 1px;
+    word-spacing: 2.5px;
+    font-weight: 600;
 }
 
 .postcard-content-page-post-card-readmore{
@@ -162,17 +165,19 @@
     margin-left: 20px;
 }
 
-.postcard-content-page-post-card-comments-div h3{
+.postcard-content-page-post-card-comments-div h3:nth-child(1){
     font-family: 'Dancing Script' , cursive;
     font-weight: 700;
-    font-size: 2rem;
-    margin-bottom: 10px;
-    text-shadow: 3px 3px 5px rgba(128, 128, 128, 0.616);
+    font-size: 4rem;
+    margin-bottom: 0;
+    text-shadow: 1px 1px 1px rgba(51, 51, 51, 0.616);
     transition: all 300ms ease-in-out;
     cursor: pointer;
     margin-top: 15px;
     margin-left: auto;
     margin-right: auto;
+    color: #050505;
+    letter-spacing: 2px;
 }
 
 .postcard-content-page-post-card-comments-div h3:hover{
@@ -202,11 +207,12 @@
 .postcard-content-page-post-card-each-comment h4{
     display: inline-block;
     margin: 0;
-    font-family: 'Roboto';
+    font-family: 'Comfortaa' , cursive;
     letter-spacing: 1px;
-    color: #2D88FE;
     text-shadow: 2px 2px 2px rgba(128, 128, 128, 0.445);
     padding-left: 10px;
+    color: #050505;
+    font-weight: 600;
 }
 
 
@@ -225,6 +231,13 @@
     word-spacing: 3px;
     display: inline-block;
     margin-left: 10px;
+    min-width: 15rem;
+    min-height: 2rem;
+    height: fit-content;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
 }
 
 .postcard-content-page-comment-section-div{

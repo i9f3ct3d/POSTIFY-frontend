@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import Navbar from '../../component/navbar/navbar';
@@ -6,6 +6,9 @@ import PostCard from '../../component/postCard/postCard';
 import LeftNavbar from '../../component/leftNavbar/leftNavbar';
 
 import './MyProfile.css';
+import BackgroundAnimation from '../../component/BackgroundAnimation/BackgroundAnimation';
+import StarAnimation from '../../component/StarAnimation/StarAnimation';
+import RightOnlineUsersBar from '../../component/rightOnlineUsersBar/rightOnlineUsersBar';
 
 const MyProfile=()=>{
 
@@ -50,15 +53,29 @@ const MyProfile=()=>{
 
     },[])
 
-
+    const ref = useRef();
+    const starAnimationDivRef = useRef();
+    const timeoutRef = useRef(null);
 
     return(
         <div className="myprofile-full-div">
+        <div className="background-div"></div>
             <Navbar/>
+            <BackgroundAnimation/>
             <LeftNavbar
                 profilePic = {userData && userData.profilePic}
                 username = {userData && userData.username}
             />
+            <RightOnlineUsersBar
+                viewingUserid={userData && userData._id}
+            />
+            <div
+            style={{display : "none"}} 
+            ref={starAnimationDivRef}>
+                <StarAnimation
+                    ref={ref}
+                />
+            </div>
             <div className="myprofile-inner-div">
                 <section className="myprofile-section-1">
                     <div className="myprofile-avatar-div">
@@ -87,6 +104,28 @@ const MyProfile=()=>{
                             post={eachPost}
                             key={eachPost._id}
                             mainUserId={userData._id}
+                            turnOnConfetti = {()=>{
+                                
+                                if(timeoutRef.current){
+                                    clearTimeout(timeoutRef.current)
+                                }
+
+                                ref.current.play(0 , 50);
+                                starAnimationDivRef.current.style.display = "block"
+
+                                timeoutRef.current = setTimeout(()=>{
+
+                                    starAnimationDivRef.current.style.display = "none"
+                                    ref.current.stop();
+
+                                },1950)
+
+                            }}
+
+                            turnOffConfetti = {()=>{
+                                starAnimationDivRef.current.style.display = "none"
+                                ref.current.stop();
+                            }}
                         />
                         );
                     })

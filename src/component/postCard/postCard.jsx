@@ -1,18 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios"
 import "./postCard.css"
 import {BiDotsHorizontalRounded} from 'react-icons/bi'
-import {IoSaveOutline} from 'react-icons/io5'
 import {IoCloseOutline} from 'react-icons/io5'
-import {AiOutlineEye} from 'react-icons/ai'
 import Cookies from 'js-cookie'
 import Avatar from '../Avatar/Avatar'
+// import StarAnimation from "../StarAnimation/StarAnimation";
+import LottieAnimation from "../../Pages/lottiAnimation";
+import saveAnimation from '../../images/saveAnimation.json'
+import viewPostAnimation from '../../images/viewpostAnimation.json'
+import starReactAnimation from '../../images/starReactAnimation.json'
+import Lottie from 'lottie-web'
+
+let likedPosts = new Set();
 
 const PostCard = props => {
 
     const [randomComment, setRandomComment] = useState(props.post.comments.length > 0 ? props.post.comments[Math.floor(Math.random() * props.post.comments.length)] : null);
     const [likeCount, changeLikeCount] = useState(0)
     const [isLiked, changeisLiked] = useState(false);
+
+    const postCardDotsBar = useRef();
+    const postCardDotsBarCloser = useRef();
 
 
     const findRandomComment = () => {
@@ -25,6 +34,7 @@ const PostCard = props => {
     }
 
     const checkLikeCount = () => {
+
         changeLikeCount(props.post.likeArray.length);
         if (props.post.likeArray.includes(props.mainUserId)) {
             changeisLiked(true);
@@ -35,18 +45,42 @@ const PostCard = props => {
 
     }
 
+    const turnOnConfetti = () => {
 
+        props && props.turnOnConfetti && props.turnOnConfetti();
+
+    }
+
+    const turnOffConfetti = () => {
+
+        props && props.turnOffConfetti && props.turnOffConfetti();
+
+    }
 
     const handleLikeClick = async (event) => {
 
-        changeisLiked(prev => !prev);
+        console.log("click");
+
+        
         if (isLiked && likeCount > 0) {
             changeLikeCount(prev => prev - 1);
+            turnOffConfetti();
+            starAnim.goToAndStop(0,true);
         }
         else {
             changeLikeCount(prev => prev + 1);
+                            
+            starAnim.setSpeed(0.5)
+            starAnim.play();
+            dontRunUseEffect.current = true;
 
+            if(!likedPosts.has(props.post._id)){
+                turnOnConfetti();
+                likedPosts.add(props.post._id);
+            }
         }
+
+        changeisLiked(prev => !prev);
 
         const postId = props.post._id;
         const userId = props.mainUserId;
@@ -81,14 +115,14 @@ const PostCard = props => {
         checkLikeCount();
     }, [props])
 
+
+
     const postCardDotsClickHanlder=()=>{
-        const postCardBar = document.querySelector(".post-card-dots-bar");
-        postCardBar.style.display = "block";
+        postCardDotsBar.current.style.display = "block";
     }
 
     const postCardBarCrossClickHanlder=()=>{
-        const postCardBar = document.querySelector(".post-card-dots-bar");
-        postCardBar.style.display = "none";
+        postCardDotsBar.current.style.display = "none";
     }
 
     const savePostButtonClickHanlder=async()=>{
@@ -111,23 +145,156 @@ const PostCard = props => {
 
     }
 
+    function getMonth(n){
+
+        switch(n){
+            case 1 : {
+                return "Jan";
+            }
+            case 2 : {
+                return "Feb";
+            }
+            case 3 : {
+                return "Mar";
+            }
+            case 4 : {
+                return "Apr";
+            }
+            case 5 : {
+                return "May";
+            }
+            case 6 : {
+                return "Jun";
+            }
+            case 7 : {
+                return "Jul";
+            }
+            case 8 : {
+                return "Aug";
+            }
+            case 9 : {
+                return "Sep";
+            }
+            case 10 : {
+                return "Oct";
+            }
+            case 11 : {
+                return "Nov";
+            }
+            case 12 : {
+                return "Dec";
+            }
+            default : {
+                return "Jan";
+            }
+        }
+
+    }
+
+    const getDate=(s)=>{
+
+        const stringDate = new Date(s);
+        const month = getMonth(stringDate.getMonth());
+        const date = stringDate.getDate();
+
+        let ansString = "";
+
+        if(date % 10 === 1){
+            ansString += date + "st ";
+        }else if(date % 10 === 2){
+            ansString += date + "nd ";
+        }else if(date % 10 === 3){
+            ansString += date + "rd ";
+        }else{
+            ansString += date + "th";
+        }
+
+        ansString += month;
+
+        return ansString;
+
+    }
+    
+
+    const showuserPageHandler = () => {
+        if(props){
+            window.location="/profilepage?searcheduserid="+props.post.userid;
+        }
+    }
+
+
+    const starReactAnimationRef = useRef(null);
+    const [starAnim , setStarAnim] = useState(null)
+
+      useEffect(()=>{
+
+        const anim = Lottie.loadAnimation({
+            container : starReactAnimationRef.current, 
+            renderer : 'canvas',
+            loop : false,
+            autoplay : false,
+            path : "../../images/starReactAnimation.json",
+            animationData : starReactAnimation,
+        })
+
+        
+        setStarAnim(anim);
+
+
+      },[])
+
+      const dontRunUseEffect = useRef(false);
+
+      useEffect(()=>{
+
+        if(isLiked !== null && starAnim && !dontRunUseEffect.current){
+
+            if(isLiked){
+
+                starAnim.goToAndStop(30,true);
+                
+            }else{
+                
+                starAnim.goToAndStop(0,true);
+            }
+
+        }
+
+      },[starAnim , isLiked])
+
+
+
     return (
         <div className="post-card-main-div">
+
             <div onClick={postCardDotsClickHanlder} className="post-card-dots-div">
                 <BiDotsHorizontalRounded
                     className="post-card-dots"
                 />
             </div>
-            <div className="post-card-dots-bar">
+            <div ref={postCardDotsBar} className="post-card-dots-bar">
                 <div onClick={savePostButtonClickHanlder} className="post-card-dots-bar-save-post-div">
-                    <div className="post-card-dots-bar-save-post-icon-div"><IoSaveOutline className="post-card-dots-bar-save-post-icon"/></div>
+                    <div className="post-card-dots-bar-save-post-icon-div">
+                        <LottieAnimation
+                            lotti = {saveAnimation}
+                            height = "1.7rem"
+                            width = "1.7rem"
+                        />
+                     </div>
                     <div className="post-card-dots-bar-save-post-text-div">Save post</div>
                 </div>
                 <div onClick={viewPostHandler} className="post-card-dots-bar-save-post-div">
-                    <div className="post-card-dots-bar-save-post-icon-div"><AiOutlineEye className="post-card-dots-bar-save-post-icon"/></div>
-                    <div className="post-card-dots-bar-save-post-text-div">View post</div>
+                    <div className="post-card-dots-bar-save-post-icon-div">
+                        <LottieAnimation
+                            lotti = {viewPostAnimation}
+                            height = "1.8rem"
+                            width = "1.8rem"
+                        />
+                        {/* <AiOutlineEye className="post-card-dots-bar-save-post-icon"/> */}
+                    </div>
+                    <div className="post-card-dots-bar-save-post-text-div">Read post</div>
                 </div>
-                <div onClick={postCardBarCrossClickHanlder} className="post-card-dots-bar-save-post-div-close-cross-div">
+                <div ref={postCardDotsBarCloser} onClick={postCardBarCrossClickHanlder} className="post-card-dots-bar-save-post-div-close-cross-div">
                     <IoCloseOutline
                         className="post-card-dots-bar-save-post-div-close-cross"
                     />
@@ -135,12 +302,18 @@ const PostCard = props => {
             </div>
             <div className="post-card-header">
                 <div className="post-author-image">
-                    <img id="post-author-pic" src={(props.post.authorProfilePic && props.post.authorProfilePic !== undefined) ? process.env.REACT_APP_BACKEND_API_URL + props.post.authorProfilePic : "https://qph.fs.quoracdn.net/main-qimg-2b21b9dd05c757fe30231fac65b504dd"} />
+                    <Avatar
+                        height = "3.5rem"
+                        width = '3.5rem'
+                        borderColor = "white"
+                        image = {props && props.post.authorProfilePic}
+                        onClick = {showuserPageHandler}
+                    />
                 </div>
                 <div className="post-card-author">
-                    <h4>{props.post.username}</h4>
+                    <h4 onClick = {showuserPageHandler}>{props.post.username}</h4>
                 </div>
-                <p className="post-card-date">on {props.post.postDate}</p>
+                <p className="post-card-date">{props && props.post && props.post.postDate && getDate(props.post.postDate)}</p>
             </div>
             <div className="post-card-underline" style={{ height: "1px" }}></div>
             <div className="post-card-title-div">
@@ -157,12 +330,31 @@ const PostCard = props => {
                 <i className="fa-star fas" style={{ color: "gold" }}>{"    " + likeCount}</i>
             </div>
             <div className="post-card-underline" style={{ width: "90%", height: "1px" }}></div>
+            
+            
+
+
+            
+            
             <div className="post-card-like-div">
-                <i className={`fa-star ${isLiked ? "fas" : "far"}`} style={{ color: isLiked ? "gold" : "grey", cursor: "pointer", marginTop: "10px" }} onClick={handleLikeClick}>Star</i>
-
-                <i onClick={viewPostHandler} className="fas fa-pen" style={{ position: "absolute", right: "0", marginTop: "10px", color: "grey", cursor: "pointer" }}>Comment</i>
-
+               
+                <div className="post-card-like-div-like-button">
+                    <div className="post-card-like-div-like-button-lottie-container" ref={starReactAnimationRef}></div>
+                    <div onClick={handleLikeClick}  className="post-card-like-div-like-button-touchable-div"></div>
+                </div>
+                
+                <div className="post-card-like-div-comment-button">
+                    <i onClick={viewPostHandler} className="fas fa-pen">Comment</i>
+                </div>
+            
+            
             </div>
+
+
+
+
+
+
             {
                 randomComment && <div className="post-card-random-comment-div">
                     <h3>Comments</h3>
@@ -174,6 +366,7 @@ const PostCard = props => {
                                 width = "2rem"
                                 image = {randomComment.userProfilePic}
                                 borderWidth = "2px"
+                                onClick = {showuserPageHandler}
                             />
                         </div>
                         <h4>{randomComment.username}</h4>

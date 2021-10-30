@@ -7,35 +7,40 @@
     height: 2.5rem;
     width: 15rem;
     border: 2px solid rgba(0, 110, 255, 0.664);
+    border-color: #c0bebe;
     outline: none;
-    border-radius: 10px;
-    transition: all 300ms ease-in-out;
-    text-align: center;
+    border-radius: 4px;
+    transition: border-color 300ms ease-in-out;
     font-family: 'Roboto';
     letter-spacing: 1px;
     font-size: 1.2rem;
     color: rgb(0, 68, 255);
-    font-weight: 700;
+    color: #050505;
     padding: 0 1rem;
     transform: translateZ(0);
+    background-color: transparent;
 }
 
 .inputfield-input-placeholder{
     color: grey;
-    transition: all 500ms ease-in-out;
     position: absolute;
-    left: 50%;
+    left: 10px;
     top: 50%;
-    transform: translate(-50%,-50%);
-    font-family: 'Roboto';
-    letter-spacing: 1px;
-    font-size: 1.1rem;
+    transform: translateY(-50%) translateZ(0);
+    font-family: 'Comfortaa' , cursive;
     pointer-events: none;
+    background: white;
+    padding: 0 5px;
+    transition: color, top 500ms ease-in-out;
 }
 
-.inputfield-input:focus{
-    border-color: rgb(0, 89, 255);
-    filter: drop-shadow(0 0 5px rgba(128, 128, 128, 0.609));
+.inputfield-input:focus, .inputfield-input:valid{
+    border-color: rgba(0, 110, 255, 0.664);
+}
+
+.inputfield-input:focus~.inputfield-input-placeholder, .inputfield-input:valid~.inputfield-input-placeholder{
+    color: rgba(0, 110, 255, 0.664);
+    top: 0;
 }
 
 .password-viewer{
@@ -47,8 +52,8 @@
     color: grey;
 }
 
-@media(min-width : 500px){
-    .inputfield-input:focus{
-        transform: scale(1.1) translateZ(0);
+@media(max-width : 900px){
+    .inputfield-input-placeholder{
+        background-color: #F0F2F5;
     }
 }

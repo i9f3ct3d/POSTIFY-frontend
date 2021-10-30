@@ -7,6 +7,9 @@ import './messagePage.css';
 import axios from 'axios';
 import Avatar from '../../component/Avatar/Avatar';
 import ChatBubble from './chatBubble';
+import BackgroundAnimation from '../../component/BackgroundAnimation/BackgroundAnimation';
+import LeftNavbar from '../../component/leftNavbar/leftNavbar';
+import RightOnlineUsersBar from '../../component/rightOnlineUsersBar/rightOnlineUsersBar';
 
 const MessagePage=(props)=>{
 
@@ -19,6 +22,7 @@ const MessagePage=(props)=>{
 
 
     const [searchedUser , setSearchedUser] = useState(null);
+    const [viewingUser , setViewingUser] = useState(null);
     const [runUseEffect , setRunUseEffect] = useState(false);
     const [conversationId , setConversationId] = useState("");
     
@@ -98,7 +102,7 @@ const MessagePage=(props)=>{
                     }
                     
                 //////////////////// Getting userDetails ////////////////////
-                    const response =await axios.post(process.env.REACT_APP_BACKEND_API_URL+"getonlyuserdata/?token="+cookie,{
+                    const response =await axios.post(process.env.REACT_APP_BACKEND_API_URL+"getmessagepageuserdata/?token="+cookie,{
                         "userId" : searchedUserid,
                     });
     
@@ -106,6 +110,7 @@ const MessagePage=(props)=>{
                         window.location="/login";
                     }else if(response.status === 200){
                         setSearchedUser(response.data.user);
+                        setViewingUser(response.data.viewingUser);
                     }
 
 
@@ -220,7 +225,14 @@ const MessagePage=(props)=>{
     return(
         <div className="messagepage-full-div">
             <Navbar/>
-
+            <BackgroundAnimation/>
+            <LeftNavbar
+                profilePic = {viewingUser && viewingUser.profilePic}
+                username = {viewingUser && viewingUser.username}
+            />
+            <RightOnlineUsersBar
+                viewingUserid={viewingUser && viewingUser._id}
+            />
             <div className="messagepage-inner-div">
                 <div className="messagepage-friend-div">
                     <Avatar

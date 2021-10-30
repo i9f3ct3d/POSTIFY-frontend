@@ -6,11 +6,11 @@ import Navbar from '../../component/navbar/navbar'
 import Avatar from "../../component/Avatar/Avatar";
 import LeftNavbar from "../../component/leftNavbar/leftNavbar";
 import RightOnlineUsersBar from "../../component/rightOnlineUsersBar/rightOnlineUsersBar";
+import BackgroundAnimation from "../../component/BackgroundAnimation/BackgroundAnimation";
 
 const Notification=()=>{
 
     const [postNotifications , setPostNotifications] = useState(null);
-    // const [userid , setUserid] = useState(null);
     const [user , setUser] = useState(null)
     const cookie = Cookies.get("x-auth-token");
 
@@ -128,6 +128,8 @@ const Notification=()=>{
             <div className="notification-page-navbar-div">
                 <Navbar/>
             </div>
+            <div className="background-div"></div>
+            <BackgroundAnimation/>
             {user && <LeftNavbar
                 profilePic = {user && user.profilePic}
                 username = {user && user.username}

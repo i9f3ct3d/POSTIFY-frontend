@@ -1,6 +1,5 @@
 .App {
   text-align: center;
-  /* background-color: #282c34; */;
 }
 
 .App-logo {
@@ -23,6 +22,22 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+.background-div{
+  position: fixed;
+  top : 0;
+  width: 100%;
+  height: 100%;
+  z-index: -101;
+  background-color: #F0F2F5;
+}
+
+.underline{
+  height: 2px;
+  background: grey;
+  width: 50%;
+  margin: 0 auto;
+  margin-bottom: 1rem;
 }
 
 .App-link {

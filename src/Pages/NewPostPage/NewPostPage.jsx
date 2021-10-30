@@ -5,7 +5,6 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import Footer from "../../component/footer/footer"
 import "./NewPostPage.css"
-import BackImg from "../../images/icon.svg";
 
 const NewPostPage=(props)=>{
     const noPic = "https://qph.fs.quoracdn.net/main-qimg-2b21b9dd05c757fe30231fac65b504dd";
@@ -31,9 +30,6 @@ const NewPostPage=(props)=>{
     
     return(
         <div className="new-post-page-full-container">
-        <div className="background-image-container">
-        <img src={BackImg} />
-      </div>
         <div className="new-post-page-container">      
             {user && <PostForm
                 userid={user._id}

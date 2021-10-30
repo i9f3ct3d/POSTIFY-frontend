@@ -1,19 +1,25 @@
 .login-div-container{
     width: 100%;
     min-height: 100vh;
-    background-image:linear-gradient(rgba(0, 0, 0, 0.15) ,rgba(0, 0, 0, 0.15) ), url("https://www.stepondigital.com/wp-content/uploads/2019/10/social-media-marketing.svg");
+    /* background-image:linear-gradient(rgba(0, 0, 0, 0.15) ,rgba(0, 0, 0, 0.15) ), url("https://www.stepondigital.com/wp-content/uploads/2019/10/social-media-marketing.svg"); */
     background-position: center;
     background-repeat: no-repeat;
     background-size: 100vw;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-top: 50px;
 }
 
-.loginPage-background-image{
+.loginPage-background-image, .loginPage-background-image-div{
     width: auto;
     height: auto;
     display: none;
+}
+
+.login-page-logo-div{
+    width: fit-content;
+    height: fit-content;
 }
 
 .login-with-google-button-div{
@@ -24,9 +30,8 @@
 @media(min-width : 1200px){
     .login-div-container{
         background: none;
-        background-color: #F0F2F5;
     }
-    .loginPage-background-image{
+    .loginPage-background-image, .loginPage-background-image-div{
         display: block;
         margin-right: 50px;
     }
@@ -75,20 +80,16 @@
 
 .login-fulldiv h1
 {
-    color: blue;
+    color: #1877F3;
     margin: 0;
     padding: 0;
     border-radius: 10px;
-    letter-spacing: 3px;
-    margin-bottom: 20px;
-    font-family: 'Roboto';
-    font-weight: 700;
-    /* background-color: white;
-    border: 2px solid blue;
+    margin-bottom: 5px;
+    font-family: 'Fira Sans Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 2.2rem;
     text-align: left;
-    -webkit-box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
-    box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568); */
-    text-shadow: 3px 3px 5px grey;
+    text-shadow: 1px 1px 3px grey;
 }
 .input-wrapper-outside
 {

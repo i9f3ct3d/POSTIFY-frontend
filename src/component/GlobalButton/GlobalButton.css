@@ -1,0 +1,55 @@
+.global-button-full-div{
+    width: 8rem;
+    height: 2.7rem;
+    position: relative;
+    display: inline-flex;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 3px;
+    transition: transform, box-shadow 500ms, 500ms ease-in-out;
+}
+
+.global-button{
+    width: 100%;
+    height: 100%;
+    border: 2px solid #45BD62;
+    border-radius: 3px;
+    font-family: 'Comfortaa' , cursive;
+    /* font-weight: 600; */
+    background: transparent;
+    cursor: pointer;
+    color: #45BD62;
+    transition: color 500ms ease-in-out;
+    text-shadow: 1px 1px 5px rgba(128, 128, 128, 0.411);
+    /* letter-spacing: 1px; */
+    font-size: 1rem;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.global-button-background{
+    width: 0;
+    height: 200%;
+    left: -50px;
+    top: -20px;
+    background-color: #45BD62;
+    transition: width 500ms ease-in-out;
+    z-index: -1;
+    position: absolute;
+    transform: rotate(10deg);
+    border-radius: 5px;
+}
+
+.global-button-full-div:hover .global-button-background{
+    width: 200%;
+}
+
+.global-button-full-div:hover .global-button{
+    color: white !important;
+}
+
+.global-button-full-div:hover{
+    transform: scale(1.05);
+    box-shadow: 3px 3px 25px rgba(128, 128, 128, 0.418);
+}

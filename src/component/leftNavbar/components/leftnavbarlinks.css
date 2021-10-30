@@ -13,7 +13,7 @@
 .left-navbar-link-icon-div{
     width: 2rem;
     height: 2rem;
-    margin-right: 10px;
+    margin-right: 15px;
 }
 
 .left-navbar-link-text-div{
@@ -31,4 +31,10 @@
 
 .left-navbar-link-full-div:hover{
     transform: rotate(-9deg) translate3d(0, -15px, 0) !important;
+}
+
+@media (max-width : 900px){
+    .left-navbar-link-full-div{
+        transform: none;
+    }
 }

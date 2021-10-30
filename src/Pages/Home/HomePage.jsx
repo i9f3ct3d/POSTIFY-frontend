@@ -1,53 +1,29 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import PostCardPage from "../PostCardPage/PostCardPage";
-
 import Navbar from "../../component/navbar/navbar";
-import BackImg from "../../images/icon.svg";
-import Footer from "../../component/footer/footer"
-
+// import Footer from "../../component/footer/footer"
 import "./HomePage.css";
 import LeftNavbar from "../../component/leftNavbar/leftNavbar";
 import Avatar from "../../component/Avatar/Avatar";
-
-
-
-import {io} from 'socket.io-client';
 import RightOnlineUsersBar from "../../component/rightOnlineUsersBar/rightOnlineUsersBar";
+import BackgroundAnimation from "../../component/BackgroundAnimation/BackgroundAnimation";
+import Loader from "../../component/Loader/Loader";
 
 const HomePage = (props) => {
 
-  // const [onlineUsers , setOnlineUsers] = useState(null);
   const [userid, setuserid] = useState();
   const [username, changeUsername] = useState("");
   const [userEmail, setuserEmail] = useState([]);
   const [posts, setposts] = useState([]);
   const [userProfilePic , setUserProfilePic] = useState("");
-  // const socket = useRef();
-  
-  // useEffect(()=>{
-    
-  //   socket.current = io("ws://localhost:8900");
-
-  // },[]);
-
-  // useEffect(()=>{
-          
-          
-  //   if(userid){
-  //       socket.current.emit("addUser" , userid);
-  //       socket.current.on("getOnlineUsers" , users=>{
-  //           setOnlineUsers(users)
-  //       })
-  //   }
-    
-
-  // },[userid])
-
-
+  const [isLoading , setIsLoading] = useState(true);
 
   useEffect(() => {
+
+
+
     const cookie = Cookies.get("x-auth-token");
     ////////////fixed when cookie is undefined/////////specifically when user does not have cookie at all////////////
     if (cookie === undefined) {
@@ -73,6 +49,7 @@ const HomePage = (props) => {
               setuserid(res.data.userid);
               changeUsername(res.data.username);
               setUserProfilePic(res.data.profilePic)
+              setIsLoading(false);
             }
           }
 
@@ -134,25 +111,26 @@ const HomePage = (props) => {
       </svg>
     )
   }
-  
 
   return (
     <div className="home-page-container">
     <div className="background-div"></div>
-      <div className="background-image-container">
-        <img src={BackImg} />
-      </div>
-      <Navbar />
+
+
+      <BackgroundAnimation/>
+      {isLoading && <Loader/>}
+      <Navbar
+        // onlineUsersButtonClick = {openOnlineUserBar}
+      />
       <LeftNavbar
         profilePic = {userProfilePic && userProfilePic}
         username = {username && username}
       />
       <RightOnlineUsersBar
         viewingUserid={userid && userid}
-        // onlineUsers={onlineUsers && onlineUsers}
+        // isOpen = {onlineUsersBarIsOpen}
       />
       <div onClick={()=>{window.location="/newpost"}} className="home-page-new-post-div">
-      <div className="home-page-new-post-div-background"></div>
         <div className="home-page-new-post-upper-div">
           <div className="home-page-new-post-avatar-div">
             <Avatar
@@ -166,10 +144,12 @@ const HomePage = (props) => {
             <span className="home-page-new-post-link-div-custom-placeholder">Write something ...</span>
           </div>
         </div>
+        <div style={{height : "1px" , width : "99%" , marginBottom : "10px"}} className="post-card-underline"></div>
         <div className="home-page-new-post-lower-div">
           <div className="home-page-new-post-lower-div-add-image-svg">
             <AddImageSvg/>
           </div>
+          {" Photo"}
         </div>
       </div>
 
@@ -182,9 +162,6 @@ const HomePage = (props) => {
         <a id="new-post-icon" href="/newpost">
           <i id="icon-feather" className="fas fa-feather-alt"></i>
         </a>
-      </div>
-      <div className="footer-container">
-        <Footer/>
       </div>
     </div>
   );
