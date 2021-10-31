@@ -14,7 +14,7 @@ const RightOnlineUsersBar=(props)=>{
 
     useEffect(()=>{
     
-        socket.current = io("ws://localhost:8900");
+        socket.current = io(process.env.REACT_APP_SOCKET_API_URL);
     
       },[]);
 
