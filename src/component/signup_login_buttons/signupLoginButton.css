@@ -9,7 +9,7 @@
     position: relative;
     padding: 0;
     cursor: pointer;
-    transition: all 300ms ease-in-out;
+    transition: transform, box-shadow 300ms, 300ms ease-in-out;
     background: rgba(36, 143, 231, 0.335);
 }
 

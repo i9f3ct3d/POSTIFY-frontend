@@ -1,16 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import './signupLoginButton.css'
 
 const SignupLoginButton = (props) =>{
 
-    // const [onHover , setOnHover] = useState(false);
-
     return(
         <button
             style={{background:props.background, borderColor:props.borderColor}} 
-            // onMouseOver={()=>{setOnHover(true)}} 
-            // onMouseOut={()=>{setOnHover(false)}} 
             className="signup-login-button-div"
             >
             <div className="button-gloss">
@@ -27,4 +23,4 @@ const SignupLoginButton = (props) =>{
 
 }
 
-export default SignupLoginButton;
+export default React.memo(SignupLoginButton);

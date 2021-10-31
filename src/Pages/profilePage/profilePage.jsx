@@ -19,17 +19,18 @@ const ProfilePage = () => {
     const [searchedUserPosts , setSearchedUserPosts] = useState();
     const [myUserid , setMyUserid] = useState();
 
-    const [showAddFriend , setShowAddFriend] = useState("none");
-    const [showReqSent , setShowReqSent] = useState("none");
-    const [showFriends , setShowFriends] = useState("none");
-    const [showReqRecieved , setShowReqRecieved] = useState("none");
-
     const [useEffectRefresh , setUseEffectRefresh] = useState(false);
     const [showPopUp , setShowPopUp] = useState(false);
     const [popUpStatement , setPopUpStatement] = useState("");
     const [popUpFunction , setPopUpFunction] = useState(()=>{});
 
     const cookie = Cookies.get('x-auth-token');
+
+    const showAddFriendRef = useRef();
+    const showFriendsRef = useRef();
+    const showReqSentRef = useRef();
+    const friendReqCancelRef = useRef();
+    const friendReqConfirmRef = useRef();
 
     useEffect(()=>{
 
@@ -76,28 +77,39 @@ const ProfilePage = () => {
 
                         if(resSearchedUser.friends && resSearchedUser.friendReqRecieved && resSearchedUser.friendReqSent){
                             if(!resSearchedUser.friends.includes(resMyUserid) && !resSearchedUser.friendReqRecieved.includes(resMyUserid) && !resSearchedUser.friendReqSent.includes(resMyUserid)){
-                                setShowAddFriend("inline-block");
-                                setShowFriends("none");
-                                setShowReqSent("none");
-                                setShowReqRecieved("none");
+
+
+                                showAddFriendRef.current.style.display = "inline-block";
+                                showFriendsRef.current.style.display = "none";
+                                showReqSentRef.current.style.display = "none";
+                                friendReqCancelRef.current.style.display = "none";
+                                friendReqConfirmRef.current.style.display = "none";
                             }
                             else if(resSearchedUser.friends.includes(resMyUserid)){
-                                setShowAddFriend("none");
-                                setShowFriends("inline-block");
-                                setShowReqSent("none");
-                                setShowReqRecieved("none");
+
+                                showAddFriendRef.current.style.display = "none";
+                                showFriendsRef.current.style.display = "inline-block";
+                                showReqSentRef.current.style.display = "none";
+                                friendReqCancelRef.current.style.display = "none";
+                                friendReqConfirmRef.current.style.display = "none";
+
                             }
                             else if(resSearchedUser.friendReqRecieved.includes(resMyUserid)){
-                                setShowAddFriend("none");
-                                setShowFriends("none");
-                                setShowReqSent("inline-block");
-                                setShowReqRecieved("none");
+
+
+                                showAddFriendRef.current.style.display = "none";
+                                showFriendsRef.current.style.display = "none";
+                                showReqSentRef.current.style.display = "inline-block";
+                                friendReqCancelRef.current.style.display = "none";
+                                friendReqConfirmRef.current.style.display = "none";
                             }
                             else if(resSearchedUser.friendReqSent.includes(resMyUserid)){
-                                setShowAddFriend("none");
-                                setShowFriends("none");
-                                setShowReqSent("none");
-                                setShowReqRecieved("inline-block");
+
+                                showAddFriendRef.current.style.display = "none";
+                                showFriendsRef.current.style.display = "none";
+                                showReqSentRef.current.style.display = "none";
+                                friendReqCancelRef.current.style.display = "inline-block";
+                                friendReqConfirmRef.current.style.display = "inline-block";
                             }
                         }
 
@@ -244,6 +256,8 @@ const ProfilePage = () => {
     const starAnimationDivRef = useRef();
     const timeoutRef = useRef(null);
 
+
+
     return(
         <div className="profilepage-full-div">
             <Navbar/>
@@ -285,26 +299,28 @@ const ProfilePage = () => {
                 </section>
                 <section className="profilepage-section-2">
                     <p className="profilepage-section-2-username">{searchedUser && searchedUser.username}</p>
-                    <button onClick={ addFriendButtonClickHandler} style={{display:showAddFriend}} className="add-friend-button"><i className="fas fa-user-plus"></i>  Add Friend</button>
-                    <button onClick={ (e)=>{
+                    
+                    
+                    <button ref = {showAddFriendRef} onClick={ addFriendButtonClickHandler} className="add-friend-button"><i className="fas fa-user-plus"></i>  Add Friend</button>
+                    <button ref = {showReqSentRef} onClick={ (e)=>{
 
                         e.preventDefault();
                         setShowPopUp(true);
                         setPopUpStatement("Do you want to cancel the friend request to "+searchedUser.username+" ?");
                         setPopUpFunction(()=>removeSentFriendReq);
 
-                    } } style={{display:showReqSent}} className="req-sent-button"><i className="fas fa-check"></i>  Reqest Sent</button>
-                    <button onClick={ confirmFriendButtonClickHandler} style={{display:showReqRecieved}} className="friend-req-confirm-button"><i className="fas fa-check"></i>  Confirm</button>
-                    <button onClick={ cancelReceivedRequestButtonClickHandler} style={{display:showReqRecieved}} className="friend-req-cancel-button"><i className="fas fa-check"></i>  Cancel</button>
+                    } } className="req-sent-button"><i className="fas fa-check"></i>  Reqest Sent</button>
+                    <button ref = {friendReqConfirmRef} onClick={ confirmFriendButtonClickHandler} className="friend-req-confirm-button"><i className="fas fa-check"></i>  Confirm</button>
+                    <button ref = {friendReqCancelRef} onClick={ cancelReceivedRequestButtonClickHandler} className="friend-req-cancel-button"><i className="fas fa-check"></i>  Cancel</button>
                     
-                    <button onClick={(e)=>{
+                    <button ref = {showFriendsRef} onClick={(e)=>{
 
                         e.preventDefault();
                         setShowPopUp(true);
                         setPopUpStatement("Do you want to unfriend "+searchedUser.username+" ?");
                         setPopUpFunction(()=>unfriendButtonHandler);
 
-                    }} style={{display:showFriends}} className="friends-button"><i className="fas fa-user-friends"></i>  Friends</button>
+                    }} className="friends-button"><i className="fas fa-user-friends"></i>  Friends</button>
                     <i onClick={messageButtonClickHandler} className="far fa-comments send-message-icon"></i>
                     <BiDotsVerticalRounded
                         className = "add-friend-dots"

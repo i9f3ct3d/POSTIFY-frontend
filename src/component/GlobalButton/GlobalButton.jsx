@@ -1,5 +1,4 @@
 import React from 'react'
-// using ES6
 import './GlobalButton.css'
 
 const GlobalButton = (props) => {
@@ -14,4 +13,4 @@ const GlobalButton = (props) => {
     )
 }
 
-export default GlobalButton
+export default React.memo(GlobalButton)

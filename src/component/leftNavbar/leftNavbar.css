@@ -39,7 +39,15 @@
         height: calc(100vh);
         overflow-y: scroll;
         box-sizing: border-box;
+
+        -ms-overflow-style: none;  /* Internet Explorer 10+ */
+        scrollbar-width: none;  /* Firefox */
     }
+
+    .left-navbar-full-div::-webkit-scrollbar { 
+        display: none;  /* Safari and Chrome */
+    }
+
     .left-navbar-mobile-cross-div{
         position: absolute;
         right: 10px;

@@ -37,16 +37,10 @@
     z-index: 10;
     transition: all 300ms ease-in-out;
     border-right: 2px solid #8f8f88;
-    /* padding-top: 10%; */
-    /* margin-top: 20px; */
 }
 
 .navbar-left-slider-content{
     display: table-cell;
-    /* margin: 50% 0;
-    height: 50%; */
-    /* padding: auto 0; */
-    /* vertical-align: middle; */
     position: relative;
     top:25%;
     bottom: 25%;
@@ -295,13 +289,16 @@
     height : 35rem;
     overflow: hidden;
     overflow-y: scroll;
-
     border-radius: 10px;
-    
     -webkit-box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
     box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
     background-color: #F0F2F5;
-    /* border:1px solid red; */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none; 
+}
+
+.searched-users-outer-div::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
 }
 
 .search-bar-back-icon{
@@ -555,67 +552,6 @@
         display: none;
     }
 
-    .mobile-navigation-switch{
-        position: absolute;
-        left: 0;
-        top: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 80px;
-        height: 100%;
-        cursor: pointer;
-        transition: all 0.5s ease-in-out;
-    }
-
-    .hamburger-button{
-        display: none;
-        width: 50px;
-        height: 6px;
-        background: rgba(102, 99, 99, 0.609);
-        border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(255, 101, 47, 0.2);
-        transition: all 0.5s ease-in-out;
-    }
-
-    .hamburger-button::before{
-        content: "";
-        position: absolute;
-        transform: translate(-25px , -16px);
-        width: 50px;
-        height: 6px;
-        background: rgba(102, 99, 99, 0.609);
-        border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(255, 101, 47, 0.2);
-        transition: all 0.5s ease-in-out;
-        
-    }
-
-    .hamburger-button::after{
-        content: "";
-        position: absolute;
-        transform: translate(-25px, 16px);
-        width: 50px;
-        height: 6px;
-        background: rgba(102, 99, 99, 0.609);
-        border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(255, 101, 47, 0.2);
-        transition: all 0.5s ease-in-out;
-    }
-
-    .mobile-navigation-switch.open-mobile-navbar .hamburger-button{
-        transform: translateX(-50px);
-        background: transparent;
-        box-shadow: none;
-    }   
-
-    .mobile-navigation-switch.open-mobile-navbar .hamburger-button::before{
-        transform: rotate(45deg) translate(35px , -35px);
-    } 
-
-    .mobile-navigation-switch.open-mobile-navbar .hamburger-button::after{
-        transform: rotate(-45deg) translate(35px , 35px);
-    } 
 
 }
 

@@ -7,12 +7,13 @@ import Cookies from 'js-cookie';
 import PostCard from '../../component/postCard/postCard';
 import BackgroundAnimation from '../../component/BackgroundAnimation/BackgroundAnimation'
 import StarAnimation from "../../component/StarAnimation/StarAnimation";
+import Loader from '../../component/Loader/Loader';
 
 const SavedPostsPage=()=>{
 
     const [posts , setPosts] = useState(null);
     const [viewingUser , setViewinguser] = useState(null);
-    
+    const [isLoading , setIsLoading] = useState(true);
 
     useEffect(()=>{
 
@@ -28,11 +29,13 @@ const SavedPostsPage=()=>{
                     
                     setPosts(res.data.savedPosts);
                     setViewinguser(res.data.viewingUser);
+                    setIsLoading(false);
     
                 }
 
             } catch (error) {
-                
+
+                window.location = "/error";
             }
             
         }
@@ -51,6 +54,7 @@ const SavedPostsPage=()=>{
             <Navbar/>
             <div className="background-div"></div>
             <BackgroundAnimation/>
+            {isLoading && <Loader/>}
             <div
             style={{display : "none"}} 
             ref={starAnimationDivRef}>

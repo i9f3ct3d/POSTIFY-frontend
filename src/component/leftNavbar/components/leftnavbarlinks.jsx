@@ -161,4 +161,4 @@ const LeftNavbarLinks=(props)=>{
 
 }
 
-export default LeftNavbarLinks;
+export default React.memo(LeftNavbarLinks);

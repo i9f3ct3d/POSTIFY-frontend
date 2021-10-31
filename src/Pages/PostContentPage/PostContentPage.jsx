@@ -11,9 +11,8 @@ import { useState, useEffect, useRef } from "react";
 import Navbar from "../../component/navbar/navbar";
 import Avatar from "../../component/Avatar/Avatar";
 import BackgroundAnimation from "../../component/BackgroundAnimation/BackgroundAnimation";
-// import StarAnimation from "../../component/StarAnimation/StarAnimation";
-
-
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import Loader from '../../component/Loader/Loader'
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -24,15 +23,12 @@ const PostContentPage = () => {
     const postid = query.get("postid");
     const viewingUserid = query.get("userid");
 
-    // const ref = useRef();
-    // const starAnimationDivRef = useRef();
-
     const [post , setPost] = useState(null);
     const [currentUser , setCurrentUser] = useState(null);
     const [isLiked , setIsLiked] = useState(false);
     const [runUseEffect , setRunUseEffect] = useState(false);
     const [likeCount , setLikeCount] = useState(0);
-
+    const [isLoading , setIsLoading] = useState(true);
 
     useEffect(() => {
 
@@ -60,6 +56,8 @@ const PostContentPage = () => {
                     setIsLiked(false);
                 }
 
+                setIsLoading(false);
+
             } catch (error) {
                 window.location = "/error";
             }
@@ -67,25 +65,9 @@ const PostContentPage = () => {
         fetchData();
     }, [runUseEffect]);
 
-    // const turnOnConfetti = () => {
 
-    //     starAnimationDivRef.current.style.display = "block"
-    //     ref.current.play();
-
-    //     console.log(ref.current);
-
-    //     setTimeout(()=>{
-    //         starAnimationDivRef.current.style.display = "none"
-    //         ref.current.stop();
-    //     },1950)
-
-    // }
-
-    //function triggers on click of the like button
     const handleLikeClick = async (event) => {
 
-        //write the code
-        // cancel the axios request for liking if the previous one is still going on
         setIsLiked(prev => !prev);
 
         if(isLiked && likeCount > 0){
@@ -95,7 +77,6 @@ const PostContentPage = () => {
         }else if(!isLiked){
 
             setLikeCount(prev => (prev + 1));
-            // turnOnConfetti();
 
         }else{
             return;
@@ -191,7 +172,14 @@ const PostContentPage = () => {
     }
 
     const showuserPageHandler = () => {
-        if(post){
+
+        if(post && currentUser){
+
+            if(post.userid === currentUser._id){
+                window.location = "/myprofile";
+                return;
+            }
+
             window.location="/profilepage?searcheduserid="+post.userid;
         }
     }
@@ -266,29 +254,22 @@ const PostContentPage = () => {
 
     }
 
-
+    const postcardContentPagePostImageDivRef = useRef();
 
     return (
         <div className="postcard-content-page-full-div">
             
-            {/* <div ref={starAnimationDivRef} 
-            style={{display : "none"}}
-            >
-                <StarAnimation
-                    ref = {ref}
-                />
-            </div> */}
             
             <div className="background-div"></div>
             <Navbar />
 
-
+            {isLoading && <Loader/>}
             <BackgroundAnimation/>
 
             <div className="postcard-content-page-post-card-main-div">
             <div className="postcard-content-page-post-card-header">
                 <div className="postcard-content-page-post-author-image">
-                    <img onClick = {showuserPageHandler} id="postcard-content-page-post-author-pic" alt="posterPic" src={post && (post.authorProfilePic ? ( post.authorProfilePic[0] === "u" ? process.env.REACT_APP_BACKEND_API_URL + post.authorProfilePic : post.authorProfilePic ): "https://qph.fs.quoracdn.net/main-qimg-2b21b9dd05c757fe30231fac65b504dd")} />
+                    <LazyLoadImage placeholderSrc = {process.env.PUBLIC_URL + "/logo192.png"} height="4rem" width="4rem" onClick = {showuserPageHandler} id="postcard-content-page-post-author-pic" alt="posterPic" src={post && (post.authorProfilePic ? ( post.authorProfilePic[0] === "u" ? process.env.REACT_APP_BACKEND_API_URL + post.authorProfilePic : post.authorProfilePic ): "https://qph.fs.quoracdn.net/main-qimg-2b21b9dd05c757fe30231fac65b504dd")} />
                 </div>
                 <div className="postcard-content-page-post-card-author">
                     <h4 onClick = {showuserPageHandler}>{post && post.username}</h4>
@@ -301,8 +282,10 @@ const PostContentPage = () => {
             <div className="postcard-content-page-post-card-content-div">
                 <p className="postcard-content-page-post-card-content">{post && post.postcontent}</p>
             </div>
-            {post && post.postImage && post.postImage!=="false" && <div className="postcard-content-page-post-card-img-div">
-                <img alt="postImage" className="postcard-content-page-post-card-img" src={process.env.REACT_APP_BACKEND_API_URL + post.postImage} />
+            {post && post.postImage && post.postImage!=="false" && <div ref = {postcardContentPagePostImageDivRef} className="postcard-content-page-post-card-img-div">
+                <LazyLoadImage afterLoad={()=>{
+                    postcardContentPagePostImageDivRef.current.style.height = "unset";
+                }} placeholderSrc = {process.env.PUBLIC_URL + "/logo192.png"} height="100%" width="100%" alt="postImage" className="postcard-content-page-post-card-img" src={process.env.REACT_APP_BACKEND_API_URL + post.postImage} />
             </div>}
             <div className="postcard-content-page-post-card-like-count-div">
                 <i className="fa-star fas" style={{ color: "gold" }}>{"             "}{likeCount}</i>

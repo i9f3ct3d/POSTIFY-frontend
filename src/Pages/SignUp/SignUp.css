@@ -13,7 +13,7 @@
     font-size: 2.2rem;
     text-align: left;
     text-shadow: 1px 1px 3px grey;
-    margin: 0 0 5px 110px;
+    margin: 0 0 5px 90px;
 }
 
 .signup-div form  p
@@ -160,7 +160,7 @@
     display: none;
 }
 
-@media(min-width : 60rem)
+@media(min-width : 900px)
 {
 
     .signup-page-underline{
@@ -168,7 +168,7 @@
     }
 
     .signup-page-logo{
-        transform: translateX(100px) translateY(20px);
+        transform: translateX(60px) translateY(20px);
         margin-top: 50px;
     }
 
@@ -192,6 +192,7 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: space-evenly;
+        align-items: center;
         max-width: 1500px;
         margin: 0 auto;
         height: fit-content;
@@ -212,12 +213,11 @@
         height: fit-content;
     }
     .written-input{
-        padding: 2rem 2rem 0 2rem;
+        padding: 1rem 1rem 100px 1rem;
         border-radius: 10px;
         background-color: white;
         box-shadow: 4px 4px 5px rgba(128, 128, 128, 0.534);
-        width: 500px;
-        padding-bottom: 100px;
+        width: 460px;
     }
 
     #file-picker-button{

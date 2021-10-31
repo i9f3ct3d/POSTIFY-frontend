@@ -8,14 +8,24 @@
     margin: 0 auto;
     width: 40%;
     max-width: 750px;
-    /* width: 100%;
-    max-width: 50%; */
 }
 
 
 .notification-inner-div{
     width: 100%;
+    height: calc(100vh - 64px);
     overflow-y: scroll;
+    box-sizing: border-box;
+
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+
+}
+
+
+
+.notification-inner-div::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
 }
 
 .eachnotification-div{
@@ -82,5 +92,9 @@
         max-width: 100%;
         width: 100%;
         padding-top: 112px;
+    }
+
+    .notification-inner-div{
+        height: calc(100vh - 112px);
     }
 }
