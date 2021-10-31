@@ -1,5 +1,5 @@
 import axios from "axios";
-import React ,{useRef}from "react";
+import React ,{useEffect, useRef}from "react";
 import Cookies from "js-cookie";
 import "./LogIn.css"
 
@@ -16,6 +16,17 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const LogIn=()=>{
+
+  useEffect(()=>{
+    
+    const cookie  = Cookies.get('x-auth-token');
+
+    if(cookie){
+      window.location = "/home";
+      return;
+    }
+
+  },[])
 
 
   const formEmailRef = useRef("");
@@ -215,7 +226,8 @@ const LogIn=()=>{
             <div className="login-fulldiv">
                 
                 <div className="login-page-logo-div">
-                  <Logo 
+                  <Logo
+                    className = "login-page-logo"
                   />
                 </div>
 

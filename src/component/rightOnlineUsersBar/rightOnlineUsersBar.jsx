@@ -38,16 +38,6 @@ const RightOnlineUsersBar=(props)=>{
     
       },[viewingUserid])
 
-    //   const onlineUsersBarRef = useRef();
-
-
-    //   useEffect(()=>{
-
-    //     if(props && props.isOpen && onlineUsersBarRef.current){
-    //         onlineUsersBarRef.current.style.display = "block";
-    //     }
-
-    //   },[props])
 
 
     useEffect(()=>{
@@ -116,6 +106,13 @@ const RightOnlineUsersBar=(props)=>{
             <div className="right-online-users-bar-inner-div">
                 {
                     onlineUsersData && onlineUsersData.map((eachUser)=>{
+                        
+                        if(eachUser._id === viewingUserid){
+                            return(
+                                <div style={{display : "none"}}></div>
+                            )
+                        }
+
                         return(
                             <div onClick={()=>{onlineUserClickHandler(eachUser._id)}} key={eachUser._id} className="right-online-users-bar-eachuser-div">
                                 <div className="right-online-users-bar-eachuser-avatar-div">

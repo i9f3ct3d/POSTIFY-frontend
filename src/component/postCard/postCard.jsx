@@ -5,12 +5,15 @@ import {BiDotsHorizontalRounded} from 'react-icons/bi'
 import {IoCloseOutline} from 'react-icons/io5'
 import Cookies from 'js-cookie'
 import Avatar from '../Avatar/Avatar'
-// import StarAnimation from "../StarAnimation/StarAnimation";
 import LottieAnimation from "../../Pages/lottiAnimation";
 import saveAnimation from '../../images/saveAnimation.json'
 import viewPostAnimation from '../../images/viewpostAnimation.json'
 import starReactAnimation from '../../images/starReactAnimation.json'
 import Lottie from 'lottie-web'
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 let likedPosts = new Set();
 
@@ -126,7 +129,7 @@ const PostCard = props => {
     }
 
     const savePostButtonClickHanlder=async()=>{
-
+        postCardBarCrossClickHanlder();
         try {
             
             const cookie = Cookies.get("x-auth-token");
@@ -135,7 +138,16 @@ const PostCard = props => {
             });
 
             if(res.status === 200){
-                postCardBarCrossClickHanlder()
+                
+                toast.success('Saved!', {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
             }
 
 
@@ -218,6 +230,12 @@ const PostCard = props => {
 
     const showuserPageHandler = () => {
         if(props){
+
+            if(props.mainUserId === props.post.userid){
+                window.location="/myprofile";
+                return;
+            }
+
             window.location="/profilepage?searcheduserid="+props.post.userid;
         }
     }
@@ -262,10 +280,23 @@ const PostCard = props => {
 
       },[starAnim , isLiked])
 
-
+      const postCardImageDivRef = useRef();
 
     return (
         <div className="post-card-main-div">
+
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme = "colored"
+            />
 
             <div onClick={postCardDotsClickHanlder} className="post-card-dots-div">
                 <BiDotsHorizontalRounded
@@ -323,8 +354,11 @@ const PostCard = props => {
                 <p className="post-card-content">{props.post.postcontent.length > 410 ? props.post.postcontent.substr(0, 410) + "...." : props.post.postcontent}</p>
                 {props.post.postcontent.length > 410 && <p onClick={viewPostHandler} className="post-card-readmore">Read more</p>}
             </div>
-            {props.post.postImage && props.post.postImage!=="false" && <div className="post-card-img-div">
-                <img onClick={viewPostHandler} className="post-card-img" src={process.env.REACT_APP_BACKEND_API_URL + props.post.postImage} />
+            {props.post.postImage && props.post.postImage!=="false" && <div ref={postCardImageDivRef} className="post-card-img-div">
+                <LazyLoadImage afterLoad={()=>{
+                    postCardImageDivRef.current.style.height = "unset";
+                    postCardImageDivRef.current.style.maxHeight = "30rem";
+                }} placeholderSrc = {process.env.PUBLIC_URL + "/logo192.png"} width="100%" height="100%" onClick={viewPostHandler} className="post-card-img" src={process.env.REACT_APP_BACKEND_API_URL + props.post.postImage} />
             </div>}
             <div className="post-card-like-count-div">
                 <i className="fa-star fas" style={{ color: "gold" }}>{"    " + likeCount}</i>

@@ -31,4 +31,4 @@ const LottieAnimation = ({ lotti, width, height , isStopped , isloop , speed} , 
   );
 };
 
-export default forwardRef(LottieAnimation);
+export default React.memo(forwardRef(LottieAnimation));

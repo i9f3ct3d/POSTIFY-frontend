@@ -10,7 +10,6 @@ import imageCompression from "browser-image-compression";
 import BackgroundAnimation from '../../component/BackgroundAnimation/BackgroundAnimation'
 import InputField from "../../component/inputField/inputField";
 
-
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -22,7 +21,15 @@ const SignUp = () => {
   const [compressedImage , setCompressedImage] = useState(null);
 
 
+  useEffect(()=>{
+    
+    const cookie  = Cookies.get('x-auth-token');
 
+    if(cookie){
+      window.location = "/home";
+    }
+
+  },[])
 
 
   const userEmailRef = useRef();
@@ -331,7 +338,7 @@ const SignUp = () => {
               />
               <h1 className="signup-here-text">Sign up Here</h1>
             </div>
-            <div style={{borderRadius : "0 50px 50px 0", height : "10px" , backgroundColor : "#1877F2", marginLeft : "110px" , width : "15rem"}} className="underline signup-page-underline"></div>
+            <div style={{borderRadius : "0 50px 50px 0", height : "10px" , backgroundColor : "#1877F2", marginLeft : "90px" , width : "15rem"}} className="underline signup-page-underline"></div>
                 
             <div className="signup-page-inputs-div">
               <InputField
@@ -396,4 +403,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default React.memo(SignUp);

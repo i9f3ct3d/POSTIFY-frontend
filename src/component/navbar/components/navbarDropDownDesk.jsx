@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import './navbarDropDownDesk.css'
 import {BsCaretDown} from 'react-icons/bs';
 import Avatar from '../../Avatar/Avatar';
 import Cookies from 'js-cookie';
+
+const pathNameSet = new Set(
+  ['/signup','/login','/welcomepage']
+);
 
 const NavbarDropDownDesk = (props)=>{
 
@@ -48,7 +52,7 @@ const NavbarDropDownDesk = (props)=>{
                         <i style={{color : "rgb(224, 198, 50)"}} className="far fa-paper-plane newnavbar-dropdown-desk-aboutus-icon"></i>
                         <p style={{color : "rgb(224, 198, 50)"}} className="newnavbar-dropdown-desk-avatar-aboutus-text">Contact me</p>
                       </div>
-                      <div onClick={onlineUsersButtonClick} className="newnavbar-dropdown-desk-aboutus">
+                      <div style={{display : pathNameSet.has(window.location.pathname) && "none"}} onClick={onlineUsersButtonClick} className="newnavbar-dropdown-desk-aboutus">
                         <i style={{color : "greenYellow"}} className="fas fa-signal newnavbar-dropdown-desk-aboutus-icon"></i>
                         <p style={{color : "greenYellow"}} className="newnavbar-dropdown-desk-avatar-aboutus-text">Online users</p>
                       </div>
@@ -62,4 +66,4 @@ const NavbarDropDownDesk = (props)=>{
     )
 }
 
-export default NavbarDropDownDesk;
+export default React.memo(NavbarDropDownDesk);

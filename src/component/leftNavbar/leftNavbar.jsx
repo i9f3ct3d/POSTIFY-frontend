@@ -98,4 +98,4 @@ const LeftNavbar=(props)=>{
 
 }
 
-export default LeftNavbar;
+export default React.memo(LeftNavbar);

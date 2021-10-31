@@ -3,7 +3,6 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import PostCardPage from "../PostCardPage/PostCardPage";
 import Navbar from "../../component/navbar/navbar";
-// import Footer from "../../component/footer/footer"
 import "./HomePage.css";
 import LeftNavbar from "../../component/leftNavbar/leftNavbar";
 import Avatar from "../../component/Avatar/Avatar";
@@ -13,11 +12,9 @@ import Loader from "../../component/Loader/Loader";
 
 const HomePage = (props) => {
 
-  const [userid, setuserid] = useState();
-  const [username, changeUsername] = useState("");
-  const [userEmail, setuserEmail] = useState([]);
+  
   const [posts, setposts] = useState([]);
-  const [userProfilePic , setUserProfilePic] = useState("");
+  const [viewingUser , setViewingUser] = useState(null);
   const [isLoading , setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -40,21 +37,23 @@ const HomePage = (props) => {
           {
             if(res.data.credentials === "not logged in" || res.data.credentials === "invalid")
             {
+              Cookies.remove('x-auth-token')
               window.location="/login";
+              return;
             }
             else if(res.data.credentials==="valid")
             {
-              setuserEmail(res.data.useremail);
+
+              setViewingUser(res.data.user);
               setposts(res.data.Posts);
-              setuserid(res.data.userid);
-              changeUsername(res.data.username);
-              setUserProfilePic(res.data.profilePic)
               setIsLoading(false);
             }
           }
 
         } catch (error) {
+          Cookies.remove('x-auth-token')
           window.location = "/error";
+          return;
         }
       };
       fetchData();
@@ -119,16 +118,13 @@ const HomePage = (props) => {
 
       <BackgroundAnimation/>
       {isLoading && <Loader/>}
-      <Navbar
-        // onlineUsersButtonClick = {openOnlineUserBar}
-      />
+      <Navbar/>
       <LeftNavbar
-        profilePic = {userProfilePic && userProfilePic}
-        username = {username && username}
+        profilePic = {viewingUser && viewingUser.profilePic}
+        username = {viewingUser && viewingUser.username}
       />
       <RightOnlineUsersBar
-        viewingUserid={userid && userid}
-        // isOpen = {onlineUsersBarIsOpen}
+        viewingUserid={viewingUser && viewingUser._id}
       />
       <div onClick={()=>{window.location="/newpost"}} className="home-page-new-post-div">
         <div className="home-page-new-post-upper-div">
@@ -136,7 +132,7 @@ const HomePage = (props) => {
             <Avatar
               height = "3rem"
               width = "3rem"
-              image = {userProfilePic && userProfilePic}
+              image = {viewingUser && viewingUser.profilePic}
               borderColor = "white"
             />
           </div>
@@ -156,7 +152,7 @@ const HomePage = (props) => {
 
 
       <div className="post-card">
-        {posts && <PostCardPage posts={posts} viewingUserProfilePic={userProfilePic} username={username} userEmail={userEmail} userId={userid} />}
+        {posts && <PostCardPage posts={posts} viewingUserProfilePic={viewingUser && viewingUser.profilePic} username={viewingUser && viewingUser.username} userEmail={viewingUser && viewingUser.email} userId={viewingUser && viewingUser._id} />}
       </div>
       <div className="postIt-container">
         <a id="new-post-icon" href="/newpost">

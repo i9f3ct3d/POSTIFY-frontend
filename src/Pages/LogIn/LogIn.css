@@ -1,7 +1,6 @@
 .login-div-container{
     width: 100%;
     min-height: 100vh;
-    /* background-image:linear-gradient(rgba(0, 0, 0, 0.15) ,rgba(0, 0, 0, 0.15) ), url("https://www.stepondigital.com/wp-content/uploads/2019/10/social-media-marketing.svg"); */
     background-position: center;
     background-repeat: no-repeat;
     background-size: 100vw;
@@ -20,6 +19,10 @@
 .login-page-logo-div{
     width: fit-content;
     height: fit-content;
+}
+
+.login-page-logo{
+    transform: translateX(-30px) translateY(25px) !important;
 }
 
 .login-with-google-button-div{
@@ -46,7 +49,6 @@
 {
     margin: 0;
     padding: 0;
-    /* color: rgb(223, 45, 0); */
     font-size: .8rem;
     font-weight: 600;
     letter-spacing: 1px;
@@ -62,13 +64,7 @@
     letter-spacing: 1px;
 }
 
-.login-fulldiv
-{
-    /* position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%); */
-}
+
 @media(min-width : 900px){
     .login-fulldiv{
         padding: 5rem;

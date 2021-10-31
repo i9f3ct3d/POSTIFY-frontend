@@ -7,7 +7,6 @@ import LogIn from "./Pages/LogIn/LogIn"
 
 import ErrorPage from "./Pages/http-error-page/http-error";
 import Contact from "./Pages/Contact/Contact"
-// import WelcomePage from "./Pages/Welcomepage/WelcomePage"
 import MyProfile from './Pages/MyProfile/MyProfile';
 import AuthCheck from './Pages/authcheck';
 import Loader from './component/Loader/Loader';
@@ -61,10 +60,6 @@ function App() {
           <Contact/>
         </Route>
 
-
-        {/* <Route path="/welcomepage" exact>
-          <WelcomePage/>
-        </Route> */}
 
 
         <Route path="/friendrequest" exact>

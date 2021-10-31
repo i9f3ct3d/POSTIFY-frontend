@@ -27,4 +27,4 @@ function BackgroundAnimation() {
     )
 }
 
-export default BackgroundAnimation
+export default React.memo(BackgroundAnimation)

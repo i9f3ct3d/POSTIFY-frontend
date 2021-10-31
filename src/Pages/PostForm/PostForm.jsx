@@ -214,7 +214,6 @@ const PostForm = (props) => {
         {preview !== undefined && <div className="postform-img-preview-div"><img className="postform-img-preview" src={preview}/></div>}
       
       <form autoComplete="off" onSubmit={onsubmitHandler} encType="multipart/form-data">
-      {/* {preview !== undefined && <div className="post-card-underline" style={{height:"1px", width : "90%",marginTop:"0"}}></div>} */}
       <div className="postform-title-input-div">
       <input
           ref={titleInput}
@@ -241,12 +240,10 @@ const PostForm = (props) => {
 
         
         <input style={{display:"none"}} type="file" ref={filePickerRef} accept=".jpg , .png , .jpeg" onChange={(event)=>{setFile(event.target.files[0])}}/>
-        {/* <div className="postform-image-picker-button" onClick={pickFileHandler}><FcAddImage/></div> */}
         <span
           ref={contentInputRef}
           onClick={() => {
             contentInputRef.current.style.borderColor = "white";
-            // setEmptyContent(false);
           }}
           id="post-content-span"
           contentEditable="true"
@@ -275,4 +272,4 @@ const PostForm = (props) => {
   );
 };
 
-export default PostForm;
+export default React.memo(PostForm);

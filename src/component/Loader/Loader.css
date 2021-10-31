@@ -8,10 +8,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.61);
-    backdrop-filter: blur(20px);
-    /* opacity: 0;
-    transition: opacity 500ms ease-in-out; */
+    /* background-color: rgba(0, 0, 0, 0.61); */
+    background: #F0F2F5;
+    /* backdrop-filter: blur(20px); */
 }
 
 .loader-page-loader-div{

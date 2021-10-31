@@ -4,6 +4,12 @@
     padding-top: 5px;
 }
 
+@media (max-width : 900px){
+    .postcard-content-page-full-div{
+        padding-top: 50px;
+    }
+}
+
 .postcard-content-page-post-card-main-div{
     width:calc(100vw - 100px);
     border-radius: 5px;
@@ -130,6 +136,7 @@
     width: 100%;
     overflow: hidden;
     display: inline-block;
+    height: 30rem;
 }
 
 .postcard-content-page-post-card-img{

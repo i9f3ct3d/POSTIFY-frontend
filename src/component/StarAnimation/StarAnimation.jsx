@@ -19,4 +19,4 @@ const StarAnimation = (props , ref) => {
     )
 }
 
-export default forwardRef(StarAnimation)
+export default React.memo(forwardRef(StarAnimation))
