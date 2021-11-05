@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Dancing+Script:wght@700&family=Mate+SC&family=Pattaya&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed&family=Fira+Sans+Condensed:wght@400;500;600;700;800;900&display=swap');
+
+
 .welcome-page-head-section{
     padding-top: 64px;
     height: 100vh;
@@ -32,8 +32,6 @@
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    /* background: #f2f0f5; */
-    /* filter: drop-shadow(0 0 35px black); */
     overflow: hidden;
     border-radius: 5px;
 }
@@ -66,9 +64,6 @@
     -26px 52px 1px #dfdddc, -27px 54px 1px #e2e0df, -28px 56px 1px #e4e3e2;
 }
 
-.welcome-page-logo{
-
-}
 
 
 .welcome-page-head-section-left-div-text p:nth-child(2){
@@ -85,12 +80,6 @@
     -23px 46px 1px #d4d2d1, -24px 48px 1px #d8d6d5, -25px 50px 1px #dbdade,
     -26px 52px 1px #dfdddc, -27px 54px 1px #e2e0df, -28px 56px 1px #e4e3e2;
 }
-/* .welcome-page-head-section-left-div-text p:nth-child(3){
-    margin-bottom: 10px;
-    margin-top: 1px;
-    color: rgb(246, 119, 73);
-    text-shadow: 1px 1px 4px black;
-} */
 
 .welcome-page-head-section-left-div-tagline{
     width: 100%;
@@ -115,6 +104,5 @@
     background-color: gold;
     margin: 0 auto;
     border-radius: 100px;
-    /* transform: ; */
     transform:rotate(90deg) translateY(-2400%);
 }   

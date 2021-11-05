@@ -13,6 +13,8 @@ import Avatar from "../../component/Avatar/Avatar";
 import BackgroundAnimation from "../../component/BackgroundAnimation/BackgroundAnimation";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import Loader from '../../component/Loader/Loader'
+import LottiAnimation from "../lottiAnimation";
+import CommentAnimation from '../../images/commentAnimation.json'
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -255,6 +257,7 @@ const PostContentPage = () => {
     }
 
     const postcardContentPagePostImageDivRef = useRef();
+    const commentRef = useRef();
 
     return (
         <div className="postcard-content-page-full-div">
@@ -314,7 +317,52 @@ const PostContentPage = () => {
                             />
                         </div>
                         <div className = "postcard-content-page-comment-section-input-div">
-                            <textarea  onFocus={textAreaOnFocus} onBlur={textAreaOnBlur} onKeyPress={commentSubmitHandler} onInput={textAreaOnInput} className="postcard-content-page-comment-section-textarea" type="text" required/>
+                            <textarea ref={commentRef} onFocus={textAreaOnFocus} onBlur={textAreaOnBlur} onKeyPress={commentSubmitHandler} onInput={textAreaOnInput} className="postcard-content-page-comment-section-textarea" type="text" required/>
+                            <div onClick={async()=>{
+
+            const typedComment = commentRef.current.value.trim();
+            if(typedComment.length > 0){
+
+                try {
+                    
+                    const res = await axios.post(process.env.REACT_APP_BACKEND_API_URL+"postinfo",{
+
+                        "postid" : postid,
+                        "comment":typedComment,
+                        "userEmail":currentUser.email,
+                        "username":currentUser.username,
+                        "userProfilePic":currentUser.profilePic,
+                        "userid":viewingUserid,
+
+                    })
+
+                    if(res.status === 200){
+
+                        setRunUseEffect(prev=>!prev);
+
+                    }else{
+                        window.location = "/error";
+                    }
+
+                    commentRef.current.value = "";
+                    
+                } catch (error) {
+                    window.location = "/error";
+                }
+
+            }
+
+        
+
+
+                            }} className="postcard-content-page-comment-button-div">
+                                <LottiAnimation
+                                    lotti = {CommentAnimation}
+                                    height = "4rem"
+                                    width = "4rem"
+                                    className = "postcard-content-page-comment-button"
+                                />
+                            </div>
                         </div>
                         <span className="postcard-content-page-comment-section-custom-placeholder">Comment ...</span>
                     </div>

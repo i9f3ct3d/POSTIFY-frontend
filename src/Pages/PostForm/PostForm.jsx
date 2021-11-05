@@ -5,8 +5,7 @@ import "./PostForm.css";
 import Navbar from "../../component/navbar/navbar";
 import imageCompression from 'browser-image-compression';
 import BackgroundAnimation from "../../component/BackgroundAnimation/BackgroundAnimation";
-import NewPostAnimation from '../../images/newPostAnimation.json'
-import LottieAnimation from "../lottiAnimation";
+import InputField from '../../component/inputField/inputField'
 
 
 const PostForm = (props) => {
@@ -19,7 +18,6 @@ const PostForm = (props) => {
   const longTitleWarningMsg = useRef();
   const emptyTitleWarningMsg = useRef();
   const titleInput = useRef();
-  const placeholderRef = useRef();
   const contentInputRef = useRef();
 
   const pickFileHandler=(event)=>{
@@ -214,8 +212,8 @@ const PostForm = (props) => {
         {preview !== undefined && <div className="postform-img-preview-div"><img className="postform-img-preview" src={preview}/></div>}
       
       <form autoComplete="off" onSubmit={onsubmitHandler} encType="multipart/form-data">
-      <div className="postform-title-input-div">
-      <input
+      <div style={{marginTop : file && "70px"}} className="postform-title-input-div">
+      {/* <input
           ref={titleInput}
           maxLength="19"
           autoComplete="off"
@@ -232,8 +230,19 @@ const PostForm = (props) => {
           }}
           type="text"
           name="heading"
+        /> */}
+
+        <InputField
+          ref = {titleInput}
+          type = "text"
+          placeholder = "Title"
+          name = "heading"
+          placeholderBackground = "white"
+          style={{
+            fontFamily : "'Barlow Condensed' , sans-serif"
+          }}
         />
-        <span ref={placeholderRef} className="postform-title-placeholder">Give a title</span>
+        {/* <span ref={placeholderRef} className="postform-title-placeholder">Give a title</span> */}
       </div>
         <p ref={emptyTitleWarningMsg} style={{ color: "red",visibility : "hidden" ,margin:"0"}}>Post must have a title</p>
           <p ref={longTitleWarningMsg} style={{ color: "red",visibility : "hidden" ,margin:"0"}}>Title Can't be more than 19 characters</p>
@@ -242,9 +251,6 @@ const PostForm = (props) => {
         <input style={{display:"none"}} type="file" ref={filePickerRef} accept=".jpg , .png , .jpeg" onChange={(event)=>{setFile(event.target.files[0])}}/>
         <span
           ref={contentInputRef}
-          onClick={() => {
-            contentInputRef.current.style.borderColor = "white";
-          }}
           id="post-content-span"
           contentEditable="true"
         ></span>
@@ -257,14 +263,7 @@ const PostForm = (props) => {
           </div>
           <br/>
         <button className="new-post-submit-button" type="submit">
-
-          <LottieAnimation
-            lotti = {NewPostAnimation}
-            height = "8rem"
-            width = "8rem"
-            isStopped = {false}
-          />
-
+          <i className = "fas fa-feather-alt"></i>
         </button>
       </form>
     </div>

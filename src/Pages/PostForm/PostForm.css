@@ -59,7 +59,7 @@
 
 .postform-title-input-div{
   position: relative;
-  margin:0 auto;
+  margin:30px auto 0 auto;
 }
 
 .title-input-area{
@@ -124,26 +124,20 @@ visibility: hidden;
   display: inline-block;
   border: solid 1px black;
   width: 80%;
-  border: 2px solid white;
-  box-shadow: 6px 6px 10px rgba(128, 128, 128, 0.555);
+  border: 2px solid #C0BEBE;
   border-radius: 20px;
   outline: none;
   padding: 1rem 1rem;
   min-height: 14rem;
   font-size: 1.3rem;
   transition: all 500ms ease-in-out;
-
   background: #f0f2f5;
-background: linear-gradient(1deg,#f0f2f5 0%, #00c3ffa6 220%);
-background: -webkit-linear-gradient(1deg,#f0f2f5 0%, #00d9ffa8 220%);
-background: -moz-linear-gradient(1deg,#f0f2f5 0%, #00ccffb2 220%);
-
 }
 
 #post-content-span:focus{
-  border-color: white;
-  box-shadow: none;
-  filter: drop-shadow(0 0 10px rgba(128, 128, 128, 0.555));
+  border-color: #6CA5F2;
+  background: transparent;
+  box-shadow: 4px 4px 20px rgba(128, 128, 128, 0.541);
 }
 
 .post-form-image-picker-icon{

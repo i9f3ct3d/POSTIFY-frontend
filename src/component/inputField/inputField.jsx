@@ -12,8 +12,8 @@ const InputField = (props , ref) =>{
 
     return(
         <div className="inputfield-input-div">
-            <input ref = {ref} autoComplete="new-password" type={(eyeClicked) ? props.type : "text"} onChange={inputValueOnChangeHandler} className="inputfield-input" required/>
-            <span className="inputfield-input-placeholder">
+            <input style={props && props.style && props.style} name={props && props.name && props.name} ref = {ref} autoComplete="new-password" type={(eyeClicked) ? props.type : "text"} onChange={inputValueOnChangeHandler} className="inputfield-input" required/>
+            <span style={{backgroundColor : props && props.placeholderBackground && props.placeholderBackground}} className="inputfield-input-placeholder">
                 {props.placeholder}
             </span>
             {props.type === "password" && <i onClick={()=>{setEyeClicked(prev => !prev)}} className={`far fa-eye${eyeClicked ? "-slash":""} password-viewer`}  required></i>}
