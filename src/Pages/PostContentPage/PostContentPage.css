@@ -273,8 +273,15 @@
 
     width: calc(100% - 3rem);
     height: 100%;
-
+    position: relative;
 }
+
+.postcard-content-page-comment-button-div{
+    position: absolute;
+    right: -10px;
+    top: -18px;
+}
+
 
 .postcard-content-page-comment-section-textarea{
     box-sizing: border-box;

@@ -193,7 +193,7 @@ const Navbar=(props)=>
                     </div>
                 
                 <div style={{boxShadow : window.location.pathname === "/welcomepage" && "none" , background : window.location.pathname === "/welcomepage" && "transparent"}} className="navbar-top">
-                <div className="navbar-logo-div">
+                <div onClick={onLogoClickHandler} className="navbar-logo-div">
                     <LottiAnimation
                         lotti = {LogoLotti}
                         height = "100%"

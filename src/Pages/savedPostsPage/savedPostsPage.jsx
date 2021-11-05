@@ -30,7 +30,7 @@ const SavedPostsPage=()=>{
                     setPosts(res.data.savedPosts);
                     setViewinguser(res.data.viewingUser);
                     setIsLoading(false);
-    
+                     
                 }
 
             } catch (error) {
