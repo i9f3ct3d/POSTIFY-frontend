@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import "./navbar.css";
 import { BsHouse } from "react-icons/bs";
@@ -24,7 +24,7 @@ const Navbar=(props)=>
     const [matchedUsers , setMatchedUsers] = useState();
     const [searchInputValue , setSearchInputValue] = useState("");
     const [lastCancelToken , setLastCancelToken] = useState(null);
-
+    
 
 
 
@@ -115,10 +115,14 @@ const Navbar=(props)=>
         const leftNavbar = document.querySelectorAll(".left-navbar-full-div");
 
         leftNavbar.forEach(l => {
-            l.style.left = "0"
+            l.style.transform = "translateX(0) translateZ(0)"
         });
 
     }
+
+    const searchedDivInputRef = useRef();
+    const mobileSearchedDivRef = useRef();
+    const searchedUsersDivRef = useRef();
 
     return(
         <div>
@@ -133,17 +137,17 @@ const Navbar=(props)=>
                 
                 <div className="navbar-mobile-icons-inside-div">
                 
-                <div className="navbar-mobile-icon navbar-mobile-feed-icon" style={{color:pathUrl === "/home" && "blue"}} onClick={()=>{window.location="/home";removeBottomBorder();}}>
+                <div className="navbar-mobile-icon navbar-mobile-feed-icon" style={{color:pathUrl === "/home" && "cyan"}} onClick={()=>{window.location="/home";removeBottomBorder();}}>
 
                     <BsHouse/>
                 </div>
-                <div className="navbar-mobile-icon navbar-mobile-friend-req-icon" style={{color:pathUrl === "/friendrequest" && "blue"}} onClick={()=>{window.location="/friendrequest";removeBottomBorder();}}>
+                <div className="navbar-mobile-icon navbar-mobile-friend-req-icon" style={{color:pathUrl === "/friendrequest" && "cyan"}} onClick={()=>{window.location="/friendrequest";removeBottomBorder();}}>
                     <BiUserPlus/>
                 </div>
-                <div className="navbar-mobile-icon navbar-mobile-notification-icon" style={{color:pathUrl === "/friendsuggestion" && "blue"}} onClick={()=>{window.location="/notification";removeBottomBorder();}}>
+                <div className="navbar-mobile-icon navbar-mobile-notification-icon" style={{color:pathUrl === "/notification" && "cyan"}} onClick={()=>{window.location="/notification";removeBottomBorder();}}>
                     <IoNotificationsOutline/>
                 </div>
-                <div className="navbar-mobile-icon navbar-mobile-newpost-icon" style={{color:pathUrl === "/newpost" && "blue"}} onClick={()=>{window.location="/newpost";removeBottomBorder();}}>
+                <div className="navbar-mobile-icon navbar-mobile-newpost-icon" style={{color:pathUrl === "/newpost" && "cyan"}} onClick={()=>{window.location="/newpost";removeBottomBorder();}}>
                     <BsPen/>
                 </div>
                 </div>
@@ -152,8 +156,22 @@ const Navbar=(props)=>
             </div>}
 
 
+            {cookie !== undefined && 
+            <div onClick = {(e) => {
+                searchedDivInputRef.current.style.display = "block";
+                searchedDivInputRef.current.style.zIndex = "14";
+                mobileSearchedDivRef.current.style.display = "none"
 
-            {cookie!==undefined && <div className="navbar-search-div" style={{zIndex:matchedUsers!== undefined && matchedUsers.length>0 && "12"}}>
+                searchedUsersDivRef.current.style.transform = "translateX(0) translateZ(0)"
+                searchedUsersDivRef.current.style.opacity = "1"
+                searchedUsersDivRef.current.style.pointerEvents = "unset"
+
+
+            }} ref = {mobileSearchedDivRef} className = "navbar-mobile-search-icon-div">
+                <i className="fas fa-search navbar-mobile-search-icon"></i>
+            </div>}
+
+            {cookie!==undefined && <div ref = {searchedDivInputRef} className="navbar-search-div" style={{zIndex:matchedUsers!== undefined && matchedUsers.length>0 && "14"}}>
                     <input value={searchInputValue} autoComplete="off" required className="navbar-search-input" type="text" name="searchedUserName" onChange={searchBarOnChangeHandler}/>                   
                     <span className="placeholder"><i className="fas fa-search"></i>{" Search Users"}</span>
                     
@@ -163,8 +181,22 @@ const Navbar=(props)=>
 
 
 
-            <div className="navbar-searched-users-div" style={{left : matchedUsers!== undefined && searchInputValue && matchedUsers.length>0 && "0" , opacity :  matchedUsers!== undefined && searchInputValue && matchedUsers.length>0 && "1" , pointerEvents :  matchedUsers!== undefined && searchInputValue && matchedUsers.length>0 && "unset"}}>
-                    <div className="search-bar-back-icon" onClick={()=>{setSearchInputValue("")}}><TiArrowBackOutline/></div>
+            <div ref = {searchedUsersDivRef} className="navbar-searched-users-div" style={{transform : matchedUsers!== undefined && searchInputValue && matchedUsers.length>0 && "translateX(0) translateZ(0)" , opacity :  matchedUsers!== undefined && searchInputValue && matchedUsers.length>0 && "1" , pointerEvents :  matchedUsers!== undefined && searchInputValue && matchedUsers.length>0 && "unset"}}>
+                    <div className="search-bar-back-icon" onClick={()=>{
+
+                        searchedUsersDivRef.current.style.transform = "translateX(-101%) translateZ(0)"
+                        searchedUsersDivRef.current.style.opacity = "0"
+                        searchedUsersDivRef.current.style.pointerEvents = "none"
+
+                        if(window.innerWidth <= 1173){
+                            searchedDivInputRef.current.style.display = "none";
+                            searchedDivInputRef.current.style.zIndex = "unset";
+                            mobileSearchedDivRef.current.style.display = "block"
+                        }
+
+                        setSearchInputValue("")
+
+                    }}><TiArrowBackOutline/></div>
                     <div className="searched-users-outer-div">
                     {
                         (matchedUsers!== undefined && matchedUsers.length > 0) &&

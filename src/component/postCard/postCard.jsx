@@ -15,7 +15,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-let likedPosts = new Set();
+// let likedPosts = new Set();
 
 const PostCard = props => {
 
@@ -48,26 +48,33 @@ const PostCard = props => {
 
     }
 
-    const turnOnConfetti = () => {
+    // const turnOnConfetti = () => {
 
-        props && props.turnOnConfetti && props.turnOnConfetti();
+    //     props && props.turnOnConfetti && props.turnOnConfetti();
 
-    }
+    // }
 
-    const turnOffConfetti = () => {
+    // const turnOffConfetti = () => {
 
-        props && props.turnOffConfetti && props.turnOffConfetti();
+    //     props && props.turnOffConfetti && props.turnOffConfetti();
 
-    }
+    // }
+
+    const [lastCancelToken , setLastCancelToken] = useState(null);
 
     const handleLikeClick = async (event) => {
 
-        console.log("click");
+        lastCancelToken && lastCancelToken.cancel();
+
+        const CancelToken = axios.CancelToken;
+        const source = CancelToken.source();
+
+        setLastCancelToken(source);
 
         
         if (isLiked && likeCount > 0) {
             changeLikeCount(prev => prev - 1);
-            turnOffConfetti();
+            // turnOffConfetti();
             starAnim.goToAndStop(0,true);
         }
         else {
@@ -76,11 +83,6 @@ const PostCard = props => {
             starAnim.setSpeed(0.5)
             starAnim.play();
             dontRunUseEffect.current = true;
-
-            if(!likedPosts.has(props.post._id)){
-                turnOnConfetti();
-                likedPosts.add(props.post._id);
-            }
         }
 
         changeisLiked(prev => !prev);
@@ -94,12 +96,18 @@ const PostCard = props => {
                 userid: userId,
                 username: props.viewingUsername,
                 userProfilePic : props.viewingUserProfilePic,
+            },{
+                cancelToken : source.token,
             })
 
             changeLikeCount(response.data.length);
 
         } catch (error) {
-            window.location = "/error";
+            const e = new Error(error);
+
+            if(e.message !== "Cancel"){
+                window.location="/error";
+            }
         }
 
     }
@@ -336,7 +344,7 @@ const PostCard = props => {
                     <Avatar
                         height = "3.5rem"
                         width = '3.5rem'
-                        borderColor = "white"
+                        borderColor = "cyan"
                         image = {props && props.post.authorProfilePic}
                         onClick = {showuserPageHandler}
                     />
@@ -365,8 +373,6 @@ const PostCard = props => {
             </div>
             <div className="post-card-underline" style={{ width: "90%", height: "1px" }}></div>
             
-            
-
 
             
             
@@ -375,6 +381,7 @@ const PostCard = props => {
                 <div className="post-card-like-div-like-button">
                     <div className="post-card-like-div-like-button-lottie-container" ref={starReactAnimationRef}></div>
                     <div onClick={handleLikeClick}  className="post-card-like-div-like-button-touchable-div"></div>
+                    <span onClick = {handleLikeClick} className = "post-card-like-div-like-button-text">Star</span>
                 </div>
                 
                 <div className="post-card-like-div-comment-button">

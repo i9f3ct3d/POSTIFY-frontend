@@ -13,6 +13,7 @@ const FriendRequestCard = (props) => {
         if(props){
             props.confirmFriendButtonClickHandler();
             acceptButton.current.style.display = "none"
+            cancelButton.current.style.display = "none"
             friendsButton.current.style.display = "block"
         }
 
@@ -21,12 +22,16 @@ const FriendRequestCard = (props) => {
     return (
         <div className="friend-request-card-full-div">
             <div className="friend-request-card-upper-div">
-                <div className="friend-request-card-avatar-div">
+                <div onClick = {() => {
+
+                    window.location = "/profilepage?searcheduserid="+props.userid;
+
+                }} className="friend-request-card-avatar-div">
                     <Avatar
                         height = "3rem"
                         width = "3rem"
                         image = {props && props.userProfilePic}
-                        borderColor = "white"
+                        borderColor = "cyan"
                     />
                 </div>
                 <div className="friend-request-card-username-div">

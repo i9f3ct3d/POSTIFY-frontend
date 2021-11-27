@@ -133,7 +133,7 @@ const HomePage = (props) => {
               height = "3rem"
               width = "3rem"
               image = {viewingUser && viewingUser.profilePic}
-              borderColor = "white"
+              borderColor = "cyan"
             />
           </div>
           <div className="home-page-new-post-link-div">

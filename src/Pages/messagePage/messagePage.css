@@ -12,6 +12,9 @@
     height: 100%;
     display: inline-block;
     max-width: 570px;
+    position: relative;
+    background-color: rgba(20, 20, 20, 0.335);
+    backdrop-filter: blur(5px);
 }
 
 @media(max-width : 900px){
@@ -50,7 +53,7 @@
     align-items:flex-end;
     border-radius: 20px 20px 0 0;
     border-top: none;
-    filter: drop-shadow(0 0 5px grey);
+    filter: drop-shadow(0 0 5px rgba(0 , 0 , 0 , 0.5));
 }
 
 .messagepage-friend-username{
@@ -76,7 +79,6 @@
     color: rgb(204, 201, 201);
     font-size: 0.7rem;
     text-shadow: 3px 3px 5px rgba(128, 128, 128, 0.664);
-    transition: all 300ms ease-in-out;
 }
 
 .friend-status-text{
@@ -86,15 +88,14 @@
     font-family: 'Roboto';
     letter-spacing: 1px;
     text-shadow: 3px 3px 5px rgba(128, 128, 128, 0.664);
-    transition: all 300ms ease-in-out;
 }
 
 .message-div{
     height: calc(100% - 138.4px);
     padding: 0.1rem 0 0 2rem;
     box-sizing: border-box;
-    -webkit-box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
-    box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
+    -webkit-box-shadow:inset 3px 3px 5px 2px rgba(0 , 0 , 0 , 0.5);
+    box-shadow:inset 3px 3px 5px 2px rgba(0 , 0 , 0 , 0.5);
     border-radius: 0 0 10px 10px;
 }
 
@@ -104,34 +105,50 @@
     
 }
 
+.message-inner-div::-webkit-scrollbar{
+    background-color: #0e0d0d;
+    width: 4px;
+}
+
+.message-inner-div::-webkit-scrollbar-thumb{
+    background : linear-gradient(to bottom , #121212 , cyan);
+    border-radius: 0 0 10px 10px;
+}
+
 .message-send-div{
     display: flex;
     width: 100%;
 }
 
 .message-send-textarea-div{
-    width: calc(100% - 60px);
+    width: calc(100% - 64px);
 }
 
 .message-send-textarea{
-    width: 100%;
-    height: 100%;
-    resize: none;
+    width: calc(100% - 64px);
+    min-height: 68px;
+    max-height: 150px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
     outline: none;
     border: none;
-    border-radius: 10px;
+    border-radius: 2px 2px 2px 10px;
     border: 2px solid #cfcfcf;
     padding: 0.5rem;
     font-size: 1rem;
     font-family: 'Roboto';
     letter-spacing: 1px;
     word-spacing: 2px;
-    color: grey;
-    transition: all 500ms ease-in-out;
-    position: relative;
-    background: #F0F2F5;
+    color: whitesmoke;
+    background: transparent;
     z-index: 0;
     box-sizing: border-box;
+    resize: none;
+    overflow: hidden;
+
+    background-color: rgba(0, 0, 0, 0.822);
+    backdrop-filter: blur(50px);
 }
 
 .message-send-textarea::placeholder{
@@ -139,22 +156,24 @@
 }
 
 .message-send-textarea:focus{
-    border-color:#1877F1;
-    box-shadow: 4px 4px 9px rgba(128, 128, 128, 0.493);
+    border-color:cyan;
 }
 
 .message-send-button{
     border: none;
     outline: none;
     position: relative;
-    transition: all 500ms ease-in-out;
+    transition: transform 500ms ease-in-out;
     height: 4rem;
     width: 4rem;
-    background: linear-gradient(white , #1877F1);
-    border: 2px solid #F0F2F5;
+    border: 1px solid cyan;
     border-radius: 100%;
-    box-shadow: 4px 4px 8px rgba(128, 128, 128, 0.479);
     cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.61);
+    backdrop-filter: blur(1px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .message-send-button:hover{
@@ -169,14 +188,15 @@
 }
 
 .message-send-button-icon{
-    font-size: 2rem;
-    color: #184bf1;
+    font-size: 2.4rem;
+    font-weight: lighter;
+    color: cyan;
 }
 
 .message-send-button-background{
     position: absolute;
     font-size: 1.5rem;
-    color: #184bf1;
+    color: cyan;
     opacity: 0;
     text-shadow: 3px 3px 3px grey;
 }

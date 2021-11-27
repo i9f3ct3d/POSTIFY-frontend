@@ -22,7 +22,6 @@
     border-radius: 5px;
     width: 0;
     overflow: hidden;
-    transition: width 1s ease-in-out;
 }
 
 .welcome-page-head-section-left-div{

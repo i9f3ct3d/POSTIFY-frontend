@@ -10,6 +10,7 @@ import ChatBubble from './chatBubble';
 import BackgroundAnimation from '../../component/BackgroundAnimation/BackgroundAnimation';
 import LeftNavbar from '../../component/leftNavbar/leftNavbar';
 import RightOnlineUsersBar from '../../component/rightOnlineUsersBar/rightOnlineUsersBar';
+import { RiSendPlaneLine } from 'react-icons/ri';
 
 const MessagePage=(props)=>{
 
@@ -30,11 +31,11 @@ const MessagePage=(props)=>{
     const [ arrivalMessage , setArrivalMessage] = useState(null)
     const [allChats , setAllChats] = useState([]);
     const [onlineUsers , setOnlineUsers] = useState(null);
-    const [typedText , setTypedText] = useState("");
     
     
     const socket  = useRef();
     const cookie = Cookies.get('x-auth-token');
+    const lastMessageRef = useRef();
     
     useEffect(()=>{
         
@@ -141,8 +142,12 @@ const MessagePage=(props)=>{
                 }else if(res.status === 200){
 
                     setAllChats(res.data.allChats);
+
+                    document.getElementById("message-page-last-message").scrollIntoView({behavior : 'smooth'});
                     
                 }
+
+
 
             } catch (error) {
                 window.location="/error"
@@ -175,13 +180,14 @@ const MessagePage=(props)=>{
     const messageSendButtonClickHandler=async(e)=>{
         e.preventDefault();
 
-        const chatContent = typedText.trim();
+        const chatContent = textRef.current.value.trim();
 
         if(chatContent && conversationId){
 
             const background = document.querySelector(".message-send-button-background");
             background.classList.toggle("clicked-message-button");
-            setTypedText("");
+            // setTypedText("");
+            textRef.current.value = "";
             setTimeout(() => {
                 background.classList.toggle("clicked-message-button");
             }, 1000);
@@ -210,7 +216,7 @@ const MessagePage=(props)=>{
                     window.location="/login";
                 }
                 else if(res.status === 200){
-                    setRunUseEffect(!runUseEffect);
+                    setRunUseEffect(prev => !prev);
                 }
                 
             } catch (error) {
@@ -220,10 +226,18 @@ const MessagePage=(props)=>{
         
     }
 
+      const textRef = useRef();
 
+      const onChangeHandler = (e) => {
+        const target = e.target;
+        textRef.current.style.height = "30px";
+        textRef.current.style.height = `${target.scrollHeight}px`;
+      }
 
     return(
+        
         <div className="messagepage-full-div">
+            <div className="background-div"></div>
             <Navbar/>
             <BackgroundAnimation/>
             <LeftNavbar
@@ -252,9 +266,10 @@ const MessagePage=(props)=>{
                 <div className="message-inner-div">
 
                     {
-                        allChats.map((eachChat)=>{
+                        allChats.map((eachChat , index)=>{
 
                             let obj = <ChatBubble
+                                        id = {allChats ? ((index === allChats.length - 1) ? "message-page-last-message" : null) : null}
                                         key={eachChat._id}
                                         myUserid = {myUserid}
                                         senderid = {eachChat.senderId}
@@ -271,9 +286,39 @@ const MessagePage=(props)=>{
                 </div>
                 <div className="message-send-div">
                 <div className="message-send-textarea-div">
-                    <textarea placeholder="message..." value={typedText} onChange={(e)=>{setTypedText(e.target.value)}} className="message-send-textarea"/>
+                    <textarea
+                    onKeyPress = {(e) => {
+                        if(e.key !== "Enter" || e.shiftKey){
+                            return;
+                        }
+
+                        messageSendButtonClickHandler(e);
+                    }}
+                    ref={textRef}
+                    onChange={onChangeHandler} 
+                    placeholder="message..." 
+                    //   value={typedText} 
+                    //   onChange={(e)=>{setTypedText(e.target.value)}}
+                    className="message-send-textarea"/>
                 </div>
-                    <button style={{background: !typedText.trim() && "rgba(161, 160, 160, 0.349)",transform:!typedText.trim() && "none"}} onClick={messageSendButtonClickHandler} className="message-send-button"><i style={{color: !typedText.trim() && "grey"}} className="far fa-paper-plane message-send-button-icon"></i><i className="far fa-paper-plane message-send-button-background"></i></button>
+                    <button 
+                        // style={{background: !typedText.trim() && "rgba(161, 160, 160, 0.349)",transform:!typedText.trim() && "none"}} 
+                        onClick={messageSendButtonClickHandler} className="message-send-button">
+                        {/* <i 
+                        style={{color: !typedText.trim() && "grey"}} 
+                        className="far fa-paper-plane message-send-button-icon">
+
+                        </i>
+                        <i className="far fa-paper-plane message-send-button-background">
+
+                        </i> */}
+                        <RiSendPlaneLine
+                            className = "message-send-button-icon"
+                        />
+                        <RiSendPlaneLine
+                            className = "message-send-button-background"
+                        />
+                    </button>
                 </div>
             </div>
         </div>

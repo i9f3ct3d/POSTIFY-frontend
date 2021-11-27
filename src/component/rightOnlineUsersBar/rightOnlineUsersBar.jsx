@@ -87,7 +87,7 @@ const RightOnlineUsersBar=(props)=>{
         const allOnlineUsersBar = document.querySelectorAll(".right-online-users-bar-full-div");
 
         allOnlineUsersBar.forEach(o => {
-          o.style.right = "-100%";
+          o.style.transform = "translateX(101%) translateZ(0)";
         });
 
     }
@@ -102,14 +102,14 @@ const RightOnlineUsersBar=(props)=>{
             </div>
 
             <p className="right-online-users-bar-title"><i className="far fa-circle right-online-users-bar-title-icon"></i>Online</p>
-            <div style={{height : "1px" , backgroundColor : "#CED0D4" , width : "100%" , margin : "10px 0 0 0"}} className="underline"></div>
+            <div style={{height : "1px" , backgroundColor : "#3D3F42" , width : "100%" , margin : "10px 0 0 0"}} className="underline"></div>
             <div className="right-online-users-bar-inner-div">
                 {
                     onlineUsersData && onlineUsersData.map((eachUser)=>{
                         
                         if(eachUser._id === viewingUserid){
                             return(
-                                <div style={{display : "none"}}></div>
+                                <div key = {eachUser._id} style={{display : "none"}}></div>
                             )
                         }
 

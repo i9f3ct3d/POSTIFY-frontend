@@ -30,6 +30,7 @@ const NewPostPage=(props)=>{
     
     return(
         <div className="new-post-page-full-container">
+        <div className = "background-div"></div>
         <div className="new-post-page-container">      
             {user && <PostForm
                 userid={user._id}

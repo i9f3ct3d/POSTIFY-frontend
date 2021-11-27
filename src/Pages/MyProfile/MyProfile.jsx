@@ -90,10 +90,6 @@ const MyProfile=()=>{
                 <section className="myprofile-section-2">
                     <p className="myprofile-section-2-username">{userData && userData.username}</p>
                     <p className="myprofile-section-2-useremail">{userData && userData.email}</p>
-                    {/* <div className="myProfile-details-div">
-                        <p style={{cursor:"pointer"}}>Friends : {userData && userData.friends && userData.friends.length}</p>
-                        <p>Posts : {userPosts && userPosts.length}</p>
-                    </div> */}
                 </section>
                 <section className="myprofile-section-3">
                 {

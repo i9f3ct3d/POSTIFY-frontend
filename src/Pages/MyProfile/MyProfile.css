@@ -22,7 +22,7 @@
 .myprofile-cover-pic{
     height: 15rem;
     width: 100%;
-    background-color: rgb(216, 216, 216);
+    background-color: #242527;
     border: 2px solid grey;
     box-sizing:border-box !important;
 }
@@ -31,7 +31,7 @@
     height: 7rem;
     width: 7rem;
     border-radius: 7rem;
-    border : 2px solid white;
+    border : 2px solid cyan;
     box-shadow: 2px 2px 2px rgba(128, 128, 128, 0.596);
     position: absolute;
     top: calc(15rem - 3.5rem);
@@ -39,36 +39,33 @@
 }
 
 .myprofile-section-2{
-    background-color: white;
+    background-color: #121212;
     width: 40%;
     max-width: 750px;
     margin: 0 auto;
     padding-top: 4rem ;
     text-align: right;
     border-radius: 0 0 5px 5px;
-    box-shadow: 3px 3px 3px rgba(128, 128, 128, 0.527);
+    box-shadow: 3px 3px 3px rgba(0 , 0 , 0 , 0.5);
     padding-bottom: 1rem;
 }
 
 .myprofile-section-2 p{
     margin-right: 10px;
-    /* font-family: 'Roboto';
-    letter-spacing: 1px;
-    word-spacing: 2px;
-    color: #1877F1; */
 }
 
 .myprofile-section-2-username{
     font-size: 2.5rem;
     font-weight: 900;
     font-family: 'Comfortaa' , cursive;
-    color: #050505;
+    color: cyan;
 }
 
 .myprofile-section-2-useremail{
     font-size: 1rem;
     font-weight: 500;
     font-family: 'Comfortaa' , cursive;
+    color: whiteSmoke;
 }
 
 

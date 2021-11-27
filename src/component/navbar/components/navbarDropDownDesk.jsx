@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import './navbarDropDownDesk.css'
 import {BsCaretDown} from 'react-icons/bs';
@@ -11,29 +11,50 @@ const pathNameSet = new Set(
 
 const NavbarDropDownDesk = (props)=>{
 
-    const [dropDownButtonClicked , setDropDownButtonClicked] = useState(false);
-
 
     const onlineUsersButtonClick = () => {
 
         const allOnlineUsersBar = document.querySelectorAll(".right-online-users-bar-full-div");
 
         allOnlineUsersBar.forEach(o => {
-          o.style.right = "0";
+          o.style.transform = "translateX(0) translateZ(0)";
         });
 
-        setDropDownButtonClicked(prev => !prev);
+        dropDownDeskCloseHandler();
 
     }
 
+    const dropDownButtonRef = useRef();
+    const dropDownDeskRef = useRef();
+
+    const dropDownDeskOpenHandler = () => {
+
+        dropDownDeskRef.current.style.transform = "translateX(0) translateY(0) translateZ(0) scale(1)"
+        dropDownDeskRef.current.style.opacity = "1"
+        dropDownDeskRef.current.style.pointerEvents = "unset";
+
+    }
+    
+    const dropDownDeskCloseHandler = () => {
+      dropDownDeskRef.current.style.transform = "translateX(40%) translateY(-45%) translateZ(0) scale(0.1)"
+      dropDownDeskRef.current.style.opacity = "0"
+      dropDownDeskRef.current.style.pointerEvents = "none";
+    }
+
     return(
-        <div style={{overflow : !dropDownButtonClicked && "hidden"}} className="newnavbar-dropdown-button">
-                     <div className="newnavbar-dropdown-button-icon" onClick={()=>{setDropDownButtonClicked(prev => !prev)}}>
+        <div
+        ref = {dropDownButtonRef}
+        className="newnavbar-dropdown-button">
+                     <div className="newnavbar-dropdown-button-icon" onClick={()=>{
+                       dropDownDeskOpenHandler();}}
+                       >
                       <BsCaretDown/>
                      </div> 
                     
-                    <div style={{zIndex :  dropDownButtonClicked && "100", height :  dropDownButtonClicked && "auto" , width :  dropDownButtonClicked && "15rem" ,top :  dropDownButtonClicked && "-5px" ,  opacity :  dropDownButtonClicked && "1" , borderRadius :  dropDownButtonClicked && "10px"}} className="newnavbar-dropdown-desk">
-                      <i onClick={()=>{setDropDownButtonClicked(prev => !prev)}} className="fas fa-times newnavbar-dropdown-desk-close-button"></i>
+                    <div
+                    ref = {dropDownDeskRef}
+                    className="newnavbar-dropdown-desk">
+                      <i onClick={()=>{dropDownDeskCloseHandler();}} className="fas fa-times newnavbar-dropdown-desk-close-button"></i>
                       <div style={{display : props && !props.cookie && "none"}} className="newnavbar-dropdown-desk-avatar">
                         <Avatar
                           onClick={()=>{window.location="/myprofile"}}

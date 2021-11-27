@@ -4,7 +4,8 @@
     top: 0;
     z-index: 3;
     padding-top: 100px;
-    transition: left 500ms ease-in-out;
+    transform: translateZ(0);
+    transition: transform 500ms ease-in-out;
 }
 
 .left-navbar-profile-link-div{
@@ -18,11 +19,11 @@
 }
 
 .left-navbar-profile-link-text{
-    margin-left: 10px;
+    margin-left: 20px;
     font-family: 'Comfortaa' , cursive;
     font-size: 1.2rem;
     font-weight: 600;
-    color: #2B89DC;
+    color: #2bb9dc;
 }
 
 .left-navbar-mobile-cross-div{
@@ -32,14 +33,14 @@
 @media (max-width : 900px){
     .left-navbar-full-div{
         padding-top: 130px;
-        background: white;
+        background: #242527;
         box-shadow: 2px 2px 5px black;
-        left: -100%;
+        left: 0;
         top: 0;
-        height: calc(100vh);
+        transform: translateX(-101%) translateZ(0);
+        height: 100vh;
         overflow-y: scroll;
         box-sizing: border-box;
-
         -ms-overflow-style: none;  /* Internet Explorer 10+ */
         scrollbar-width: none;  /* Firefox */
     }
@@ -58,10 +59,10 @@
         border-radius: 100%;
         border: 1px solid transparent;
         padding: 0.5rem;
-        color: rgb(107, 107, 107);
         cursor: pointer;
-        transition: border 300ms ease-in-out;
+        /* transition: border 300ms ease-in-out; */
         z-index: 2;
         color: #050505;
+        font-size: 1.5rem;
     }
 }
