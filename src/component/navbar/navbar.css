@@ -105,8 +105,8 @@
     top: 50%;
     transform: translateY(-50%);
     color: grey;
-    transition: color 2s;
     pointer-events: none;
+    transition: color 1s ease-in-out;
 }
 
 .placeholder i:nth-child(1){
@@ -131,7 +131,7 @@
     left: 0;
     width: 23rem;
     border-radius: 0 0 10px 0;
-    transition: opacity, transform 500ms, 500ms ease-in-out;
+    transition: opacity,transform,-webkit-transform 500ms,500ms,500ms ease-in-out;
     opacity: 0;
     text-align: left;
     padding: 1rem 0.5rem;

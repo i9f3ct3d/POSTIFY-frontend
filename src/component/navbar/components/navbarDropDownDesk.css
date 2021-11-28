@@ -48,7 +48,7 @@
     cursor: default;
     box-shadow: -5px 5px 10px rgba(0 , 0 , 0 , 0.5);
     pointer-events: none;
-    transition: transform , opacity 500ms , 500ms ease-in-out;
+    transition: transform,-webkit-transform,opacity 500ms,500ms,500ms ease-in-out;
 }
 
 
@@ -78,9 +78,9 @@
     justify-content: flex-start;
     align-items: center;
     cursor: pointer;
-    transition: transform 300ms ease-in-out;
     padding: 5px 10px;
     transform: translateZ(0);
+    transition: transform,-webkit-transform 300ms,300ms ease-in-out;
 }
 
 .newnavbar-dropdown-desk-aboutus:hover{

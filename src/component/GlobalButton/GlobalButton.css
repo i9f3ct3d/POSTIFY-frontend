@@ -6,7 +6,7 @@
     cursor: pointer;
     overflow: hidden;
     border-radius: 3px;
-    transition: transform 500ms ease-in-out;
+    transition: transform,-webkit-transform 500ms,500ms ease-in-out;
     z-index: 0;
 }
 
@@ -34,7 +34,7 @@
     left: -50px;
     top: -25px;
     background-color: greenyellow;
-    transition: transform 500ms ease-in-out;
+    transition: transform,-webkit-transform 500ms,500ms ease-in-out;
     z-index: -1;
     position: absolute;
     transform: rotate(10deg) translateX(-100%);
