@@ -7,7 +7,7 @@
     padding: 10px;
     cursor: pointer;
     transform: translate3d(-90%, 0, 0);
-    transition: transform,-webkit-transform 200ms,200ms ease-in-out;
+    transition: transform 200ms ease-in-out;
 }
 
 .left-navbar-link-icon-div{

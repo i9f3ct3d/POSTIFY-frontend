@@ -13,7 +13,7 @@
     color: #050505;
     border : 1px solid tomato;
     opacity: 0;
-    transition: transform, opacity 500ms, 500ms ease-in-out;
+    transition: transform 500ms ease-in-out, opacity 500ms ease-in-out;
     pointer-events: none;
 }
 

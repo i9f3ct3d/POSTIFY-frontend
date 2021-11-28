@@ -81,7 +81,7 @@
     border-radius: 5px;
     cursor: pointer;
     transform: translateZ(0);
-    transition: transform , box-shadow 300ms, 300ms ease-in-out;
+    transition: transform 300ms ease-in-out, box-shadow 300ms ease-in-out;
 }
 
 .google-svg-div{
@@ -200,7 +200,7 @@
         height: fit-content;
         opacity: 0;
         transform: translateX(-100px) translateZ(0);
-        transition: transform, opacity 500ms, 500ms ease-in-out;
+        transition: transform 500ms ease-in-out, opacity 500ms ease-in-out;
     }
     .written-input{
         padding: 1rem 1rem 40px 1rem;
@@ -215,7 +215,7 @@
 
         opacity: 0;
         transform: translateX(100px) translateZ(0);
-        transition: transform, opacity 500ms, 500ms ease-in-out;
+        transition: transform 500ms ease-in-out, opacity 500ms ease-in-out;
     }
 
     .signup-page-message-icon-div{

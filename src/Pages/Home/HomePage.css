@@ -95,7 +95,7 @@
     padding: 20px;
     max-width: 750px;
     cursor: pointer;
-    transition: transform, box-shadow 300ms, 300ms ease-in-out;
+    transition: transform 300ms ease-in-out,box-shadow 300ms ease-in-out;
     position: relative;
     overflow: hidden;
 }

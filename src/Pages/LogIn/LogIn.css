@@ -81,7 +81,7 @@
     .loginPage-background-image-div{
         opacity: 0;
         transform: translateX(-50px);
-        transition: transform, opacity 500ms, 500ms ease-in-out;
+        transition: transform 500ms ease-in-out, opacity 500ms ease-in-out;
     }
 
     .loginPage-background-image, .loginPage-background-image-div{
@@ -151,7 +151,7 @@
         position: relative;
         transform: translateX(50px);
         opacity: 0;
-        transition: transform, opacity 500ms, 500ms ease-in-out;
+        transition: transform 500ms ease-in-out,opacity 500ms ease-in-out;
     }
 
     .login-page-message-icon-div{
