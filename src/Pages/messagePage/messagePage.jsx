@@ -24,7 +24,6 @@ const MessagePage=(props)=>{
 
     const [searchedUser , setSearchedUser] = useState(null);
     const [viewingUser , setViewingUser] = useState(null);
-    const [runUseEffect , setRunUseEffect] = useState(false);
     const [conversationId , setConversationId] = useState("");
     
     
@@ -35,7 +34,6 @@ const MessagePage=(props)=>{
     
     const socket  = useRef();
     const cookie = Cookies.get('x-auth-token');
-    const lastMessageRef = useRef();
     
     useEffect(()=>{
         
@@ -89,6 +87,9 @@ const MessagePage=(props)=>{
         }else{
 
             const fetch=async()=>{
+
+                props && props.showLoader && props.showLoader();
+
                 try {
                     //////////////////// Getting ConversationId ////////////////////
                     const res =await axios.post(process.env.REACT_APP_BACKEND_API_URL+"conversation/?token="+cookie,{
@@ -112,8 +113,10 @@ const MessagePage=(props)=>{
                     }else if(response.status === 200){
                         setSearchedUser(response.data.user);
                         setViewingUser(response.data.viewingUser);
+
                     }
 
+                    props && props.hideLoader && props.hideLoader();
 
                 } catch (error) {
                     window.location="/error";
@@ -143,7 +146,6 @@ const MessagePage=(props)=>{
 
                     setAllChats(res.data.allChats);
 
-                    document.getElementById("message-page-last-message").scrollIntoView({behavior : 'smooth'});
                     
                 }
 
@@ -156,7 +158,7 @@ const MessagePage=(props)=>{
         
         fetch();}
 
-    },[conversationId,runUseEffect])
+    },[conversationId])
 
     const [isFriendOnline , setIsFriendOnline] = useState(false)
 
@@ -186,7 +188,6 @@ const MessagePage=(props)=>{
 
             const background = document.querySelector(".message-send-button-background");
             background.classList.toggle("clicked-message-button");
-            // setTypedText("");
             textRef.current.value = "";
             setTimeout(() => {
                 background.classList.toggle("clicked-message-button");
@@ -204,6 +205,18 @@ const MessagePage=(props)=>{
 
                 const date = new Date();
 
+                // produce random string
+                let r = (Math.random() + 1).toString(36).substring(7);
+
+                setAllChats(prev => [...prev,{
+                    _id : r,
+                    conversationId : conversationId,
+                    senderId : myUserid,
+                    recieverId : searchedUserid,
+                    date : date,
+                    chatContent : chatContent,
+                }])
+
                 const res =await axios.post(process.env.REACT_APP_BACKEND_API_URL+"sendmessage?token="+cookie,{
                     "senderId" : myUserid,
                     "recieverId" : searchedUserid,
@@ -211,12 +224,10 @@ const MessagePage=(props)=>{
                     "chatContent" : chatContent,
                     "conversationId" : conversationId
                 });
+                
 
                 if(res.status===204){
                     window.location="/login";
-                }
-                else if(res.status === 200){
-                    setRunUseEffect(prev => !prev);
                 }
                 
             } catch (error) {
@@ -233,6 +244,37 @@ const MessagePage=(props)=>{
         textRef.current.style.height = "30px";
         textRef.current.style.height = `${target.scrollHeight}px`;
       }
+
+    useEffect(()=>{
+
+        if(allChats){
+
+            document.getElementById("message-page-last-message") && document.getElementById("message-page-last-message").scrollIntoView({behavior : 'smooth'});
+
+        }
+
+    },[allChats])
+    
+
+    function getOnlyUserName(fullName){
+
+        var i;
+        let firstName = "";
+
+        for (i of fullName){
+
+            if(i === ' '){
+                return firstName;
+            }
+
+            firstName += i;
+
+        }
+
+        return firstName;
+
+    }
+
 
     return(
         
@@ -255,7 +297,7 @@ const MessagePage=(props)=>{
                         image={searchedUser && searchedUser.profilePic}
                     />
                     <div className="messagepage-friend-status-outer-div">
-                        <p className="messagepage-friend-username">{searchedUser && searchedUser.username}</p>
+                        <p className="messagepage-friend-username">{searchedUser && searchedUser.username && getOnlyUserName(searchedUser.username)}</p>
                         <div className="messagepage-friend-status-inner-div">
                             <i style={{color : isFriendOnline && "greenYellow"}} className="far fa-circle friend-status-icon"></i>
                             <p style={{color : isFriendOnline && "greenYellow"}} className="friend-status-text">{isFriendOnline ?"online" : "offline"}</p>

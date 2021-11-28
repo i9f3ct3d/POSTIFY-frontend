@@ -19,6 +19,7 @@ const PostForm = (props) => {
   const emptyTitleWarningMsg = useRef();
   const titleInput = useRef();
   const contentInputRef = useRef();
+  const formRef = useRef();
 
   const pickFileHandler=(event)=>{
     event.preventDefault();
@@ -27,6 +28,8 @@ const PostForm = (props) => {
 
   const onsubmitHandler = async (event) => {
     event.preventDefault();
+
+    props && props.showLoader && props.showLoader();
 
     let allcondition = true;
 
@@ -82,13 +85,22 @@ const PostForm = (props) => {
         );
 
         if (response.data.credentials === "valid") {
-          Cookies.set("x-auth-token", response.data.token);
-          window.location = "/home";
+          // Cookies.set("x-auth-token", response.data.token);
+          // window.location = "/home";
+
+          formRef.current.reset();
+          contentInputRef.current.innerHTML = "";
+          setPreview(null);
+          setCompressedImage(null);
+
         }
       } catch (error) {
         window.location = "/error";
       }
     }
+
+    props && props.hideLoader && props.hideLoader();
+
   };
 
 
@@ -211,7 +223,7 @@ const PostForm = (props) => {
         <br/>
         {preview !== undefined && <div className="postform-img-preview-div"><img className="postform-img-preview" src={preview}/></div>}
       
-      <form autoComplete="off" onSubmit={onsubmitHandler} encType="multipart/form-data">
+      <form ref = {formRef} autoComplete="off" onSubmit={onsubmitHandler} encType="multipart/form-data">
       <div style={{marginTop : file && "70px"}} className="postform-title-input-div">
 
         <InputField

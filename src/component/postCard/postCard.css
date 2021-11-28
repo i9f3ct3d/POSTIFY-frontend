@@ -305,6 +305,7 @@ html, body {
     font-family: 'Roboto';
     letter-spacing: 0.7px;
     word-spacing: 3px;
+    word-break: break-all;
 }
 
 .post-card-dots-div{

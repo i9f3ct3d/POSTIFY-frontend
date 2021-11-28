@@ -12,7 +12,6 @@ import Navbar from "../../component/navbar/navbar";
 import Avatar from "../../component/Avatar/Avatar";
 import BackgroundAnimation from "../../component/BackgroundAnimation/BackgroundAnimation";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import Loader from '../../component/Loader/Loader'
 import LottiAnimation from "../lottiAnimation";
 import CommentAnimation from '../../images/commentAnimation.json'
 
@@ -23,7 +22,7 @@ function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
-const PostContentPage = () => {
+const PostContentPage = (props) => {
     let query = useQuery();
     const postid = query.get("postid");
     const viewingUserid = query.get("userid");
@@ -31,44 +30,45 @@ const PostContentPage = () => {
     const [post , setPost] = useState(null);
     const [currentUser , setCurrentUser] = useState(null);
     const [isLiked , setIsLiked] = useState(false);
-    const [runUseEffect , setRunUseEffect] = useState(false);
     const [likeCount , setLikeCount] = useState(0);
-    const [isLoading , setIsLoading] = useState(true);
 
-    useEffect(() => {
+    const fetchData = async () => {
 
-        
-        const fetchData = async () => {
-            try {
-                const cookie = Cookie.get("x-auth-token");
-                const res = await axios.get(process.env.REACT_APP_BACKEND_API_URL + 'fetchuser/?token=' + cookie);
-                
-                if(res.data.credentials==="invalid")
-                {
-                    window.location="/login";
-                }
-               setCurrentUser(res.data.user);
+        props && props.showLoader && props.showLoader();
 
-                const response = await axios.get(process.env.REACT_APP_BACKEND_API_URL + 'postinfo?postid=' + postid);
-                setPost(response.data);
-                setLikeCount(response.data.likeArray.length)
-                
-                const isIncluded = response.data.likeArray.includes(viewingUserid);
-
-                if (isIncluded) {
-                    setIsLiked(true);
-                } else {
-                    setIsLiked(false);
-                }
-
-                setIsLoading(false);
-
-            } catch (error) {
-                window.location = "/error";
+        try {
+            const cookie = Cookie.get("x-auth-token");
+            const res = await axios.get(process.env.REACT_APP_BACKEND_API_URL + 'fetchuser/?token=' + cookie);
+            
+            if(res.data.credentials==="invalid")
+            {
+                window.location="/login";
             }
-        };
+           setCurrentUser(res.data.user);
+
+            const response = await axios.get(process.env.REACT_APP_BACKEND_API_URL + 'postinfo?postid=' + postid);
+            setPost(response.data);
+            setLikeCount(response.data.likeArray.length)
+            
+            const isIncluded = response.data.likeArray.includes(viewingUserid);
+
+            if (isIncluded) {
+                setIsLiked(true);
+            } else {
+                setIsLiked(false);
+            }
+
+            // setIsLoading(false);
+
+            props && props.hideLoader && props.hideLoader();
+
+        } catch (error) {
+            window.location = "/error";
+        }
+    };
+    useEffect(() => {
         fetchData();
-    }, [runUseEffect]);
+    }, []);
 
     const [lastCancelToken , setLastCancelToken] = useState(null);
 
@@ -151,46 +151,6 @@ const PostContentPage = () => {
 
     }
 
-    const commentSubmitHandler=async(e)=>{
-        
-        if(e.key === "Enter" && !e.shiftKey){
-
-            const typedComment = (e.target.value).trim();
-            if(typedComment.length > 0){
-
-                try {
-                    
-                    const res = await axios.post(process.env.REACT_APP_BACKEND_API_URL+"postinfo",{
-
-                        "postid" : postid,
-                        "comment":typedComment,
-                        "userEmail":currentUser.email,
-                        "username":currentUser.username,
-                        "userProfilePic":currentUser.profilePic,
-                        "userid":viewingUserid,
-
-                    })
-
-                    if(res.status === 200){
-
-                        setRunUseEffect(prev=>!prev);
-
-                    }else{
-                        window.location = "/error";
-                    }
-
-                    e.target.value = "";
-                    textAreaOnInput(e);
-                    
-                } catch (error) {
-                    window.location = "/error";
-                }
-
-            }
-
-        }
-
-    }
     
     const textAreaOnInput=(e)=>{
         e.target.style.height = "5px";
@@ -291,6 +251,8 @@ const PostContentPage = () => {
         const typedComment = commentRef.current.value.trim();
             if(typedComment.length > 0){
 
+                props && props.showLoader && props.showLoader();
+
                 try {
                     
                     const res = await axios.post(process.env.REACT_APP_BACKEND_API_URL+"postinfo",{
@@ -306,7 +268,8 @@ const PostContentPage = () => {
 
                     if(res.status === 200){
 
-                        setRunUseEffect(prev=>!prev);
+                        // setRunUseEffect(prev=>!prev);
+                        fetchData();
 
                     }else{
                         window.location = "/error";
@@ -371,8 +334,6 @@ const PostContentPage = () => {
             
             <div className="background-div"></div>
             <Navbar />
-
-            {isLoading && <Loader/>}
             <BackgroundAnimation/>
 
             <div className="postcard-content-page-post-card-main-div">

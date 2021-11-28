@@ -1,5 +1,5 @@
 import './App.css';
-import React , { Suspense , lazy } from 'react';
+import React , { Suspense , lazy, useRef } from 'react';
 import { BrowserRouter as Router, Route , Switch,  Redirect} from "react-router-dom";
 
 import SignUp from "./Pages/SignUp/SignUp"
@@ -21,37 +21,83 @@ const ProfilePage = lazy(()=>import("./Pages/profilePage/profilePage"));
 const SavedPostsPage = lazy(()=>import("./Pages/savedPostsPage/savedPostsPage"));
 const MessagePage = lazy(()=>import("./Pages/messagePage/messagePage"));
 
-
+var isShowing = false;
 
 function App() {
+
+  const LoaderRef = useRef();
+  // const isShowing = useRef(false);
+
+  const showLoader = () => {
+
+    if(isShowing === false){
+
+      isShowing = true;
+      
+      LoaderRef && LoaderRef.current && LoaderRef.current.show();
+    }
+    
+  }
+  
+  const hideLoder = () => {
+
+    if(isShowing){
+
+      isShowing = false;
+      LoaderRef && LoaderRef.current && LoaderRef.current.hide();
+      setTimeout(()=>{
+        LoaderRef && LoaderRef.current && LoaderRef.current.reset();
+      },500)
+    }
+
+  }
+
   return (
     <div className="App">
+      <Loader
+        ref = {LoaderRef}
+      />
       <Router>
       <Switch>
         <Route path = "/login" exact>
-          <LogIn/>
+          <LogIn
+            showLoader = {showLoader}
+            hideLoader = {hideLoder}
+          />
         </Route>
         <Route path = "/signup" exact>
-          <SignUp/>
+          <SignUp
+            showLoader = {showLoader}
+            hideLoader = {hideLoder}
+          />
         </Route>
 
         <Route path="/home" exact>
           <Suspense fallback={<Loader/>}>
-            <HomePage/>
+            <HomePage
+              showLoader = {showLoader}
+              hideLoader = {hideLoder}
+            />
           </Suspense>
         </Route>
 
 
         <Route path="/newpost" exact>
         <Suspense fallback={<Loader/>}>
-          <NewPostPage/>
+          <NewPostPage
+            showLoader = {showLoader}
+            hideLoader = {hideLoder}
+          />
         </Suspense>
         </Route>
 
 
         <Route path="/postinfo" exact>
           <Suspense fallback={<Loader/>}>
-          <PostContentPage />
+          <PostContentPage
+            showLoader = {showLoader}
+            hideLoader = {hideLoder}
+          />
           </Suspense>
         </Route>
 
@@ -64,7 +110,10 @@ function App() {
 
         <Route path="/friendrequest" exact>
         <Suspense fallback={<Loader/>}>
-          <FriendRequest/>
+          <FriendRequest
+            showLoader = {showLoader}
+            hideLoader = {hideLoder}
+          />
         </Suspense>
         </Route>
 
@@ -72,7 +121,10 @@ function App() {
         
         <Route path="/notification" exact>
           <Suspense fallback={<Loader/>}>
-          <Notification/>
+          <Notification
+            showLoader = {showLoader}
+            hideLoader = {hideLoder}
+          />
           </Suspense>
         </Route>
 
@@ -80,14 +132,20 @@ function App() {
 
         <Route path="/profilepage" exact>
           <Suspense fallback={<Loader/>}>
-          <ProfilePage/>
+          <ProfilePage
+            showLoader = {showLoader}
+            hideLoader = {hideLoder}
+          />
           </Suspense>
         </Route>
 
 
         <Route path="/myprofile" exact>
             <Suspense fallback={<Loader/>}>
-              <MyProfile/>
+              <MyProfile
+                showLoader = {showLoader}
+                hideLoader = {hideLoder}
+              />
             </Suspense>
         </Route>
 
@@ -95,15 +153,21 @@ function App() {
 
         <Route path="/savedposts" exact>
             <Suspense fallback={<Loader/>}>
-          <SavedPostsPage/>
+          <SavedPostsPage
+            showLoader = {showLoader}
+            hideLoader = {hideLoder}
+          />
             </Suspense>
         </Route>
 
 
 
         <Route path="/messagepage" exact>
-            <Suspense fallback={<Loader/>}>
-              <MessagePage/>
+            <Suspense fallback={<></>}>
+              <MessagePage
+                showLoader = {showLoader}
+                hideLoader = {hideLoder}
+              />
             </Suspense>
         </Route>
 

@@ -8,10 +8,9 @@ import axios from "axios";
 import FriendRequestCard from "./components/FriendRequestCard";
 import BackgroundAnimation from '../../component/BackgroundAnimation/BackgroundAnimation'
 
-const FriendRequest=()=>{
+const FriendRequest=(props)=>{
 
     const [user , setUser] = useState(null);
-    const [useEffectRefresh , setUseEffectRefresh] = useState(false);
     const [friendReqRecievedUsersArray , setFriendReqRecievedUsersArray] = useState(null);
 
     const cookie = Cookies.get('x-auth-token');
@@ -19,6 +18,8 @@ const FriendRequest=()=>{
     useEffect(()=>{
 
         const fetch = async() => {
+
+            props && props.showLoader && props.showLoader();
 
             try {
                 
@@ -39,7 +40,7 @@ const FriendRequest=()=>{
         fetch();
 
 
-    },[useEffectRefresh])
+    },[])
 
 
     useEffect(()=>{
@@ -64,6 +65,7 @@ const FriendRequest=()=>{
                     window.location = "/error";
                 }
 
+                props && props.hideLoader && props.hideLoader();
 
             }
 
@@ -71,7 +73,7 @@ const FriendRequest=()=>{
 
         }
 
-    },[user , useEffectRefresh])
+    },[user])
 
 
 
@@ -127,7 +129,8 @@ const FriendRequest=()=>{
                                                 window.location="/login";
 
                                             }else if(res.status === 200){
-                                                setUseEffectRefresh((prev) => !prev);
+
+                                                setFriendReqRecievedUsersArray(prev => prev.filter( u => u._id !== eachUser._id));
                                             }
 
                                             } catch (error) {

@@ -11,6 +11,9 @@ const NewPostPage=(props)=>{
     const[user , setUser]=useState();
     
     useEffect(()=>{
+
+        props && props.showLoader && props.showLoader();
+
         const cookie=Cookies.get('x-auth-token');
         const fetchData = async () => {
             try {
@@ -19,6 +22,9 @@ const NewPostPage=(props)=>{
                 {               
                     setUser(res.data.user);
                 }
+                
+                props && props.hideLoader && props.hideLoader();
+
             } catch (error) {
                 
                 window.location="/error";
@@ -33,12 +39,14 @@ const NewPostPage=(props)=>{
         <div className = "background-div"></div>
         <div className="new-post-page-container">      
             {user && <PostForm
+                showLoader = {props && props.showLoader && props.showLoader}
+                hideLoader = {props && props.hideLoader && props.hideLoader}
                 userid={user._id}
                 username={user.username}
                 userProfilePic={user.profilePic ? (user.profilePic[0] === "u" ? process.env.REACT_APP_BACKEND_API_URL+ user.profilePic : user.profilePic) : noPic}
             />}
         </div>
-            <Footer/>
+            {/* <Footer/> */}
         </div>
     )
 }

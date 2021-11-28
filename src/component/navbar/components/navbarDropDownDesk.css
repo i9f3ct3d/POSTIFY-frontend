@@ -4,9 +4,11 @@
     border-radius: 100%;
     display: inline-block;
     font-size: 2rem;
-    height: 30px;
-    width: 30px;
-    padding: 7px;
+    /* height: 30px;
+    width: 30px; */
+    /* padding: 7px; */
+    height: fit-content;
+    width: fit-content;
     background: #121212;
     border: 2px solid #3D3F42;
     color: #3D3F42;
@@ -20,6 +22,9 @@
 }
 
 .newnavbar-dropdown-button-icon{
+    width: 30px;
+    height: 30px;
+    padding: 7px;
     transition: box-shadow 500ms ease-in-out;
 }
 
