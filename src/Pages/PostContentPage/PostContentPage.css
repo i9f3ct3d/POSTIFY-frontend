@@ -340,7 +340,7 @@
     top: 9px;
     pointer-events: none;
     background: transparent;
-    transition: top, color, background-color, border-color 300ms, 300ms, 300ms, 300ms ease-in-out;
+    transition: top 300ms ease-in-out, color 300ms ease-in-out, background-color 300ms ease-in-out, border-color 300ms ease-in-out;
     padding: 0 5px;
     color: #909192;
     background-color: #121212;

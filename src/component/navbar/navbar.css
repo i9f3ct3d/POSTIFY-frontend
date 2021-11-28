@@ -37,7 +37,7 @@
 .navbar-top-button:active{
     background-color: rgba(0, 0, 0, 0.637);
     color: white;
-    transition: background-color 0.6s;
+    transition: background-color 0.6s ease-in-out;
 }
 
 
@@ -105,8 +105,8 @@
     top: 50%;
     transform: translateY(-50%);
     color: grey;
-    transition: color 2s;
     pointer-events: none;
+    transition: color 1s ease-in-out;
 }
 
 .placeholder i:nth-child(1){
@@ -131,7 +131,7 @@
     left: 0;
     width: 23rem;
     border-radius: 0 0 10px 0;
-    transition: opacity, transform 500ms, 500ms ease-in-out;
+    transition: opacity 500ms ease-in-out,transform 500ms ease-in-out;
     opacity: 0;
     text-align: left;
     padding: 1rem 0.5rem;
@@ -182,7 +182,7 @@
     border-radius: 10px;
     text-align: left;
     display: flex;
-    transition : background-color 1s;
+    transition : background-color 1s ease-in-out;
     margin-bottom: 0.8rem;
 }
 
@@ -230,7 +230,7 @@
     border-bottom: 4px solid #121212;
     color:#65676B;
     background-color: #121212;
-    transition: background-color 2s ,color 1s , border-bottom 1s ease-in-out;
+    transition: background-color 1s ease-in-out,color 1s ease-in-out, border-bottom 1s ease-in-out;
     font-size:1.5rem;
 }
 

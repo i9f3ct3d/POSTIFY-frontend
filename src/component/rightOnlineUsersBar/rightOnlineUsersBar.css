@@ -8,7 +8,7 @@
     z-index: 3;
     text-align: left;
     transform: translateX(0) translateZ(0);
-    transition: box-shadow, transform 500ms, 500ms ease-in-out;
+    transition: box-shadow 500ms ease-in-out,transform 500ms ease-in-out;
 }
 
 .right-online-users-bar-full-div:hover{

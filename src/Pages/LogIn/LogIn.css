@@ -46,8 +46,8 @@
     background-color: white;
     border-radius: 5px;
     cursor: pointer;
-    transition: transform , box-shadow 300ms, 300ms ease-in-out;
     transform: translateZ(0);
+    transition: transform 300ms ease-in-out, box-shadow 300ms ease-in-out;
 }
 
 .google-svg-div{
@@ -81,7 +81,7 @@
     .loginPage-background-image-div{
         opacity: 0;
         transform: translateX(-50px);
-        transition: transform, opacity 500ms, 500ms ease-in-out;
+        transition: transform 500ms ease-in-out, opacity 500ms ease-in-out;
     }
 
     .loginPage-background-image, .loginPage-background-image-div{
@@ -151,7 +151,7 @@
         position: relative;
         transform: translateX(50px);
         opacity: 0;
-        transition: transform, opacity 500ms, 500ms ease-in-out;
+        transition: transform 500ms ease-in-out,opacity 500ms ease-in-out;
     }
 
     .login-page-message-icon-div{
