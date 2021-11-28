@@ -7,15 +7,16 @@
     height: 30px;
     width: 30px;
     padding: 7px;
-    background: white;
-    filter: drop-shadow(0 0 2px grey);
-    color: #CED0D4;
+    background: #121212;
+    border: 2px solid #3D3F42;
+    color: #3D3F42;
     cursor: pointer;
     position: fixed;
     right: 0;
     top: 32px;
     transform: translateY(-50%);
-    z-index: 11;
+    z-index: 12;
+    overflow: visible;
 }
 
 .newnavbar-dropdown-button-icon{
@@ -23,35 +24,39 @@
 }
 
 .newnavbar-dropdown-button:active{
-    -webkit-box-shadow:inset 3px 3px 3px 2px rgba(128,128,128,0.568);
-    box-shadow:inset 3px 3px 3px 2px rgba(128,128,128,0.568);
+    -webkit-box-shadow:inset 3px 3px 3px 2px rgba(0 , 0 ,0 , 0.5);
+    box-shadow:inset 3px 3px 3px 2px rgba(0 , 0 , 0 , 0.5);
 }
 
 .newnavbar-dropdown-desk{
-    position: fixed;
-    width: 3rem;
-    height: 3rem;
-    border-radius: 100% 10px 10px 100%;
+    position: absolute;
+    width: 15rem;
+    height: auto;
+    border-radius:10px;
     overflow: hidden;
-    right: 0;
-    top: 0;
+    right: -5px;
+    top: -5px;
     opacity: 0;
-    border: 1px solid #CED0D4;
+    border: 1px solid #121212;
     justify-content: center;
     align-items: center;
-    transition: all 500ms ease-in-out;
+    transition: transform, opacity 500ms, 500ms ease-in-out;
     padding: 30px 5px 3px 5px;
-    background: white;
+    background: #121212;
     flex-wrap: nowrap;
-    z-index: -100;
+    z-index: 1;
     cursor: default;
-    transform: translateZ(0);
+    transform: translateX(40%) translateY(-45%) translateZ(0) scale(0.1);
+    box-shadow: -5px 5px 10px rgba(0 , 0 , 0 , 0.5);
+    pointer-events: none;
 }
+
+
 
 .newnavbar-dropdown-desk-underline{
     height: 1px;
     width: 80%;
-    background-color: #CED0D4;
+    background-color: #3D3F42;
     margin: 20px auto;
 }
 
@@ -60,8 +65,7 @@
     width: 100%;
     text-align: center;
     font-size: 1.4rem;
-    color: rgb(31, 30, 30);
-    text-shadow: 1px 1px 5px grey;
+    color: cyan;
     font-family: 'Comfortaa' , cursive;
     font-weight: 600;
 }
@@ -97,13 +101,11 @@
     display: flex;
     margin-top: 10px;
     color: red;
-    text-shadow: 3px 3px 5px rgba(255, 0, 0, 0.548);
     justify-content: flex-start;
     align-items: center;
     cursor: pointer;
     border-radius: 10px;
     border: 2px solid red;
-    background-color: white;
     padding: 5px 10px;
 }
 
@@ -123,8 +125,7 @@
     cursor: pointer;
     color: rgba(214, 211, 211, 0.603);
     padding : 5px 10px;
-    font-weight: 100;
     border-radius: 100%;
-    background: white;
     font-size: 1.5rem;
+    -webkit-text-stroke: 3px #121212;
 }

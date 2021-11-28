@@ -6,50 +6,49 @@
     cursor: pointer;
     overflow: hidden;
     border-radius: 3px;
-    transition: transform, box-shadow 500ms, 500ms ease-in-out;
+    transition: transform 500ms ease-in-out;
+    z-index: 0;
 }
 
 .global-button{
     width: 100%;
     height: 100%;
-    border: 2px solid #45BD62;
+    border: 2px solid greenyellow;
     border-radius: 3px;
     font-family: 'Comfortaa' , cursive;
-    /* font-weight: 600; */
     background: transparent;
     cursor: pointer;
-    color: #45BD62;
+    color: greenyellow;
     transition: color 500ms ease-in-out;
-    text-shadow: 1px 1px 5px rgba(128, 128, 128, 0.411);
-    /* letter-spacing: 1px; */
+    text-shadow: 1px 1px 5px rgba(0 , 0 , 0 , 0.5);
     font-size: 1rem;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+    z-index: 0;
 }
 
 .global-button-background{
-    width: 0;
-    height: 200%;
+    width: 200%;
+    height: 400%;
     left: -50px;
-    top: -20px;
-    background-color: #45BD62;
-    transition: width 500ms ease-in-out;
+    top: -25px;
+    background-color: greenyellow;
+    transition: transform 500ms ease-in-out;
     z-index: -1;
     position: absolute;
-    transform: rotate(10deg);
+    transform: rotate(10deg) translateX(-100%);
     border-radius: 5px;
 }
 
 .global-button-full-div:hover .global-button-background{
-    width: 200%;
+    transform: rotate(10deg);
 }
 
 .global-button-full-div:hover .global-button{
-    color: white !important;
+    color: whiteSmoke !important;
 }
 
 .global-button-full-div:hover{
     transform: scale(1.05);
-    box-shadow: 3px 3px 25px rgba(128, 128, 128, 0.418);
 }

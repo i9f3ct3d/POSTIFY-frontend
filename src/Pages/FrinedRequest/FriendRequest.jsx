@@ -92,7 +92,9 @@ const FriendRequest=()=>{
                     friendReqRecievedUsersArray && friendReqRecievedUsersArray.map((eachUser)=>{
                         return(
                                 <FriendRequestCard
+
                                     key = {eachUser._id}
+                                    userid = {eachUser._id}
                                     username = {eachUser.username}
                                     userProfilePic = {eachUser.profilePic}
                                     confirmFriendButtonClickHandler = {async()=>{

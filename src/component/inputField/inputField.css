@@ -29,17 +29,17 @@
     transform: translateY(-50%) translateZ(0);
     font-family: 'Comfortaa' , cursive;
     pointer-events: none;
-    background: white;
+    background: #121212;
     padding: 0 5px;
     transition: color, top 500ms ease-in-out;
 }
 
 .inputfield-input:focus, .inputfield-input:valid{
-    border-color: rgba(0, 110, 255, 0.664);
+    border-color: cyan;
 }
 
 .inputfield-input:focus~.inputfield-input-placeholder, .inputfield-input:valid~.inputfield-input-placeholder{
-    color: rgba(0, 110, 255, 0.664);
+    color: cyan;
     top: 0;
 }
 
@@ -54,6 +54,6 @@
 
 @media(max-width : 900px){
     .inputfield-input-placeholder{
-        background-color: #F0F2F5;
+        background-color: #242527;
     }
 }

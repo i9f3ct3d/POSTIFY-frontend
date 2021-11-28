@@ -13,6 +13,13 @@
     flex-wrap: wrap;
     justify-content: center;
     overflow-y: scroll;
+
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  
+}
+
+.friend-request-page-inner-div::-webkit-scrollbar{
+    display: none;
 }
 
 @media(max-width : 900px){

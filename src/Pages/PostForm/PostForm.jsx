@@ -213,36 +213,18 @@ const PostForm = (props) => {
       
       <form autoComplete="off" onSubmit={onsubmitHandler} encType="multipart/form-data">
       <div style={{marginTop : file && "70px"}} className="postform-title-input-div">
-      {/* <input
-          ref={titleInput}
-          maxLength="19"
-          autoComplete="off"
-          className="title-input-area"
-          onClick={() => {
-            emptyTitleWarningMsg.current.style.visibility = "hidden";
-            longTitleWarningMsg.current.style.visibility = "hidden";
-            placeholderRef.current.style.visibility = "hidden"
-            titleInput.current.style.borderColor = "#189af1"
-          }}
-          onBlur={(e)=>{
-            placeholderRef.current.style.visibility = e.target.value ? "hidden" : "visible"
-            titleInput.current.style.borderColor = "white"
-          }}
-          type="text"
-          name="heading"
-        /> */}
 
         <InputField
           ref = {titleInput}
           type = "text"
           placeholder = "Title"
           name = "heading"
-          placeholderBackground = "white"
+          placeholderBackground = "#0A0A0A"
           style={{
-            fontFamily : "'Barlow Condensed' , sans-serif"
+            fontFamily : "'Barlow Condensed' , sans-serif",
+            color : "whiteSmoke"
           }}
         />
-        {/* <span ref={placeholderRef} className="postform-title-placeholder">Give a title</span> */}
       </div>
         <p ref={emptyTitleWarningMsg} style={{ color: "red",visibility : "hidden" ,margin:"0"}}>Post must have a title</p>
           <p ref={longTitleWarningMsg} style={{ color: "red",visibility : "hidden" ,margin:"0"}}>Title Can't be more than 19 characters</p>

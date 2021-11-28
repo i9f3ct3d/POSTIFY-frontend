@@ -11,6 +11,7 @@ import LeftNavbar from '../../component/leftNavbar/leftNavbar';
 import RightOnlineUsersBar from '../../component/rightOnlineUsersBar/rightOnlineUsersBar';
 import BackgroundAnimation from '../../component/BackgroundAnimation/BackgroundAnimation';
 import StarAnimation from '../../component/StarAnimation/StarAnimation';
+import GlobalButton from '../../component/GlobalButton/GlobalButton';
 
 const ProfilePage = () => {
 
@@ -293,38 +294,96 @@ const ProfilePage = () => {
 
                         </div>
                         <div className="profilepage-profile-pic">
-                            <img src={searchedUser && searchedUser.profilePic ? (searchedUser.profilePic[0] === "u" ? process.env.REACT_APP_BACKEND_API_URL+searchedUser.profilePic : searchedUser.profilePic) : noPic} />
+                            <img alt = "profilePic" src={searchedUser && searchedUser.profilePic ? (searchedUser.profilePic[0] === "u" ? process.env.REACT_APP_BACKEND_API_URL+searchedUser.profilePic : searchedUser.profilePic) : noPic} />
                         </div>
                     </div>
                 </section>
                 <section className="profilepage-section-2">
                     <p className="profilepage-section-2-username">{searchedUser && searchedUser.username}</p>
-                    
-                    
-                    <button ref = {showAddFriendRef} onClick={ addFriendButtonClickHandler} className="add-friend-button"><i className="fas fa-user-plus"></i>  Add Friend</button>
-                    <button ref = {showReqSentRef} onClick={ (e)=>{
+                    <div className = "profilepage-section-2-buttons">
 
+                    
+                    <GlobalButton
+                        icon = {<i className="fas fa-user-plus"></i>}
+                        text = "Add Friend"
+                        ref = {showAddFriendRef} 
+                        onClick={ addFriendButtonClickHandler}
+                        style = {{
+                            width : "10rem",
+                            marginRight : "0",
+                            display : "none"
+                        }}
+                        borderColor = "cyan"
+                        color = "cyan"
+                        backgroundColor = "cyan"
+                    />
+                    <GlobalButton
+                        text = "Request Sent"
+                        ref = {showReqSentRef} 
+                        onClick={ (e)=>{
                         e.preventDefault();
                         setShowPopUp(true);
                         setPopUpStatement("Do you want to cancel the friend request to "+searchedUser.username+" ?");
                         setPopUpFunction(()=>removeSentFriendReq);
-
-                    } } className="req-sent-button"><i className="fas fa-check"></i>  Reqest Sent</button>
-                    <button ref = {friendReqConfirmRef} onClick={ confirmFriendButtonClickHandler} className="friend-req-confirm-button"><i className="fas fa-check"></i>  Confirm</button>
-                    <button ref = {friendReqCancelRef} onClick={ cancelReceivedRequestButtonClickHandler} className="friend-req-cancel-button"><i className="fas fa-check"></i>  Cancel</button>
-                    
-                    <button ref = {showFriendsRef} onClick={(e)=>{
-
+                        }}
+                        icon = {<i className="fas fa-check"></i>}
+                        style = {{
+                            width : "10rem",
+                            marginRight : "0",
+                            display : "none"
+                        }}
+                        borderColor = "grey"
+                        color = "grey"
+                        backgroundColor = "grey"
+                    />
+                    <GlobalButton
+                        text = "Confirm"
+                        ref = {friendReqConfirmRef} 
+                        onClick={ confirmFriendButtonClickHandler}
+                        icon = {<i className="fas fa-check"></i> }
+                        style = {{
+                            marginRight : "0",
+                            display : "none"
+                        }}
+                        borderColor = "cyan"
+                        color = "cyan"
+                        backgroundColor = "cyan"
+                    />
+                    <GlobalButton
+                        text = "Cancel"
+                        ref = {friendReqCancelRef} 
+                        onClick={ cancelReceivedRequestButtonClickHandler}
+                        icon = {<i className="fas fa-check"></i>}
+                        style = {{
+                            marginRight : "0",
+                            display : "none"
+                        }}
+                        borderColor = "grey"
+                        color = "grey"
+                        backgroundColor = "grey"
+                    />
+                    <GlobalButton
+                        icon = {<i className="fas fa-user-friends"></i>}
+                        text = "Friends"
+                        ref = {showFriendsRef} onClick={(e)=>{
                         e.preventDefault();
                         setShowPopUp(true);
                         setPopUpStatement("Do you want to unfriend "+searchedUser.username+" ?");
                         setPopUpFunction(()=>unfriendButtonHandler);
-
-                    }} className="friends-button"><i className="fas fa-user-friends"></i>  Friends</button>
+                        }}
+                        style = {{
+                            marginRight : "0",
+                            display : "none"
+                        }}
+                        borderColor = "cyan"
+                        color = "cyan"
+                        backgroundColor = "cyan"
+                    />
                     <i onClick={messageButtonClickHandler} className="far fa-comments send-message-icon"></i>
                     <BiDotsVerticalRounded
                         className = "add-friend-dots"
                     />
+                </div>
                 </section>
                 <section className="profilepage-section-3">
                 {

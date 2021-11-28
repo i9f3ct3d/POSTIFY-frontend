@@ -16,6 +16,9 @@ import Loader from '../../component/Loader/Loader'
 import LottiAnimation from "../lottiAnimation";
 import CommentAnimation from '../../images/commentAnimation.json'
 
+import starReactAnimation from '../../images/starReactAnimation.json'
+import Lottie from 'lottie-web'
+
 function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
@@ -67,20 +70,36 @@ const PostContentPage = () => {
         fetchData();
     }, [runUseEffect]);
 
+    const [lastCancelToken , setLastCancelToken] = useState(null);
 
     const handleLikeClick = async (event) => {
+
+        lastCancelToken && lastCancelToken.cancel();
+
+        const CancelToken = axios.CancelToken;
+        const source = CancelToken.source();
+
+        setLastCancelToken(source);
 
         setIsLiked(prev => !prev);
 
         if(isLiked && likeCount > 0){
 
             setLikeCount(prev => (prev - 1));
+            starAnim.goToAndStop(0,true);
 
         }else if(!isLiked){
 
             setLikeCount(prev => (prev + 1));
+            starAnim.setSpeed(0.5)
+            starAnim.play();
+            dontRunUseEffect.current = true;
 
         }else{
+            setLikeCount(prev => (prev + 1));
+            starAnim.setSpeed(0.5)
+            starAnim.play();
+            dontRunUseEffect.current = true;
             return;
         }
 
@@ -92,11 +111,17 @@ const PostContentPage = () => {
                 userid: currentUser._id,
                 username: currentUser.username,
                 userProfilePic : currentUser.profilePic,
+            },{
+                cancelToken : source.token,
             })
 
 
         } catch (error) {
-            window.location="/error";
+            const e = new Error(error);
+
+            if(e.message !== "Cancel"){
+                window.location="/error";
+            }
         }
 
     }
@@ -107,9 +132,9 @@ const PostContentPage = () => {
         const placeholder = document.querySelector(".postcard-content-page-comment-section-custom-placeholder");
         placeholder.style.top = "-12px";
         placeholder.innerHTML = "Comment";
-        placeholder.style.color = "rgb(24,119,241)";
-        placeholder.style.background = "white";
-        document.querySelector(".postcard-content-page-comment-section-div").style.borderColor = "rgb(24,119,241)";
+        placeholder.style.color = "cyan";
+        placeholder.style.backgroundColor = "#121212";
+        document.querySelector(".postcard-content-page-comment-section-div").style.borderColor = "cyan";
         
     }
     
@@ -120,8 +145,8 @@ const PostContentPage = () => {
             placeholder.style.top = "9px";
             placeholder.innerHTML = "Comment ...";
             placeholder.style.color = "#909192";
-            placeholder.style.background = "white";
-            document.querySelector(".postcard-content-page-comment-section-div").style.borderColor = "#909192";
+            placeholder.style.backgroundColor = "#121212";
+            document.querySelector(".postcard-content-page-comment-section-div").style.borderColor = "#3D3F42";
         }
 
     }
@@ -259,6 +284,87 @@ const PostContentPage = () => {
     const postcardContentPagePostImageDivRef = useRef();
     const commentRef = useRef();
 
+    const commentOnPostHandler = async(e) => {
+
+        e.preventDefault();
+
+        const typedComment = commentRef.current.value.trim();
+            if(typedComment.length > 0){
+
+                try {
+                    
+                    const res = await axios.post(process.env.REACT_APP_BACKEND_API_URL+"postinfo",{
+
+                        "postid" : postid,
+                        "comment":typedComment,
+                        "userEmail":currentUser.email,
+                        "username":currentUser.username,
+                        "userProfilePic":currentUser.profilePic,
+                        "userid":viewingUserid,
+
+                    })
+
+                    if(res.status === 200){
+
+                        setRunUseEffect(prev=>!prev);
+
+                    }else{
+                        window.location = "/error";
+                    }
+
+                    commentRef.current.value = "";
+                    
+                } catch (error) {
+                    window.location = "/error";
+                }
+
+            }
+
+    }
+
+
+
+    const starReactAnimationRef = useRef(null);
+    const [starAnim , setStarAnim] = useState(null)
+
+      useEffect(()=>{
+
+        const anim = Lottie.loadAnimation({
+            container : starReactAnimationRef.current, 
+            renderer : 'canvas',
+            loop : false,
+            autoplay : false,
+            path : "../../images/starReactAnimation.json",
+            animationData : starReactAnimation,
+        })
+
+        
+        setStarAnim(anim);
+
+
+      },[])
+
+      const dontRunUseEffect = useRef(false);
+
+      useEffect(()=>{
+
+        if(isLiked !== null && starAnim && !dontRunUseEffect.current){
+
+            if(isLiked){
+
+                starAnim.goToAndStop(30,true);
+                
+            }else{
+                
+                starAnim.goToAndStop(0,true);
+            }
+
+        }
+
+      },[starAnim , isLiked])
+
+
+
     return (
         <div className="postcard-content-page-full-div">
             
@@ -291,18 +397,37 @@ const PostContentPage = () => {
                 }} placeholderSrc = {process.env.PUBLIC_URL + "/logo192.png"} height="100%" width="100%" alt="postImage" className="postcard-content-page-post-card-img" src={process.env.REACT_APP_BACKEND_API_URL + post.postImage} />
             </div>}
             <div className="postcard-content-page-post-card-like-count-div">
-                <i className="fa-star fas" style={{ color: "gold" }}>{"             "}{likeCount}</i>
+                <i className="fa-star fas" style={{ color: "gold" , fontSize : "1.2rem"}}>{"             "}{likeCount}</i>
             </div>
             <div className="postcard-content-page-post-card-underline" style={{ width: "99%", height: "1px" }}></div>
+            
+
+
+
+
+            
             <div className="postcard-content-page-post-card-like-div">
-                <i 
+                {/* <i 
                     className={`fa-star ${isLiked ? "fas" : "far"}`} 
                     style={{ color: isLiked ? "gold" : "grey", cursor: "pointer", marginTop: "10px" }} 
-                    onClick={handleLikeClick}>Star</i>
+                    onClick={handleLikeClick}>Star</i> */}
+
+                <div className="postcard-content-page-post-card-like-div-like-button">
+                    <div className="postcard-content-page-post-card-like-div-like-button-lottie-container" ref={starReactAnimationRef}></div>
+                    <div onClick={handleLikeClick}  className="postcard-content-page-post-card-like-div-like-button-touchable-div"></div>
+                    <span onClick = {handleLikeClick} className = "postcard-content-page-post-card-like-div-like-button-text">Star</span>
+                </div>
 
                 <i className="fas fa-pen" style={{ position: "absolute", right: "0", marginTop: "10px", color: "grey", cursor: "pointer" }}>Comment</i>
 
             </div>
+
+
+
+
+
+
+
             {
                 <div className="postcard-content-page-post-card-comments-div">
                     <h3>Comments</h3>
@@ -317,45 +442,9 @@ const PostContentPage = () => {
                             />
                         </div>
                         <div className = "postcard-content-page-comment-section-input-div">
-                            <textarea ref={commentRef} onFocus={textAreaOnFocus} onBlur={textAreaOnBlur} onKeyPress={commentSubmitHandler} onInput={textAreaOnInput} className="postcard-content-page-comment-section-textarea" type="text" required/>
-                            <div onClick={async()=>{
-
-            const typedComment = commentRef.current.value.trim();
-            if(typedComment.length > 0){
-
-                try {
-                    
-                    const res = await axios.post(process.env.REACT_APP_BACKEND_API_URL+"postinfo",{
-
-                        "postid" : postid,
-                        "comment":typedComment,
-                        "userEmail":currentUser.email,
-                        "username":currentUser.username,
-                        "userProfilePic":currentUser.profilePic,
-                        "userid":viewingUserid,
-
-                    })
-
-                    if(res.status === 200){
-
-                        setRunUseEffect(prev=>!prev);
-
-                    }else{
-                        window.location = "/error";
-                    }
-
-                    commentRef.current.value = "";
-                    
-                } catch (error) {
-                    window.location = "/error";
-                }
-
-            }
-
-        
-
-
-                            }} className="postcard-content-page-comment-button-div">
+                            <form onSubmit = {commentOnPostHandler}>
+                            <input style = {{resize : "both"}} ref={commentRef} onFocus={textAreaOnFocus} onBlur={textAreaOnBlur} className="postcard-content-page-comment-section-textarea" type="text" required/>
+                            <div onClick = {commentOnPostHandler} type = "submit" className="postcard-content-page-comment-button-div">
                                 <LottiAnimation
                                     lotti = {CommentAnimation}
                                     height = "4rem"
@@ -363,6 +452,7 @@ const PostContentPage = () => {
                                     className = "postcard-content-page-comment-button"
                                 />
                             </div>
+                            </form>
                         </div>
                         <span className="postcard-content-page-comment-section-custom-placeholder">Comment ...</span>
                     </div>

@@ -1,19 +1,18 @@
 import axios from "axios";
-import React ,{useEffect, useRef}from "react";
+import React , { useEffect , useRef }from "react";
 import Cookies from "js-cookie";
 import "./LogIn.css"
 
 import Logo from "../../component/logo/logo";
 import Navbar from "../../component/navbar/navbar";
-import SignupLoginButton from "../../component/signup_login_buttons/signupLoginButton";
 import InputField from "../../component/inputField/inputField";
 import LottiAnimation from "../lottiAnimation";
 import LoginPageLotti from '../../images/loginPageLottie.json'
 import BackgroundAnimation from "../../component/BackgroundAnimation/BackgroundAnimation";
-
-
+import { IoArrowRedo } from 'react-icons/io5'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import GlobalButton from "../../component/GlobalButton/GlobalButton";
 
 const LogIn=()=>{
 
@@ -199,6 +198,28 @@ const LogIn=()=>{
     )
   }
 
+  const leftDivRef = useRef();
+  const rightDivRef = useRef();
+
+
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+
+      leftDivRef.current.style.opacity = "1";
+      leftDivRef.current.style.transform = "translateX(0)";
+
+      rightDivRef.current.style.opacity = "1";
+      rightDivRef.current.style.transform = "translateX(0)";
+
+    }
+  )
+
+  useEffect(() => {
+    observer.observe(leftDivRef.current)
+    // Remove the observer as soon as the component is unmounted
+    return () => { observer.disconnect() }
+  }, [])
+
     return(
       <div style={{width : "100%" , minHeight : "100vh"}}>
       <Navbar />
@@ -217,28 +238,40 @@ const LogIn=()=>{
       <div className="background-div"></div>
         <div className="login-div-container">
         <BackgroundAnimation/>
-        <div className="loginPage-background-image-div">
+        <div ref = {leftDivRef} className="loginPage-background-image-div">
           <LottiAnimation
             lotti = {LoginPageLotti}
             className = "loginPage-background-image"
           />
         </div> 
-            <div className="login-fulldiv">
-                
-                <div className="login-page-logo-div">
+            <div ref = {rightDivRef} className="login-fulldiv">
+              <div className = "login-page-message-icon-div">                
+                <IoArrowRedo
+                  className = "login-page-message-icon"
+                />
+              </div>
+                <div 
+
+                 className="login-page-logo-div">
                   <Logo
                     className = "login-page-logo"
                   />
                 </div>
-
+                <div
+                className = "login-page-logo-underline-div"
+                >
+                </div>
                 <h1>Login Here</h1>
-                <div style={{borderRadius : "0 50px 50px 0", height : "10px" , backgroundColor : "#45BD62", marginLeft : "0" , width : "90%"}} className="underline"></div>
+                <div style={{borderRadius : "0 50px 50px 0", height : "10px" , backgroundColor : "greenYellow", marginLeft : "0" , width : "90%"}} className="underline"></div>
                 <div className="login-div">
                     <form onSubmit={onLogInSubmitHandler}>
                         <InputField
                             type="text"
                             placeholder="Email"
                             onChange={emailOnchangeHandler}
+                            style = {{
+                              color : "whiteSmoke"
+                            }}
                         />
                         <br/>
                         <br/>
@@ -246,20 +279,37 @@ const LogIn=()=>{
                             type="password"
                             placeholder="Password"
                             onChange={passwordOnchangeHandler}
+                            style = {{
+                              color : "whiteSmoke"
+                            }}
                         />
                         <br/>
                         <br/>
-                        <SignupLoginButton
-                            iconClassName="fas fa-sign-in-alt"
-                            buttonText="Login"
-                            borderColor="blue"
-                            textColor="blue"
-                            shadowColor="rgba(36, 143, 231, 0.335)"
-                            background="rgba(36, 104, 231, 0.596)"
+                        <GlobalButton
+                          text = "Login"
+                          borderColor = "cyan"
+                          color = "cyan"
+                          backgroundColor = "cyan"
+                          style = {{
+                            width : "276px"
+                          }}
                         />
                         <br/>
 
                     </form>
+                    <br/>
+                    <br/>
+                    <div
+                    
+                          style = {{
+                            backgroundColor : "#3D3F42",
+                            width : "100%",
+                            height : "1px",
+                            margin : "0 auto"
+                          }}
+
+                    ></div>
+
                       <div className="login-with-google-button-div">
                         <div onClick={googleSignUpHandler} className="google-Signup-div">
                           <div className="google-svg-div">

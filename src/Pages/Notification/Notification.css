@@ -44,7 +44,7 @@
 
 .eachnotification-div:hover{
     transform: scale(1.02) translateZ(0);
-    box-shadow: 2px 2px 5px rgba(128, 128, 128, 0.548);
+    box-shadow: 2px 2px 5px rgba(0 , 0 , 0 , 0.5);
 }
 
 .eachnotification-avatar-div{

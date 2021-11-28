@@ -13,8 +13,8 @@
 .postcard-content-page-post-card-main-div{
     width:calc(100vw - 100px);
     border-radius: 5px;
-    background-color: white;
-    box-shadow: 4px 4px 4px rgba(128, 128, 128, 0.548);
+    background-color: #121212;
+    box-shadow: 4px 4px 4px rgba(0 , 0 , 0 , 0.5);
     padding: 20px 0;
     margin: 64px auto;
 }
@@ -37,20 +37,13 @@
     margin-left: 15px;
     cursor: pointer;
 }
-.postcard-content-page-post-card-author h4:nth-child(1):hover{
-
-    font-size: 1.2rem;
-    text-shadow: 4px 4px 5px rgb(128, 128, 128);
-}
 
 
 .postcard-content-page-post-card-author h4:nth-child(1){
     margin: 0;
     font-family: 'Comfortaa' , cursive;
     letter-spacing: 1px;
-    text-shadow: 2px 2px 3px rgba(128, 128, 128, 0.602);
-    transition: all 300ms ease-in-out;
-    color: #050505;
+    color: cyan;
     transform: translateZ(0);
     font-weight: 600;
     font-size: 1.2rem;
@@ -79,7 +72,7 @@
 .postcard-content-page-post-card-underline{
     height: 1.5px;
     width: 80%;
-    background-color:#CED0D4;
+    background-color:#3D3F42;
     margin: 10px auto 0 auto;
     
 }
@@ -88,11 +81,11 @@
     margin-top:10px;
     border-radius: 5px;
     padding:5px 2px;
-    -webkit-box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
-    box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
+    -webkit-box-shadow:inset 3px 3px 5px 2px rgba(0 , 0 , 0 , 0.5);
+    box-shadow:inset 3px 3px 5px 2px rgba(0 , 0 , 0 , 0.5);
     margin-right: 20px;
     margin-left: 20px;
-    background-color: #F0F2F5;
+    background-color: #242527;
 }
 
 .postcard-content-page-post-card-title{
@@ -102,6 +95,7 @@
     font-size: 2rem;
     margin: 0;
     letter-spacing: 0.5px;
+    color : whiteSmoke;
 }
 
 .postcard-content-page-post-card-content-div{
@@ -109,11 +103,11 @@
     text-align: left;
     padding: 10px 20px;
     border-radius: 5px;
-    -webkit-box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
-    box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
+    -webkit-box-shadow:inset 3px 3px 5px 2px rgba(0 , 0 , 0 , 0.5);
+    box-shadow:inset 3px 3px 5px 2px rgba(0 , 0 , 0 , 0.5);
     margin-right: 20px;
     margin-left: 20px;
-    background-color: #F0F2F5;
+    background-color: #242527;
 }
 
 .postcard-content-page-post-card-content{
@@ -123,6 +117,7 @@
     letter-spacing: 1px;
     word-spacing: 2.5px;
     font-weight: 600;
+    color: whiteSmoke;
 }
 
 .postcard-content-page-post-card-readmore{
@@ -141,8 +136,8 @@
 
 .postcard-content-page-post-card-img{
     width: 100%;
-    border-top: 1.5px solid #CED0D4;
-    border-bottom: 1.5px solid #CED0D4;
+    border-top: 1.5px solid #3D3F42;
+    border-bottom: 1.5px solid #3D3F42;
     padding-top: 0.5px;
     padding-bottom: 0.5px;
     cursor: pointer;
@@ -164,10 +159,56 @@
     position: relative;
     margin-right: 20px;
     margin-left: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
+/*start*/
+
+.postcard-content-page-post-card-like-div-like-button{
+    height: 100%;
+    width: 4rem;
+    position: relative;
+    overflow:visible;
+}
+
+.postcard-content-page-post-card-like-div-like-button-touchable-div{
+    position: absolute;
+    height: 2rem;
+    width: 2rem;
+    left: -2px;
+    top: 50%;
+    transform: translateY(-65%);
+    /* background-color: rgba(128, 128, 128, 0.322); */
+    cursor: pointer;
+    z-index: 2;
+}
+
+.postcard-content-page-post-card-like-div-like-button-text{
+    position: absolute;
+    height: 2rem;
+    width: 2rem;
+    top: 50%;
+    right : 2px;
+    transform: translateY(-35%);
+    cursor: pointer;
+    z-index: 2;
+    color: gold;
+    font-family: 'Comfortaa' , cursive;
+}
+
+.postcard-content-page-post-card-like-div-like-button-lottie-container{
+    width: 4.5rem;
+    height: 4.5rem;
+    padding: 0;
+    transform: translate(-1.7rem , -0.25rem);
+}
+
+
+
 .postcard-content-page-post-card-comments-div{
-    color: grey;
+    color: whiteSmoke;
     margin-right: 20px;
     margin-left: 20px;
 }
@@ -178,18 +219,11 @@
     font-size: 4rem;
     margin-bottom: 0;
     text-shadow: 1px 1px 1px rgba(51, 51, 51, 0.616);
-    transition: all 300ms ease-in-out;
-    cursor: pointer;
     margin-top: 15px;
     margin-left: auto;
     margin-right: auto;
-    color: #050505;
+    color: cyan;
     letter-spacing: 2px;
-}
-
-.postcard-content-page-post-card-comments-div h3:hover{
-    transform: scale(1.1) translateZ(0);
-    text-shadow: 4px 4px 5px rgba(128, 128, 128, 0.76);
 }
 
 .postcard-content-page-post-card-each-comment{
@@ -218,7 +252,7 @@
     letter-spacing: 1px;
     text-shadow: 2px 2px 2px rgba(128, 128, 128, 0.445);
     padding-left: 10px;
-    color: #050505;
+    color: cyan;
     font-weight: 600;
 }
 
@@ -228,9 +262,9 @@
     border-radius: 0 50px 50px  50px;
     margin: 0 auto;
     padding: 20px 20px;
-    -webkit-box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
-    box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
-    background-color: #F0F2F5;
+    -webkit-box-shadow:inset 3px 3px 5px 2px rgba(0 , 0 , 0 , 0.5);
+    box-shadow:inset 3px 3px 5px 2px rgba(0 , 0 , 0 , 0.5);
+    background-color: #242527;
     padding-top: 10px;
     margin-top:10px;
     font-family: 'Roboto';
@@ -245,6 +279,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    word-break: break-all;
 }
 
 .postcard-content-page-comment-section-div{
@@ -253,12 +288,12 @@
     display: flex;
     justify-content: center;
     border-radius: 5px;
-    border: 1px solid #CED0D4;
+    border: 1px solid #3D3F42;
     box-sizing: content-box;
     height: 2rem;
     padding: 7px 0 3px 0;
     position: relative;
-    transition: border 300ms ease-in-out;
+    transition: border-color 300ms ease-in-out;
 
 }
 
@@ -295,7 +330,8 @@
     font-size: 1.2rem;
     outline: none;
     border : none;
-    color: #909192;
+    color: whiteSmoke;
+    background: #121212;
 }
 
 .postcard-content-page-comment-section-custom-placeholder{
@@ -304,9 +340,10 @@
     top: 9px;
     pointer-events: none;
     background: transparent;
-    transition: all 300ms ease-in-out;
+    transition: top, color, background-color, border-color 300ms, 300ms, 300ms, 300ms ease-in-out;
     padding: 0 5px;
     color: #909192;
+    background-color: #121212;
 }
 
 

@@ -1,8 +1,8 @@
 .avatar-image{
     border-radius: 100%;
-    border: 3px solid #2E89FF;
-    box-shadow: 3px 3px 5px rgba(128, 128, 128, 0.452);
-    transition: all 500ms ease-in-out;
+    border: 3px solid cyan;
+    box-shadow: 3px 3px 5px rgba(0 , 0 , 0 , 0.5);
+    transition: transform 500ms ease-in-out;
     cursor: pointer;
 }
 

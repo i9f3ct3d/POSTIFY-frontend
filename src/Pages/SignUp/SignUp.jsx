@@ -5,19 +5,21 @@ import Cookies from "js-cookie";
 import Logo from "../../component/logo/logo";
 import "./SignUp.css";
 import Navbar from "../../component/navbar/navbar";
-import SignupLoginButton from '../../component/signup_login_buttons/signupLoginButton'
+import { IoArrowRedo } from 'react-icons/io5'
 import imageCompression from "browser-image-compression";
 import BackgroundAnimation from '../../component/BackgroundAnimation/BackgroundAnimation'
 import InputField from "../../component/inputField/inputField";
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import GlobalButton from "../../component/GlobalButton/GlobalButton";
+import noPicAvatar from '../../images/noPicAvatar.jpg';
 
 const SignUp = () => {
 
 
   const [file, setFile] = useState();
-  const [preview , setPreview]=useState("https://qph.fs.quoracdn.net/main-qimg-2b21b9dd05c757fe30231fac65b504dd");
+  const [preview , setPreview]=useState(noPicAvatar);
   const [compressedImage , setCompressedImage] = useState(null);
 
 
@@ -299,8 +301,33 @@ const SignUp = () => {
     )
   }
 
+
+  const imageInputRef = useRef();
+  const writtenInputRef = useRef();
+
+
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+
+      imageInputRef.current.style.opacity = "1";
+      imageInputRef.current.style.transform = "translateX(0) translateZ(0)";
+
+      writtenInputRef.current.style.opacity = "1";
+      writtenInputRef.current.style.transform = "translateX(0) translateZ(0)";
+
+    }
+  )
+
+  useEffect(() => {
+    observer.observe(writtenInputRef.current)
+    // Remove the observer as soon as the component is unmounted
+    return () => { observer.disconnect() }
+  }, [])
+
+
+
   return (
-    <div className="signup-page-div" style={{width : "100%",height:"100%"}}>
+    <div className="signup-page-div">
       <div className="background-div"></div>
       <Navbar />
       <BackgroundAnimation/>
@@ -321,30 +348,53 @@ const SignUp = () => {
         <div className="signup-div" style={{width : "100%"}}>
           <form className="signup-full-form" onSubmit={onFormSubmitHandler} encType="multipart/form-data">
 
-              <div className="img-input">
+              <div ref = {imageInputRef} className="img-input">
                 <img onClick={pickFileHandler} className="profile-pic-image-preview" src={preview}  />
                 <br/>
                 <input style={{display:"none"}} ref={filePickerRef} type="file" accept=".jpg , .jpeg , .png" onChange={(e)=>{setFile(e.target.files[0])}}/>
-                <button onClick={pickFileHandler} id="file-picker-button"><i className="far fa-images"></i>{"          Pick Image"}
+                {/* <button onClick={pickFileHandler} id="file-picker-button"><i className="far fa-images"></i>{"          Pick Image"}
                   <div className="file-picker-button-background">
                     
                   </div>
-                </button>
+                </button> */}
+                
+                <GlobalButton
+                  text = "Pick Image"
+                  icon = {<i className="far fa-images"></i>}
+                  onClick = {pickFileHandler}
+                  style = {{
+                    width : "10rem",
+                    marginBottom : "10px"
+                  }}
+                  className = "login-page-image-picker-button"
+                />
+
               </div>
 
-            <div className="written-input" >
+            <div ref = {writtenInputRef} className="written-input" >
+
+            <div className = "signup-page-message-icon-div">                
+                <IoArrowRedo
+                  className = "signup-page-message-icon"
+                />
+              </div>
+
             <div className="signup-page-logo-div">
               <Logo className = "signup-page-logo"
               />
-              <h1 className="signup-here-text">Sign up Here</h1>
+              <div className="signup-page-logo-underline"></div>
+              <h1 className="signup-here-text">Sign Up Here</h1>
             </div>
-            <div style={{borderRadius : "0 50px 50px 0", height : "10px" , backgroundColor : "#1877F2", marginLeft : "90px" , width : "15rem"}} className="underline signup-page-underline"></div>
+            <div style={{borderRadius : "0 50px 50px 0", height : "10px" , backgroundColor : "cyan", marginLeft : "90px" , width : "15rem"}} className="underline signup-page-underline"></div>
                 
             <div className="signup-page-inputs-div">
               <InputField
                 ref = {usernameRef}
                 type = "text"
                 placeholder = "Username"
+                style = {{
+                  color : "whiteSmoke"
+                }}
               />
               <br/>
               <br/>
@@ -352,6 +402,9 @@ const SignUp = () => {
                 ref = {userEmailRef}
                 type = "text"
                 placeholder = "Email"
+                style = {{
+                  color : "whiteSmoke"
+                }}
               />
               <br/>
               <br/>
@@ -359,6 +412,9 @@ const SignUp = () => {
                 ref = {userPasswordRef}
                 type = "password"
                 placeholder = "Password"
+                style = {{
+                  color : "whiteSmoke"
+                }}
               />
               <br/>
               <br/>
@@ -366,37 +422,52 @@ const SignUp = () => {
                 ref = {userConfirmPasswordRef}
                 type = "password"
                 placeholder = "Confirm Password"
+                style = {{
+                  color : "whiteSmoke"
+                }}
               />
               <br/>
               <br/>
             </div>
-
-
-              <SignupLoginButton
-                iconClassName="fas fa-user-plus"
-                buttonText="Signup"
-                borderColor="green"
-                textColor="rgb(53, 155, 13)"
-                shadowColor="rgba(191, 253, 98, 0.63)"
-                background="greenyellow"
+              <GlobalButton
+                          text = "Signup"
+                          borderColor = "greenYellow"
+                          color = "greenYellow"
+                          backgroundColor = "greenYellow"
+                          style = {{
+                            width : "276px",
+                            marginBottom : "20px"
+                          }}
               />
-            </div>
-          </form>
-          <br />
-            <div onClick={googleSignUpHandler} className="google-Signup-div">
+              
+              <div
+                    
+                    style = {{
+                      backgroundColor : "#3D3F42",
+                      width : "276px",
+                      height : "1px",
+                      margin : "0 auto 10px auto"
+                    }}
+
+              ></div>
+
+          <div onClick={googleSignUpHandler} className="google-Signup-div">
               <div className="google-svg-div">
                 <GoogleSvg/>
               </div>
               <div className="google-Signup-text-div">
-                Signup with Google
+                Sign Up with Google
               </div>
             </div>
-            <span>
+            <span style ={{color : " whiteSmoke"}} >
               Already registered{" "}
               <a href="/login">
                 <i className="fas fa-sign-in-alt"></i> login
               </a>
             </span>
+            </div>
+          </form>
+          <br />
         </div>
       </div>
     </div>

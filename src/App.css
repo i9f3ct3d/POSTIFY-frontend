@@ -27,7 +27,8 @@
   width: 100%;
   height: 100%;
   z-index: -101;
-  background-color: #F0F2F5;
+  background: rgb(18,18,18);
+  background: linear-gradient(144deg, rgba(18,18,18,1) 0%, rgba(29,29,29,1) 50%, rgba(36,37,39,1) 50%);
 }
 
 .underline{
@@ -37,13 +38,3 @@
   margin: 0 auto;
   margin-bottom: 1rem;
 }
-
-/* ::-webkit-scrollbar{
-  width: 10px;
-  background: #303136;
-}
-
-::-webkit-scrollbar-thumb{
-  background: linear-gradient(transparent , #08FDD8);
-  border-radius: 6px;
-} */

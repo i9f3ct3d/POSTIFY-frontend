@@ -59,19 +59,19 @@ const LeftNavbar=(props)=>{
 
     ]
 
-    const rightNavbarCloseHandler = () => {
+    const leftNavbarCloseHandler = () => {
 
         const leftNavbar = document.querySelectorAll(".left-navbar-full-div");
 
         leftNavbar.forEach(l => {
-            l.style.left = "-100%"
+            l.style.transform = "translateX(-101%) translateZ(0)"
         });
 
     }
 
     return(
         <div className="left-navbar-full-div">
-            <div onClick = {rightNavbarCloseHandler} className="left-navbar-mobile-cross-div">
+            <div onClick = {leftNavbarCloseHandler} className="left-navbar-mobile-cross-div">
                 <IoCloseOutline
                     
                 />
@@ -79,8 +79,8 @@ const LeftNavbar=(props)=>{
             <div className="left-navbar-inner-div">
                 <div onClick={()=>{window.location = "/myprofile"}} className="left-navbar-profile-link-div">
                     <Avatar
-                        height = "2rem"
-                        width = "2rem"
+                        height = "2.2rem"
+                        width = "2.2rem"
                         image = {props && props.profilePic}
                     />
                     <span className="left-navbar-profile-link-text">{props && props.username}</span>
