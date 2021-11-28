@@ -40,15 +40,15 @@
     border: 1px solid #121212;
     justify-content: center;
     align-items: center;
-    transition: transform, opacity 500ms, 500ms ease-in-out;
+    transform: translateX(40%) translateY(-45%) translateZ(0) scale(0.1);
     padding: 30px 5px 3px 5px;
     background: #121212;
     flex-wrap: nowrap;
     z-index: 1;
     cursor: default;
-    transform: translateX(40%) translateY(-45%) translateZ(0) scale(0.1);
     box-shadow: -5px 5px 10px rgba(0 , 0 , 0 , 0.5);
     pointer-events: none;
+    transition: transform , opacity 500ms , 500ms ease-in-out;
 }
 
 
