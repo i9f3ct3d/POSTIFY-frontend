@@ -14,7 +14,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import GlobalButton from "../../component/GlobalButton/GlobalButton";
 
-const LogIn=()=>{
+const LogIn=(props)=>{
 
   useEffect(()=>{
     
@@ -57,7 +57,7 @@ const LogIn=()=>{
 
     const onLogInSubmitHandler=async (event)=>{
         event.preventDefault();
-        
+
         const email=formEmailRef.current.trim();//change
         const password=formPasswordRef.current.trim();//change
 

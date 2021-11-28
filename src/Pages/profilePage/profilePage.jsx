@@ -13,14 +13,14 @@ import BackgroundAnimation from '../../component/BackgroundAnimation/BackgroundA
 import StarAnimation from '../../component/StarAnimation/StarAnimation';
 import GlobalButton from '../../component/GlobalButton/GlobalButton';
 
-const ProfilePage = () => {
+const ProfilePage = (props) => {
 
     const noPic = "https://qph.fs.quoracdn.net/main-qimg-2b21b9dd05c757fe30231fac65b504dd";
     const [searchedUser , setSearchedUser] = useState();
     const [searchedUserPosts , setSearchedUserPosts] = useState();
     const [myUserid , setMyUserid] = useState();
 
-    const [useEffectRefresh , setUseEffectRefresh] = useState(false);
+    // const [useEffectRefresh , setUseEffectRefresh] = useState(false);
     const [showPopUp , setShowPopUp] = useState(false);
     const [popUpStatement , setPopUpStatement] = useState("");
     const [popUpFunction , setPopUpFunction] = useState(()=>{});
@@ -33,10 +33,8 @@ const ProfilePage = () => {
     const friendReqCancelRef = useRef();
     const friendReqConfirmRef = useRef();
 
-    useEffect(()=>{
-
-        const fetch = async()=>{
-
+    const fetch = async()=>{
+        props && props.showLoader && props.showLoader();
         if(!cookie)
         {
             window.location = '/error';
@@ -115,7 +113,8 @@ const ProfilePage = () => {
                         }
 
                     }
-
+                    
+                    props && props.hideLoader && props.hideLoader();
 
                 } catch (error) {
                     window.location('/error');
@@ -126,14 +125,16 @@ const ProfilePage = () => {
 
         }
 
+    useEffect(()=>{
+
         fetch();
 
-
-    },[useEffectRefresh])
+    },[])
 
     const addFriendButtonClickHandler=async(event)=>{
 
         event.preventDefault();
+        props && props.showLoader && props.showLoader();
 
 
         try {
@@ -147,8 +148,12 @@ const ProfilePage = () => {
                 cookie && Cookies.remove('x-auth-token');
                 window.location="/login";
             }else if(res.status === 200){
-                setUseEffectRefresh(!useEffectRefresh);
+                // setUseEffectRefresh(prev => !prev);
+                fetch();
             }
+
+            // props && props.hideLoader && props.hideLoader();
+
             
         } catch (error) {
             window.location="/error";
@@ -157,6 +162,9 @@ const ProfilePage = () => {
 
 
     async function  removeSentFriendReq (){
+
+        props && props.showLoader && props.showLoader();
+
 
         try {
 
@@ -168,9 +176,11 @@ const ProfilePage = () => {
             if(res.status === 204){
                 window.location="/login";
             }else if(res.status === 200){
-                setUseEffectRefresh(!useEffectRefresh);
+                // setUseEffectRefresh(prev => !prev);
+                fetch();
             }
-            
+            // props && props.hideLoader && props.hideLoader();
+
         } catch (error) {
             window.location="/error";
         }
@@ -180,6 +190,9 @@ const ProfilePage = () => {
     const confirmFriendButtonClickHandler=async(event)=>{
 
         event.preventDefault();
+
+        props && props.showLoader && props.showLoader();
+
 
         try {
 
@@ -192,8 +205,12 @@ const ProfilePage = () => {
                 window.location="/login";
 
             }else if(res.status === 200){
-                setUseEffectRefresh(!useEffectRefresh);
+                // setUseEffectRefresh(prev => !prev);
+                fetch();
             }
+
+            // props && props.hideLoader && props.hideLoader();
+
             
         } catch (error) {
             window.location="/error";
@@ -201,6 +218,9 @@ const ProfilePage = () => {
     }
 
     const unfriendButtonHandler=async()=>{
+
+        props && props.showLoader && props.showLoader();
+
 
         try {
 
@@ -213,8 +233,12 @@ const ProfilePage = () => {
                 window.location="/login";
 
             }else if(res.status === 200){
-                setUseEffectRefresh(!useEffectRefresh);
+                // setUseEffectRefresh(prev => !prev);
+                fetch();
             }
+
+            // props && props.hideLoader && props.hideLoader();
+
             
         } catch (error) {
             window.location="/error";
@@ -224,6 +248,9 @@ const ProfilePage = () => {
     }
 
     const cancelReceivedRequestButtonClickHandler = async () => {
+
+        props && props.showLoader && props.showLoader();
+
         try {
 
             const res = await axios.post(process.env.REACT_APP_BACKEND_API_URL+"removerecievedfriendreq/?token="+cookie,{
@@ -235,8 +262,12 @@ const ProfilePage = () => {
                 window.location="/login";
 
             }else if(res.status === 200){
-                setUseEffectRefresh(!useEffectRefresh);
+                // setUseEffectRefresh(prev => !prev);
+                fetch();
             }
+
+            // props && props.hideLoader && props.hideLoader();
+
             
         } catch (error) {
             window.location="/error";
@@ -245,9 +276,6 @@ const ProfilePage = () => {
 
     const messageButtonClickHandler=(e)=>{
         e.preventDefault();
-
-        console.log({"myUserid":myUserid,
-        "searchedId":searchedUser._id});
 
         window.location="/messagepage/?myuserid="+myUserid+"&searcheduserid="+searchedUser._id;
 

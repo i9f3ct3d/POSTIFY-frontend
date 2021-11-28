@@ -10,12 +10,14 @@ import BackgroundAnimation from '../../component/BackgroundAnimation/BackgroundA
 import StarAnimation from '../../component/StarAnimation/StarAnimation';
 import RightOnlineUsersBar from '../../component/rightOnlineUsersBar/rightOnlineUsersBar';
 
-const MyProfile=()=>{
+const MyProfile=(props)=>{
 
     const [userData , setUserData]=useState();
     const [userPosts , setUserPosts]=useState();
 
     useEffect(()=>{
+
+        props && props.showLoader && props.showLoader();
 
         const cookie=Cookies.get('x-auth-token');
 
@@ -39,6 +41,9 @@ const MyProfile=()=>{
                         setUserData(res.data.userData);
                         setUserPosts(res.data.userPosts);
                     }
+
+                    props && props.hideLoader && props.hideLoader();
+
                 }catch(error)
                 {
                     window.location="/error";

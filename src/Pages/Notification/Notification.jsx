@@ -8,7 +8,7 @@ import LeftNavbar from "../../component/leftNavbar/leftNavbar";
 import RightOnlineUsersBar from "../../component/rightOnlineUsersBar/rightOnlineUsersBar";
 import BackgroundAnimation from "../../component/BackgroundAnimation/BackgroundAnimation";
 
-const Notification=()=>{
+const Notification=(props)=>{
 
     const [postNotifications , setPostNotifications] = useState(null);
     const [user , setUser] = useState(null)
@@ -17,6 +17,8 @@ const Notification=()=>{
     useEffect(()=>{
 
         const fetch=async()=>{
+
+            props && props.showLoader && props.showLoader();
 
             try {
                 
@@ -42,9 +44,11 @@ const Notification=()=>{
                     }
 
                 }
+
+                props && props.hideLoader && props.hideLoader();
             
             } catch (error) {
-                console.log({"error" : error});
+
                 window.location="/error";
             }
 
@@ -164,7 +168,7 @@ const Notification=()=>{
                                         </div>
                                     </div>
                                     {eachNotification.type === "react" && <i style={{color : "gold"}} className="fa-star fas eachnotification-div-react-icon"></i>}
-                                    {eachNotification.type === "comment" && <i style={{color : "greenyellow"}} class="fas fa-comment-alt fas eachnotification-div-react-icon"></i>}
+                                    {eachNotification.type === "comment" && <i style={{color : "greenyellow"}} className="fas fa-comment-alt fas eachnotification-div-react-icon"></i>}
                                 </div>
                             );
                         })

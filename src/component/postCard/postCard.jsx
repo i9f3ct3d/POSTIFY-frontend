@@ -48,18 +48,6 @@ const PostCard = props => {
 
     }
 
-    // const turnOnConfetti = () => {
-
-    //     props && props.turnOnConfetti && props.turnOnConfetti();
-
-    // }
-
-    // const turnOffConfetti = () => {
-
-    //     props && props.turnOffConfetti && props.turnOffConfetti();
-
-    // }
-
     const [lastCancelToken , setLastCancelToken] = useState(null);
 
     const handleLikeClick = async (event) => {

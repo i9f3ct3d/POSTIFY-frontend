@@ -5,7 +5,7 @@
     display: inline-flex;
     cursor: pointer;
     overflow: hidden;
-    border-radius: 3px;
+    /* border-radius: 3px; */
     transition: transform 500ms ease-in-out;
     z-index: 0;
 }

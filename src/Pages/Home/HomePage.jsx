@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import PostCardPage from "../PostCardPage/PostCardPage";
@@ -7,20 +7,17 @@ import "./HomePage.css";
 import LeftNavbar from "../../component/leftNavbar/leftNavbar";
 import Avatar from "../../component/Avatar/Avatar";
 import RightOnlineUsersBar from "../../component/rightOnlineUsersBar/rightOnlineUsersBar";
-import BackgroundAnimation from "../../component/BackgroundAnimation/BackgroundAnimation";
-import Loader from "../../component/Loader/Loader";
+import BackgroundAnimation from '../../component/BackgroundAnimation/BackgroundAnimation'
 
 const HomePage = (props) => {
 
   
   const [posts, setposts] = useState([]);
   const [viewingUser , setViewingUser] = useState(null);
-  const [isLoading , setIsLoading] = useState(true);
 
   useEffect(() => {
 
-
-
+    
     const cookie = Cookies.get("x-auth-token");
     ////////////fixed when cookie is undefined/////////specifically when user does not have cookie at all////////////
     if (cookie === undefined) {
@@ -28,6 +25,9 @@ const HomePage = (props) => {
     } 
     else {
       const fetchData = async () => {
+
+        props && props.showLoader && props.showLoader();
+
         try {
           const res = await axios.get(
             process.env.REACT_APP_BACKEND_API_URL + "home/?token=" + cookie
@@ -46,7 +46,7 @@ const HomePage = (props) => {
 
               setViewingUser(res.data.user);
               setposts(res.data.Posts);
-              setIsLoading(false);
+              // setIsLoading(false);
             }
           }
 
@@ -55,6 +55,8 @@ const HomePage = (props) => {
           window.location = "/error";
           return;
         }
+
+        props && props.hideLoader && props.hideLoader();
       };
       fetchData();
     }
@@ -111,13 +113,25 @@ const HomePage = (props) => {
     )
   }
 
+
+  // useEffect(() => {
+
+  //   if(isLoading){
+
+  //     props && props.showLoader && props.showLoader();
+      
+  //   }else{
+
+  //     props && props.hideLoader && props.hideLoader();
+      
+  //   }
+
+  // } , [isLoading])
+
   return (
     <div className="home-page-container">
     <div className="background-div"></div>
-
-
       <BackgroundAnimation/>
-      {isLoading && <Loader/>}
       <Navbar/>
       <LeftNavbar
         profilePic = {viewingUser && viewingUser.profilePic}
