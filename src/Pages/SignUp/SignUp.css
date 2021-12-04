@@ -4,6 +4,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-top: 70px;
+    box-sizing: border-box;
 }
 
 .signup-fulldiv
@@ -42,10 +44,6 @@
     border-radius: 10rem;
     margin : 0 auto 10px auto;
 }
-
-
-
-
 
 .signup-div span a
 {
@@ -235,7 +233,7 @@
 
     .signup-page-message-icon{
         display: block;
-        color: #0E0E0F;
+        color: #070707;
         font-size: 7rem;
         transform: rotate(90deg) scaleX(-1);
     }

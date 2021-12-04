@@ -1,15 +1,18 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 
 import './navbarDropDownDesk.css'
 import {BsCaretDown} from 'react-icons/bs';
 import Avatar from '../../Avatar/Avatar';
 import Cookies from 'js-cookie';
+import GlobalButton from '../../GlobalButton/GlobalButton';
 
 const pathNameSet = new Set(
   ['/signup','/login','/welcomepage']
 );
 
 const NavbarDropDownDesk = (props)=>{
+
+    const cookie = useRef(Cookies.get('x-auth-token'))
 
 
     const onlineUsersButtonClick = () => {
@@ -65,7 +68,11 @@ const NavbarDropDownDesk = (props)=>{
                         <p onClick={()=>{window.location="/myprofile"}} className="newnavbar-dropdown-desk-avatar-username">{(props && props.userName!= null) && props.userName}</p>
                       </div>
                       <div style={{display : props && !props.cookie && "none"}}  className="newnavbar-dropdown-desk-underline"></div>
-                     <div className="newnavbar-dropdown-desk-aboutus">
+                     <div onClick = { () => {
+
+                        window.open("https://sushantasaren.vercel.app/")
+                       
+                     }} className="newnavbar-dropdown-desk-aboutus">
                         <i className="far fa-address-card newnavbar-dropdown-desk-aboutus-icon"></i>
                         <p className="newnavbar-dropdown-desk-avatar-aboutus-text">About me</p>
                       </div>
@@ -81,6 +88,25 @@ const NavbarDropDownDesk = (props)=>{
                         <i className="fas fa-sign-out-alt newnavbar-dropdown-desk-logout-icon"></i>
                         <p className="newnavbar-dropdown-desk-avatar-logout-text">Log out</p>
                     </div>
+                    {cookie && !cookie.current && <GlobalButton
+                        icon = {<i style = {{marginRight : "10px"}}  className = 'fas fa-sign-in-alt'></i>}
+                        text = {"  Login"}
+                        style = {{width : "100%"}}
+                        color = "#5CA3DF"
+                        borderColor = "#5CA3DF"
+                        backgroundColor = "#5CA3DF"
+                        onClick = {()=>{
+                            window.location = "/login"
+                        }}
+                    />}
+                    {cookie && !cookie.current && <GlobalButton
+                        icon = {<i style = {{marginRight : "10px"}}  className = 'fas fa-user-plus'></i>}
+                        text = {"  Sign up"}
+                        style = {{width : "100%"}}
+                        onClick = {()=>{
+                            window.location = "/signup"
+                        }}
+                    />}
                     </div>
                     
         </div>

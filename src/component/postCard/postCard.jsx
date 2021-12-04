@@ -299,6 +299,7 @@ const PostCard = props => {
                     className="post-card-dots"
                 />
             </div>
+            
             <div ref={postCardDotsBar} className="post-card-dots-bar">
                 <div onClick={savePostButtonClickHanlder} className="post-card-dots-bar-save-post-div">
                     <div className="post-card-dots-bar-save-post-icon-div">
@@ -317,7 +318,6 @@ const PostCard = props => {
                             height = "1.8rem"
                             width = "1.8rem"
                         />
-                        {/* <AiOutlineEye className="post-card-dots-bar-save-post-icon"/> */}
                     </div>
                     <div className="post-card-dots-bar-save-post-text-div">Read post</div>
                 </div>

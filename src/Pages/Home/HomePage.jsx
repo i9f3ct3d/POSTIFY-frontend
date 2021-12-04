@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import PostCardPage from "../PostCardPage/PostCardPage";
@@ -114,23 +114,8 @@ const HomePage = (props) => {
   }
 
 
-  // useEffect(() => {
-
-  //   if(isLoading){
-
-  //     props && props.showLoader && props.showLoader();
-      
-  //   }else{
-
-  //     props && props.hideLoader && props.hideLoader();
-      
-  //   }
-
-  // } , [isLoading])
-
   return (
     <div className="home-page-container">
-    <div className="background-div"></div>
       <BackgroundAnimation/>
       <Navbar/>
       <LeftNavbar

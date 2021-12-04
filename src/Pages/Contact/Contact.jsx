@@ -1,15 +1,20 @@
-import react, { useState } from "react";
+import React, { useRef } from "react";
 import emailjs from 'emailjs-com';
 import "./Contact.css"
 import Navbar from "../../component/navbar/navbar"
 import BackgroundAnimation from '../../component/BackgroundAnimation/BackgroundAnimation'
 
+import { RiMailSendLine } from 'react-icons/ri'
+import InputField from "../../component/inputField/inputField";
+import Logo from '../../component/logo/logo'
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import { IoArrowRedo } from 'react-icons/io5'
+
 const Contact=()=>{
 
-    const [isValidEmail, setisValidEmail]=useState(true);
-    const [isValidMessage, setisValidMessage]=useState(true);
-    const [isEmailSent, setIsEmailSent]=useState(false);
-    const [showBottomLine, setShowBottomLine]=useState(false);
 
 
     let validateEmail = (email) => {
@@ -22,55 +27,76 @@ const Contact=()=>{
         }
       };
 
-    const emailOnChangeHandler=(event)=>{
-        var inputEmailIdName=document.getElementById("contact-form-input");
-        const typedEmail=event.target.value;
-        if(!validateEmail(typedEmail))
-        {
-            
-            setisValidEmail(false);
-            inputEmailIdName.style.borderColor="rgb(223, 45, 0)";
-        }else {
-            
-            inputEmailIdName.style.borderColor="grey";
-            setisValidEmail(true);
-        }
-    }
 
-    const messageOnChangeHandler=(event)=>{
-        var inputMessageIdName=document.getElementById("contact-form-message");
-        const typedMessage=event.target.value;
-        if(!typedMessage.trim())
-        {
 
-            setisValidMessage(false);
-            inputMessageIdName.style.borderColor="rgb(223, 45, 0)";
-        }else {
 
-            inputMessageIdName.style.borderColor="grey";
-            setisValidMessage(true);
-        }
-    }
+    const emailRef = useRef();
+    const nameRef = useRef();
+    const messageRef = useRef();
 
     const handleContactFormSUbmit=(event)=>{
         event.preventDefault();
 
-        if(validateEmail(event.target.email.value) && event.target.message.value.trim())
-        {
+        const typedEmail = emailRef.current.value.trim();
+        const typedName = nameRef.current.value.trim();
+        const typedMessage = messageRef.current.value.trim();
+
+        if(typedEmail.length === 0 || !validateEmail(typedEmail)){
+
+            //email error
+            toast.error('Invalid Email entered!', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
+            return;
+
+        }
+
+        if(!typedName || typedName.length === 0){
+
+            //name error
+            toast.error('Cannot leave the Name field!', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
+            return;
+
+        }
+
+        
+        if(!typedMessage || typedMessage.length === 0){
+
+            //message error
+            toast.error('Message area is empty!', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
+            return;
+
+        }
+
             emailjs.sendForm(process.env.REACT_APP_EMAIL_JS_SERVICE_ID, process.env.REACT_APP_EMAIL_JS_TEMPLATE_ID, event.target, process.env.REACT_APP_EMAIL_JS_USER_ID)
             .then((result) => {
-                setIsEmailSent(true);
                 event.target.reset();
-                setShowBottomLine(true);
             }, (error) => {
                 event.target.reset();
                 window.location="/error";
             });
-        }
-        else{
-            setIsEmailSent(false);
-            setShowBottomLine(true);
-        }
     
       
     }
@@ -79,23 +105,99 @@ const Contact=()=>{
     <div className="contact-page-div">
         <BackgroundAnimation/>
         <Navbar/>
+        <ToastContainer
+            position="bottom-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme = "colored"
+        />
         <div className="contact-page-all-content">
-        <h1>We are</h1>
-        <h1 style={{color:"yellowgreen"}}>Eager</h1>
-        <h1>to hear from</h1>
-        <h1 style={{color:"yellowgreen"}}>U</h1>
         <div className="contact-form-div">
             <form type="submit" onSubmit={handleContactFormSUbmit}>
-                <input onChange={emailOnChangeHandler} id="contact-form-input" className="contact-form-input" type="email" name="email" placeholder="type your email here"/>
-                {!isValidEmail && <p style={{color:"rgb(223, 45, 0)"}}>Please enter a valid email</p>}
-                <textarea onChange={messageOnChangeHandler} id="contact-form-message" className="contact-form-message" type="text" name="message" placeholder="type your message here"/>
-                {!isValidMessage && <p style={{color:"rgb(223, 45, 0)"}}>Message area can't be left empty</p>}
-                <button className="contact-form-button" type="submit"><i className="fas fa-share-square fa-4x"></i></button>
-                {showBottomLine &&( isEmailSent?<p style={{color:"blue"}}><i className="far fa-check-circle">Thanks for your feedback</i></p>:<p><i style={{color:"rgb(223, 45, 0)"}} className="far fa-times-circle">Email not sent..invalid data</i></p>)}
+                <div className = "contact-page-logo-div">                    
+                    <Logo
+                        className = "contact-page-logo"
+                    />
+                </div>
+                <h1>We are</h1>
+                <h1 style={{color:"greenYellow"}}>Eager</h1>
+                <h1>to hear from</h1>
+                <h1 style={{color:"greenYellow"}}>U</h1>
+
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <InputField
+                    ref = {emailRef}
+                    type = "text"
+                    placeholder = "Email"
+                    name = "email"
+                    placeholderBackground = "#141414"
+                    style = {{
+                    color : "whiteSmoke",
+                    borderLeftWidth : "10px",
+                    background : "#141414",
+                    borderRadius : "0",
+                    borderColor : "#242527"
+                }}
+              />
+              <br/>
+              <br/>
+              <InputField
+                    ref = {nameRef}
+                    type = "text"
+                    name = "name"
+                    placeholder = "Name"
+                    placeholderBackground = "#141414"
+                    style = {{
+                    color : "whiteSmoke",
+                    borderLeftWidth : "10px",
+                    background : "#141414",
+                    borderColor : "#242527"
+                }}
+              />
+              <br/>
+              <br/>
+              <InputField
+                    ref = {nameRef}
+                    type = "text"
+                    name = "subject"
+                    placeholder = "Subject"
+                    placeholderBackground = "#141414"
+                    style = {{
+                    color : "whiteSmoke",
+                    borderLeftWidth : "10px",
+                    background : "#141414",
+                    borderColor : "#242527"
+                }}
+              />
+                <textarea
+                    ref = {messageRef}
+                    className="contact-form-message" 
+                    type="text" 
+                    name="message" 
+                    placeholder="type your message here"
+                    required
+                />
+                <div className="contactme-send-button-div">
+                    <button className="contactme-send-button"><RiMailSendLine/>{" Contact"}</button>
+                </div>
+            <div className="contact-page-message-icon-div">
+                <IoArrowRedo
+                    className = "contact-page-message-icon"
+                />
+            </div>
             </form>
         </div>
         </div>
     </div>)
 }
 
-export default Contact;
+export default React.memo(Contact);

@@ -17,6 +17,8 @@ import CommentAnimation from '../../images/commentAnimation.json'
 
 import starReactAnimation from '../../images/starReactAnimation.json'
 import Lottie from 'lottie-web'
+import LeftNavbar from "../../component/leftNavbar/leftNavbar";
+import RightOnlineUsersBar from "../../component/rightOnlineUsersBar/rightOnlineUsersBar";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -331,10 +333,32 @@ const PostContentPage = (props) => {
     return (
         <div className="postcard-content-page-full-div">
             
-            
-            <div className="background-div"></div>
             <Navbar />
             <BackgroundAnimation/>
+
+            <LeftNavbar
+                profilePic = {currentUser && currentUser.profilePic}
+                username = {currentUser && currentUser.username}
+                style = {{
+                    backgroundColor : "#242527",
+                    height : "100vh",
+                    transform : "translateX(-101%) translateZ(0)",
+                }}
+                crossCloserStyle = {{
+                    display : "inline-block"
+                }}
+            />
+            <RightOnlineUsersBar
+                viewingUserid={currentUser && currentUser._id}
+                style = {{
+                    backgroundColor : "#242527",
+                    height : "100vh",
+                    transform : "translateX(101%) translateZ(0)",
+                }}
+                crossCloserStyle = {{
+                    display : "inline-block"
+                }}
+            />
 
             <div className="postcard-content-page-post-card-main-div">
             <div className="postcard-content-page-post-card-header">

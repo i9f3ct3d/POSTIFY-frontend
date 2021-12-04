@@ -157,21 +157,21 @@
     .login-page-message-icon-div{
         display: block;
         position: absolute;
-        left: 20px;
+        left: 70px;
         bottom: -55px;
         height: 55px;
         display: flex;
         align-items: flex-end;
         justify-content: center;
         overflow: hidden;
-        transform: scaleX(2);
+        transform: scaleX(3);
         z-index: 10;
         
     }
 
     .login-page-message-icon{
         display: block;
-        color: #0E0E0F;
+        color: #070707;
         font-size: 7rem;
         transform: rotate(90deg) scaleX(-1);
     }

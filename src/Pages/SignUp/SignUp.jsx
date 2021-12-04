@@ -328,7 +328,6 @@ const SignUp = () => {
 
   return (
     <div className="signup-page-div">
-      <div className="background-div"></div>
       <Navbar />
       <BackgroundAnimation/>
       <ToastContainer
@@ -352,15 +351,10 @@ const SignUp = () => {
                 <img onClick={pickFileHandler} className="profile-pic-image-preview" src={preview}  />
                 <br/>
                 <input style={{display:"none"}} ref={filePickerRef} type="file" accept=".jpg , .jpeg , .png" onChange={(e)=>{setFile(e.target.files[0])}}/>
-                {/* <button onClick={pickFileHandler} id="file-picker-button"><i className="far fa-images"></i>{"          Pick Image"}
-                  <div className="file-picker-button-background">
-                    
-                  </div>
-                </button> */}
                 
                 <GlobalButton
                   text = "Pick Image"
-                  icon = {<i className="far fa-images"></i>}
+                  icon = {<i style = {{marginRight : "10px"}} className="far fa-images"></i>}
                   onClick = {pickFileHandler}
                   style = {{
                     width : "10rem",

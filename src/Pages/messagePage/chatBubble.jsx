@@ -1,8 +1,45 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useRef } from 'react';
 
 import './chatBubble.css'
 
 const ChatBubble = (props) =>{
+
+    const ref = useRef();
+
+    const seenMessage = async() => {
+
+        try {
+
+            if(props && props.senderid !== props.myUserid && !(props.isSeen)){
+
+                const res = await axios.post(process.env.REACT_APP_BACKEND_API_URL + "messageseen",{
+                    customChatid : props.customChatid,
+                })
+    
+            }
+
+        } catch (error) {
+            
+            window.location = "/error";
+
+        }
+
+    }
+
+    const observer = new IntersectionObserver(
+      async([entry]) => {
+
+        seenMessage();
+
+      }
+    )
+  
+    useEffect(() => {
+      observer.observe(ref.current)
+      // Remove the observer as soon as the component is unmounted
+      return () => { observer.disconnect() }
+    }, [])
 
 
     const isUserMessage=()=>{
@@ -10,13 +47,12 @@ const ChatBubble = (props) =>{
     }
 
     return(
-        <div id = {props ? (props.id ? props.id : undefined) : undefined} style={{textAlign : props && isUserMessage() && "right"}} className="chatbubble-div">
+        <div ref = {ref} id = {props ? (props.id ? props.id : undefined) : undefined} style={{textAlign : props && isUserMessage() && "right"}} className="chatbubble-div">
         <div 
         className="chatbubble-content-div"
         style={{
             margin: props && isUserMessage() && "0 2rem 10px auto",
-            // boxShadow : props && isUserMessage() && "2px 2px 10px rgba(128,128,128,0.568)",
-            borderRadius: props && isUserMessage() && "10px 0 10px 10px",
+            borderRadius: props && props.isPreviousMessageSenderSame ? "10px" : (isUserMessage() && "10px 0 10px 10px"),
             background : props && isUserMessage() && " #056162 ",
         }}
         >

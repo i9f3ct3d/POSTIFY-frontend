@@ -64,7 +64,6 @@ const MyProfile=(props)=>{
 
     return(
         <div className="myprofile-full-div">
-        <div className="background-div"></div>
             <Navbar/>
             <BackgroundAnimation/>
             <LeftNavbar

@@ -70,8 +70,8 @@ const LeftNavbar=(props)=>{
     }
 
     return(
-        <div className="left-navbar-full-div">
-            <div onClick = {leftNavbarCloseHandler} className="left-navbar-mobile-cross-div">
+        <div style = {props && props.style && props.style} className="left-navbar-full-div">
+            <div style = {props && props.crossCloserStyle && props.crossCloserStyle} onClick = {leftNavbarCloseHandler} className="left-navbar-mobile-cross-div">
                 <IoCloseOutline
                     
                 />

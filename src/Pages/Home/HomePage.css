@@ -1,12 +1,37 @@
 .home-page-container{
-    background-position:bottom right;
     height: 100vh;
-    margin-top: 70px;
+    padding-top: 70px;
+    overflow-y: scroll;
+    box-sizing: border-box;
+}   
+
+.home-page-container::-webkit-scrollbar{
+    background-color: #242527;
+    width: 8px;
+}
+
+.home-page-container::-webkit-scrollbar-thumb{
+    background : linear-gradient(to bottom , #242527 , cyan);
+    border-radius: 0 0 10px 10px;
+}
+
+@media (pointer:none), (pointer:coarse) {
+
+    .home-page-container::-webkit-scrollbar{
+        background-color: unset;
+        width: 0;
+    }
+
+    .home-page-container::-webkit-scrollbar-thumb{
+        background : unset;
+        border-radius: unset;
+    }
+
 }
 
 @media(max-width : 900px){
     .home-page-container{
-        margin-top: 112px;
+        padding-top: 112px;
     }
 }
 
@@ -84,6 +109,8 @@
 .post-card{
     position:relative;
 }
+
+
 
 .home-page-new-post-div{
     box-sizing: border-box;
