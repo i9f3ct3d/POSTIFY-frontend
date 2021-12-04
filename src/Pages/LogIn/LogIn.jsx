@@ -235,7 +235,6 @@ const LogIn=(props)=>{
         pauseOnHover
         theme = "colored"
       />
-      <div className="background-div"></div>
         <div className="login-div-container">
         <BackgroundAnimation/>
         <div ref = {leftDivRef} className="loginPage-background-image-div">

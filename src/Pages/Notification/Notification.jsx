@@ -132,7 +132,6 @@ const Notification=(props)=>{
             <div className="notification-page-navbar-div">
                 <Navbar/>
             </div>
-            <div className="background-div"></div>
             <BackgroundAnimation/>
             {user && <LeftNavbar
                 profilePic = {user && user.profilePic}

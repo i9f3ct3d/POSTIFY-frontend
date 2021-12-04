@@ -21,12 +21,12 @@ const ProfilePage = lazy(()=>import("./Pages/profilePage/profilePage"));
 const SavedPostsPage = lazy(()=>import("./Pages/savedPostsPage/savedPostsPage"));
 const MessagePage = lazy(()=>import("./Pages/messagePage/messagePage"));
 
+
 var isShowing = false;
 
 function App() {
 
   const LoaderRef = useRef();
-  // const isShowing = useRef(false);
 
   const showLoader = () => {
 
@@ -105,8 +105,6 @@ function App() {
         <Route path="/contact" exact>
           <Contact/>
         </Route>
-
-
 
         <Route path="/friendrequest" exact>
         <Suspense fallback={<Loader/>}>

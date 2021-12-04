@@ -1,10 +1,12 @@
 import React from "react";
+import BackgroundAnimation from "../../component/BackgroundAnimation/BackgroundAnimation";
 import "./http-error.css";
 
 const Httperror=props=>
 {
     return(
         <div>
+            <BackgroundAnimation/>
             <div className="error-div">
                 <i className="far fa-frown fa-10x" ></i>
                 <h1>404</h1>

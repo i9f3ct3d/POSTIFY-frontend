@@ -12,6 +12,9 @@ import GlobalButton from "../GlobalButton/GlobalButton";
 import LogoLotti from '../../images/LogoLotti.json'
 import LottiAnimation from "../../Pages/lottiAnimation";
 
+import Avatar from "../Avatar/Avatar";
+import noPicAvatar from '../../images/noPicAvatar.jpg'
+
 
 const pathNameSet = new Set(
     ['/signup','/login','/welcomepage']
@@ -133,7 +136,7 @@ const Navbar=(props)=>
                 cookie = {cookie ? true : false}
             />
 
-            {!pathNameSet.has(window.location.pathname) && <div className="navbar-mobile-icons-div">
+            { !pathNameSet.has(window.location.pathname) && cookie && <div className="navbar-mobile-icons-div">
                 
                 <div className="navbar-mobile-icons-inside-div">
                 
@@ -213,7 +216,19 @@ const Navbar=(props)=>
                                         window.location="/profilepage?searcheduserid="+eachUser._id;
                                 }} key={eachUser._id}>
                                 <div className="searched-users">
-                                    <img src ={eachUser.usingGoogleAuth ? eachUser.profilePic: (eachUser.profilePic?process.env.REACT_APP_BACKEND_API_URL+eachUser.profilePic:"https://qph.fs.quoracdn.net/main-qimg-2b21b9dd05c757fe30231fac65b504dd")} />
+                                    <Avatar
+                                        image = {eachUser.usingGoogleAuth ? eachUser.profilePic: (eachUser.profilePic && process.env.REACT_APP_BACKEND_API_URL+eachUser.profilePic)}
+                                        height = "3rem"
+                                        width = "3rem"
+                                        style = {{
+                                            display: "table-cell",
+                                            height: "3rem",
+                                            width: "3rem",
+                                            borderRadius: "3rem",
+                                            border:"2px solid cyan",
+                                            boxShadow: "2px 2px 3px rgba(0 , 0 , 0 , 0.5)",
+                                        }}
+                                    />
                                     <h5>{eachUser.username}</h5>
                                 </div>
                                 
@@ -256,16 +271,16 @@ const Navbar=(props)=>
                 
                 
                 <div className="navbar-login-signup-logout-div">
-                    <div className="navbar-userdetatil" style={{display:!pathNameSet.has(window.location.pathname)?"inline-flex":"none"}}>
+                    <div className="navbar-userdetatil" style={{display:(!pathNameSet.has(window.location.pathname) && cookie)?"inline-flex":"none"}}>
                         <div className="navbar-userpic" onClick={()=>{window.location="/myprofile"}}
                             >
-                            <img id="user-profile-pic" src = {viewingUser && viewingUser.profilePic ?(viewingUser.profilePic[0] == 'u' ?  (process.env.REACT_APP_BACKEND_API_URL+viewingUser.profilePic) : viewingUser.profilePic):"https://qph.fs.quoracdn.net/main-qimg-2b21b9dd05c757fe30231fac65b504dd"} />
+                            <img id="user-profile-pic" src = {viewingUser && viewingUser.profilePic ?(viewingUser.profilePic[0] == 'u' ?  (process.env.REACT_APP_BACKEND_API_URL+viewingUser.profilePic) : viewingUser.profilePic):noPicAvatar} />
                             
                         </div>
                     </div>
 
-                    {pathNameSet.has(window.location.pathname) && <GlobalButton
-                        icon = {<i className = 'fas fa-user-plus'></i>}
+                    {(pathNameSet.has(window.location.pathname) || (window.location.pathname == '/contact' && !cookie)) && <GlobalButton
+                        icon = {<i style = {{marginRight : "10px"}} className = 'fas fa-user-plus'></i>}
                         text = {"  Sign up"}
                         style = {{marginRight : "10px"}}
                         onClick = {()=>{
@@ -274,8 +289,8 @@ const Navbar=(props)=>
                         }}
                         className = "navbar-global-buttons"
                     />}
-                    {pathNameSet.has(window.location.pathname)  && <GlobalButton
-                        icon = {<i className="fas fa-sign-in-alt"></i>}
+                    {(pathNameSet.has(window.location.pathname) || (window.location.pathname == '/contact' && !cookie)) && <GlobalButton
+                        icon = {<i style = {{marginRight : "10px"}} className="fas fa-sign-in-alt"></i>}
                         text = {"   Login"}
                         color = "#5CA3DF"
                         borderColor = "#5CA3DF"

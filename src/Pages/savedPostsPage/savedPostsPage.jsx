@@ -53,7 +53,6 @@ const SavedPostsPage=(props)=>{
 
         <div className="saved-posts-page-full-div">
             <Navbar/>
-            <div className="background-div"></div>
             <BackgroundAnimation/>
             <div
             style={{display : "none"}} 

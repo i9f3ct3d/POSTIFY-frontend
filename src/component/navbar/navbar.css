@@ -202,8 +202,10 @@
 
 
 .searched-users h5{
-    display: table-cell;
-    vertical-align:middle;
+
+    display: inline-flex;
+    align-items: center;
+
     padding-left: 1rem;
     font-family: 'Comfortaa', sans-serif;
     font-size: 1rem;

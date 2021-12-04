@@ -80,7 +80,6 @@ const FriendRequest=(props)=>{
     return(
         <div className="friend-request-page-full-div">
             <Navbar/>
-            <div className="background-div"></div>
             <BackgroundAnimation/>
             <LeftNavbar
                 profilePic = {user && user.profilePic}

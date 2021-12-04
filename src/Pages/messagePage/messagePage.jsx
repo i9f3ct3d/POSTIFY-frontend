@@ -11,6 +11,7 @@ import BackgroundAnimation from '../../component/BackgroundAnimation/BackgroundA
 import LeftNavbar from '../../component/leftNavbar/leftNavbar';
 import RightOnlineUsersBar from '../../component/rightOnlineUsersBar/rightOnlineUsersBar';
 import { RiSendPlaneLine } from 'react-icons/ri';
+import { v4 as uuidv4 } from 'uuid';
 
 const MessagePage=(props)=>{
 
@@ -34,28 +35,31 @@ const MessagePage=(props)=>{
     
     const socket  = useRef();
     const cookie = Cookies.get('x-auth-token');
+
     
     useEffect(()=>{
         
         socket.current = io(process.env.REACT_APP_SOCKET_API_URL);
 
         socket.current.on("getMessage" , data=>{
-
             setArrivalMessage({
                 senderId : data.senderId,
                 recieverId : data.recieverId,
                 date : new Date(),
                 chatContent : data.chatContent,
-                conversationId : data.conversationId
+                conversationId : data.conversationId,
+                customChatid : data.customChatid,
+                isSeen : data.isSeen,
             })
 
         })
 
     },[]);
 
+
     useEffect(()=>{
 
-        if(arrivalMessage && allChats && myUserid && searchedUserid && (arrivalMessage.senderId === myUserid || searchedUserid)){
+        if(arrivalMessage && allChats && myUserid && searchedUserid && ((arrivalMessage.senderId === myUserid && arrivalMessage.recieverId === searchedUserid) || (arrivalMessage.senderId === searchedUserid && arrivalMessage.recieverId === myUserid))){
 
             setAllChats((prev)=>[...prev,arrivalMessage])
 
@@ -193,12 +197,16 @@ const MessagePage=(props)=>{
                 background.classList.toggle("clicked-message-button");
             }, 1000);
 
+            let customChatid = uuidv4();
+
 
             isFriendOnline && socket.current.emit("sendMessage" , {
                 senderId : myUserid,
                 recieverId : searchedUserid,
                 chatContent : chatContent,
-                conversationId : conversationId
+                conversationId : conversationId,
+                customChatid : customChatid,
+                isSeen : false,
             })
 
             try {
@@ -215,6 +223,7 @@ const MessagePage=(props)=>{
                     recieverId : searchedUserid,
                     date : date,
                     chatContent : chatContent,
+                    customChatid : customChatid,
                 }])
 
                 const res =await axios.post(process.env.REACT_APP_BACKEND_API_URL+"sendmessage?token="+cookie,{
@@ -222,7 +231,8 @@ const MessagePage=(props)=>{
                     "recieverId" : searchedUserid,
                     "date" : date,
                     "chatContent" : chatContent,
-                    "conversationId" : conversationId
+                    "conversationId" : conversationId,
+                    customChatid : customChatid,
                 });
                 
 
@@ -279,7 +289,6 @@ const MessagePage=(props)=>{
     return(
         
         <div className="messagepage-full-div">
-            <div className="background-div"></div>
             <Navbar/>
             <BackgroundAnimation/>
             <LeftNavbar
@@ -311,12 +320,18 @@ const MessagePage=(props)=>{
                         allChats.map((eachChat , index)=>{
 
                             let obj = <ChatBubble
+
                                         id = {allChats ? ((index === allChats.length - 1) ? "message-page-last-message" : null) : null}
                                         key={eachChat._id}
                                         myUserid = {myUserid}
                                         senderid = {eachChat.senderId}
                                         chatContent = {eachChat.chatContent}
                                         date = {eachChat.date}
+                                        chatId = {eachChat._id}
+                                        customChatid = {eachChat.customChatid}
+                                        isSeen = {eachChat.isSeen}
+                                        isPreviousMessageSenderSame = { index > 0 && allChats[index - 1].senderId === eachChat.senderId}
+
                                     />
 
                             return(

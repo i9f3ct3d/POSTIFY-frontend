@@ -62,6 +62,7 @@ html, body {
     margin: 0;
     font-size: 0.8rem;
     font-family: 'Roboto' , sans-serif;
+    color: cyan;
 
 }
 
@@ -316,7 +317,6 @@ html, body {
     width: 1rem;
     display: inline-block;
     border-radius: 100%;
-    border: 1px solid transparent;
     padding: 0.5rem;
     color: rgb(107, 107, 107);
     cursor: pointer;
@@ -327,11 +327,10 @@ html, body {
 .post-card-dots{
     height: 1rem;
     width: 1rem;
+    color: whitesmoke;
 }
 
-.post-card-dots-div:hover{
-    border-color: #050505;
-}
+
 
 .post-card-dots-div:active{
     transition: none !important;
@@ -345,12 +344,12 @@ html, body {
     right: 10px;
     top: 10px;
     width: 15rem;
-    background: white;
+    background: #242527;
     padding: 20px 10px;
     border-radius: 4px 0 4px 4px;
     border: 1px solid #050505;
     z-index: 3;
-    box-shadow: 1px 1px 15px rgba(128, 128, 128, 0.335);
+    box-shadow: 1px 1px 15px rgba(0 , 0 , 0 , 0.5);
 }
 
 .post-card-dots-bar-save-post-div{
@@ -366,7 +365,7 @@ html, body {
 }
 
 .post-card-dots-bar-save-post-div:hover{
-    background-color: #CEDEF2;
+    background-color: #a7a6a6a1;
 }
 
 .post-card-dots-bar-save-post-icon-div{
@@ -388,8 +387,8 @@ html, body {
 
 .post-card-dots-bar-save-post-text-div{
     font-family: 'Comfortaa' , cursive;
-    color: #050505;
-    font-weight: 600;
+    color: whitesmoke;
+    font-weight: 100;
 }
 
 .post-card-dots-bar-save-post-div-close-cross-div{
@@ -397,7 +396,6 @@ html, body {
     right: 5px;
     top: 5px;
     border-radius: 100%;
-    background-color: black;
     height: 1.3rem;
     width: 1.3rem;
 }

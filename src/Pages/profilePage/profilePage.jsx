@@ -290,7 +290,6 @@ const ProfilePage = (props) => {
     return(
         <div className="profilepage-full-div">
             <Navbar/>
-            <div className="background-div"></div>
             <BackgroundAnimation/>
             <LeftNavbar
                 profilePic = {searchedUser && searchedUser.profilePic}
