@@ -1,4 +1,5 @@
 .left-navbar-full-div{
+    display: none;
     position: fixed;
     left: 0;
     top: 0;
@@ -6,6 +7,13 @@
     padding-top: 100px;
     transform: translateZ(0);
     transition: transform 500ms ease-in-out;
+}
+
+.left-navbar-inner-div{
+
+    min-width: 12rem;
+    padding-right: 50px;
+
 }
 
 .left-navbar-profile-link-div{

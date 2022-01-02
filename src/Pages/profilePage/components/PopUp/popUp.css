@@ -5,16 +5,17 @@
     left: 50%;
     transform: translate(-50%,-42%);
     border-radius: 2px;
-    background-color: white;
-    font-family: 'Roboto';
+    background-color: #242527;
+    font-family: 'Barlow Condensed';
     letter-spacing: 1px;
-    font-weight: 700;
+    font-weight: 400;
+    font-size: 1.2rem;
     padding : 2rem;
-    color: #050505;
-    border : 1px solid tomato;
+    color: white;
     opacity: 0;
     transition: transform 500ms ease-in-out, opacity 500ms ease-in-out;
     pointer-events: none;
+    filter: drop-shadow(0 0 10px rgba(0 , 0 , 0 , 0.5));
 }
 
 
@@ -23,17 +24,17 @@
     border-radius: 1px;
     outline: none;
     border: none;
-    font-weight: 900;
-    font-family: 'Roboto';
+    font-weight: 500;
+    font-family: 'Barlow Condensed';
     letter-spacing: 1px;
     cursor: pointer;
-    background-color: white;
+    background-color: #121212;
 }
 
 .popup-button:active{
     filter: none;
-    -webkit-box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
-    box-shadow:inset 3px 3px 5px 2px rgba(128,128,128,0.568);
+    -webkit-box-shadow:inset 3px 3px 5px 2px rgba(0 , 0 , 0 , 0.5);
+    box-shadow:inset 3px 3px 5px 2px rgba(0 , 0 , 0 , 0.5);
 }
 
 .popup-cancel-button{
@@ -44,8 +45,11 @@
 
 .popup-confirm-button{
     color: red;
-    border:0.5px solid red;
+    border:0.5px solid transparent;
     margin-left: 5px;
+    font-weight: 100;
+    color: white;
+    background-color: red;
 }
 
 .popup-backdrop{

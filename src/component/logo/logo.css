@@ -35,6 +35,41 @@
     outline: none;
     animation: glowText 5s linear infinite;
     transform: translateZ(0);
+    margin-right: 2px;
+}
+
+.logo-div-text__onhover{
+    color: #fff;
+    text-shadow:    0 0 10px #03bcf4,
+    0 0 20px #03bcf4,
+    0 0 40px #03bcf4,
+    0 0 80px #03bcf4,
+    0 0 160px #03bcf4;
+    animation : animateText 1s ease-in-out;
+}
+
+@keyframes animateText {
+    0%{
+        transform: scale3d(1,1,1);
+    }
+    30%{
+        transform: scale3d(1.25,.75,1);
+    }
+    40%{
+        transform: scale3d(.75,1.25,1);
+    }
+    50%{
+        transform: scale3d(1.15,.85,1);
+    }
+    65%{
+        transform: scale3d(.95,1.05,1);
+    }
+    75%{
+        transform: scale3d(1.05,.95,1);
+    }
+    100%{
+        transform: scale3d(1,1,1);
+    }
 }
 
 @keyframes glowText {
@@ -48,11 +83,11 @@
     18.1%,20.1%,30%,50%,60.1%,65%,80.1%,90%,92.1%,100%{
 
         color: #fff;
-        text-shadow: 0 0 10px #03bcf4,
-        0 0 20px #03bcf4,
-        0 0 40px #03bcf4,
-        0 0 80px #03bcf4,
-        0 0 160px #03bcf4;
+        text-shadow:    0 0 10px #03bcf4,
+                        0 0 20px #03bcf4,
+                        0 0 40px #03bcf4,
+                        0 0 80px #03bcf4,
+                        0 0 160px #03bcf4;
 
     }
 }

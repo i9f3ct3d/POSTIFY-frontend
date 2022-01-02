@@ -2,28 +2,36 @@ import React, { useEffect, useState } from "react";
 import "./Notification.css"
 import Cookies from "js-cookie";
 import axios from "axios";
-import Navbar from '../../component/navbar/navbar'
 import Avatar from "../../component/Avatar/Avatar";
-import LeftNavbar from "../../component/leftNavbar/leftNavbar";
 import RightOnlineUsersBar from "../../component/rightOnlineUsersBar/rightOnlineUsersBar";
-import BackgroundAnimation from "../../component/BackgroundAnimation/BackgroundAnimation";
+import { useHistory } from "react-router-dom";
 
 const Notification=(props)=>{
 
     const [postNotifications , setPostNotifications] = useState(null);
     const [user , setUser] = useState(null)
     const cookie = Cookies.get("x-auth-token");
+    const history = useHistory();
+
+    useEffect(() => {
+
+        if(window.innerWidth > 900) props && props.showLeftNavbar && props.showLeftNavbar();
+        else props && props.hideLeftNavbar && props.hideLeftNavbar();
+    
+    },[])
 
     useEffect(()=>{
 
         const fetch=async()=>{
 
-            props && props.showLoader && props.showLoader();
+            props && props.setProgress && props.setProgress(10);
 
             try {
                 
                 const res = await axios.get(process.env.REACT_APP_BACKEND_API_URL+"getnotifications/?token="+cookie);
                 
+                props && props.setProgress && props.setProgress(40);
+
                 if(res.status === 200){
 
                     await res.data.allNotifications.sort((a,b)=>{
@@ -45,7 +53,7 @@ const Notification=(props)=>{
 
                 }
 
-                props && props.hideLoader && props.hideLoader();
+                props && props.setProgress && props.setProgress(100);
             
             } catch (error) {
 
@@ -65,9 +73,9 @@ const Notification=(props)=>{
             const res = await axios.post(process.env.REACT_APP_BACKEND_API_URL+"notificationseen",{
                 notificationid : notificationid,
             });
-            if(res.status === 200){
-                window.location = "/postinfo/?postid=" + postid + "&userid=" + user._id;
-            }
+
+            history.push(`/postinfo/${postid}/${user._id}`);
+
 
         } catch (error) {
             window.location="/error"
@@ -130,13 +138,7 @@ const Notification=(props)=>{
     return(
         <div className="notification-page-full-div">
             <div className="notification-page-navbar-div">
-                <Navbar/>
             </div>
-            <BackgroundAnimation/>
-            {user && <LeftNavbar
-                profilePic = {user && user.profilePic}
-                username = {user && user.username}
-            />}
             <RightOnlineUsersBar
                 viewingUserid = {user && user._id}
             />

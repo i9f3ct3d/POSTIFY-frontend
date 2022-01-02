@@ -1,129 +1,112 @@
 import axios from "axios";
-import React , { useEffect , useRef }from "react";
+import { useEffect, useRef, lazy, memo, Suspense } from "react";
 import Cookies from "js-cookie";
-import "./LogIn.css"
-
-import Logo from "../../component/logo/logo";
-import Navbar from "../../component/navbar/navbar";
+import "./LogIn.css";
+import { Link } from "react-router-dom";
 import InputField from "../../component/inputField/inputField";
-import LottiAnimation from "../lottiAnimation";
-import LoginPageLotti from '../../images/loginPageLottie.json'
-import BackgroundAnimation from "../../component/BackgroundAnimation/BackgroundAnimation";
-import { IoArrowRedo } from 'react-icons/io5'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import LoginPageLotti from "../../images/loginPageLottie.json";
+import { IoArrowRedo } from "react-icons/io5";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import GlobalButton from "../../component/GlobalButton/GlobalButton";
 
-const LogIn=(props)=>{
+const LottiAnimation = lazy(() => import("../lottiAnimation"));
+const Logo = lazy(() => import("../../component/logo/logo"));
 
-  useEffect(()=>{
-    
-    const cookie  = Cookies.get('x-auth-token');
+const LogIn = ({ hideLeftNavbar }) => {
+  const formEmailRef = useRef("");
+  const formPasswordRef = useRef("");
 
-    if(cookie){
-      window.location = "/home";
+  const emailOnchangeHandler = (e) => {
+    e.preventDefault();
+    const typedEmail = e.target.value.trim();
+    formEmailRef.current = typedEmail;
+  };
+
+  const passwordOnchangeHandler = (e) => {
+    e.preventDefault();
+    const typedPassword = e.target.value;
+    formPasswordRef.current = typedPassword;
+  };
+
+  let validateEmail = (email) => {
+    let re =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if (re.test(email)) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const onLogInSubmitHandler = async (event) => {
+    event.preventDefault();
+
+    const email = formEmailRef.current.trim(); //change
+    const password = formPasswordRef.current.trim(); //change
+
+    if (!validateEmail(email)) {
+      // generate invalid email entered toast
+      toast.error("Invalid email entered!", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
       return;
     }
 
-  },[])
-
-
-  const formEmailRef = useRef("");
-  const formPasswordRef = useRef("");
-  
-
-
-    const emailOnchangeHandler=(e)=>{
-        e.preventDefault();
-        const typedEmail = e.target.value.trim();
-        formEmailRef.current = typedEmail;
+    if (!password) {
+      // generate invalid password entered toast
+      toast.error("Invalid password entered!", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return;
     }
 
-    const passwordOnchangeHandler=(e)=>{
-        e.preventDefault();
-        const typedPassword = e.target.value;
-        formPasswordRef.current=(typedPassword);
+    try {
+      const response = await axios.post(
+        process.env.REACT_APP_BACKEND_API_URL + "login",
+        {
+          email: email,
+          password: password,
+        }
+      );
+      if (response.data.credentials === "valid") {
+        Cookies.set("x-auth-token", response.data.token, { expires: 7 });
+        window.location = "/home";
+      } else {
+        toast.error("Invalid credentials!", {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    } catch (error) {
+      window.location = "/error";
     }
+  };
 
-    let validateEmail = (email) => {
-        let re =/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    
-        if (re.test(email)) {
-          return true;
-        } else {
-          return false;
-        }
-      };
+  const googleSignUpHandler = async () => {
+    window.location =
+      process.env.REACT_APP_BACKEND_API_URL + "signupusinggoogle";
+  };
 
-    const onLogInSubmitHandler=async (event)=>{
-        event.preventDefault();
-
-        const email=formEmailRef.current.trim();//change
-        const password=formPasswordRef.current.trim();//change
-
-        if(!validateEmail(email)){
-          // generate invalid email entered toast
-          toast.error('Invalid email entered!', {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            });
-          return;
-        }
-
-        if(!password){
-          // generate invalid password entered toast
-          toast.error('Invalid password entered!', {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            });
-          return;
-        }
-
-        
-            try {
-                const response=await axios.post(process.env.REACT_APP_BACKEND_API_URL+"login",{
-                    email:email,
-                    password:password
-                })
-                if(response.data.credentials==="valid")
-                {
-                    Cookies.set('x-auth-token', response.data.token,{ expires: 7 });
-                    window.location="/home";
-                }
-                else
-                {
-                  toast.error('Invalid credentials!', {
-                    position: "bottom-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    });
-                }
-
-            } catch (error) {
-                window.location="/error";
-            }
-    }
-
-    const googleSignUpHandler=async()=>{
-      window.location = process.env.REACT_APP_BACKEND_API_URL+"signupusinggoogle";
-  }
-
-
-  const GoogleSvg=(props)=>{
+  const GoogleSvg = (props) => {
     return (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -133,7 +116,7 @@ const LogIn=(props)=>{
         width="100%"
         height="100%"
         xmlSpace="preserve"
-        preserveAspectRatio="xMidYMid meet" 
+        preserveAspectRatio="xMidYMid meet"
         viewBox="0 0 192 192"
         {...props}
       >
@@ -195,34 +178,34 @@ const LogIn=(props)=>{
           />
         </g>
       </svg>
-    )
-  }
+    );
+  };
 
   const leftDivRef = useRef();
   const rightDivRef = useRef();
 
+  const observer = new IntersectionObserver(([entry]) => {
+    leftDivRef.current.style.opacity = "1";
+    leftDivRef.current.style.transform = "translateX(0)";
 
-  const observer = new IntersectionObserver(
-    ([entry]) => {
-
-      leftDivRef.current.style.opacity = "1";
-      leftDivRef.current.style.transform = "translateX(0)";
-
-      rightDivRef.current.style.opacity = "1";
-      rightDivRef.current.style.transform = "translateX(0)";
-
-    }
-  )
+    rightDivRef.current.style.opacity = "1";
+    rightDivRef.current.style.transform = "translateX(0)";
+  });
 
   useEffect(() => {
-    observer.observe(leftDivRef.current)
+    observer.observe(leftDivRef.current);
     // Remove the observer as soon as the component is unmounted
-    return () => { observer.disconnect() }
-  }, [])
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
-    return(
-      <div style={{width : "100%" , minHeight : "100vh"}}>
-      <Navbar />
+  useEffect(() => {
+    hideLeftNavbar && hideLeftNavbar();
+  }, []);
+
+  return (
+    <div style={{ width: "100%", minHeight: "100vh" }}>
       <ToastContainer
         position="bottom-right"
         autoClose={5000}
@@ -233,100 +216,105 @@ const LogIn=(props)=>{
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme = "colored"
+        theme="colored"
       />
-        <div className="login-div-container">
-        <BackgroundAnimation/>
-        <div ref = {leftDivRef} className="loginPage-background-image-div">
-          <LottiAnimation
-            lotti = {LoginPageLotti}
-            className = "loginPage-background-image"
-          />
-        </div> 
-            <div ref = {rightDivRef} className="login-fulldiv">
-              <div className = "login-page-message-icon-div">                
-                <IoArrowRedo
-                  className = "login-page-message-icon"
-                />
+      <div className="login-div-container">
+        <div ref={leftDivRef} className="loginPage-background-image-div">
+          <Suspense fallback={<></>}>
+            <LottiAnimation
+              lotti={LoginPageLotti}
+              className="loginPage-background-image"
+            />
+          </Suspense>
+        </div>
+        <div ref={rightDivRef} className="login-fulldiv">
+          <div className="login-page-message-icon-div">
+            <IoArrowRedo className="login-page-message-icon" />
+          </div>
+          <div className="login-page-logo-div">
+            <Suspense fallback={<></>}>
+              <Logo className="login-page-logo" />
+            </Suspense>
+          </div>
+          <div className="login-page-logo-underline-div"></div>
+          <h1>Login Here</h1>
+          <div
+            style={{
+              borderRadius: "0 50px 50px 0",
+              height: "10px",
+              backgroundColor: "cyan",
+              marginLeft: "0",
+              width: "90%",
+            }}
+            className="underline"
+          ></div>
+          <div className="login-div">
+            <form onSubmit={onLogInSubmitHandler}>
+              <InputField
+                type="text"
+                placeholder="Email"
+                onChange={emailOnchangeHandler}
+                style={{
+                  color: "whiteSmoke",
+                }}
+              />
+              <br />
+              <br />
+              <InputField
+                type="password"
+                placeholder="Password"
+                onChange={passwordOnchangeHandler}
+                style={{
+                  color: "whiteSmoke",
+                }}
+              />
+              <br />
+              <br />
+              <GlobalButton
+                text="Login"
+                borderColor="cyan"
+                color="cyan"
+                backgroundColor="cyan"
+                style={{
+                  width: "276px",
+                }}
+              />
+              <br />
+            </form>
+            <br />
+            <br />
+            <div
+              style={{
+                backgroundColor: "#3D3F42",
+                width: "100%",
+                height: "1px",
+                margin: "0 auto",
+              }}
+            ></div>
+
+            <div className="login-with-google-button-div">
+              <div onClick={googleSignUpHandler} className="google-login-div">
+                <div className="google-login-svg-div">
+                  <GoogleSvg />
+                </div>
+                <div className="google-login-text-div">Login with Google</div>
               </div>
-                <div 
-
-                 className="login-page-logo-div">
-                  <Logo
-                    className = "login-page-logo"
-                  />
-                </div>
-                <div
-                className = "login-page-logo-underline-div"
-                >
-                </div>
-                <h1>Login Here</h1>
-                <div style={{borderRadius : "0 50px 50px 0", height : "10px" , backgroundColor : "greenYellow", marginLeft : "0" , width : "90%"}} className="underline"></div>
-                <div className="login-div">
-                    <form onSubmit={onLogInSubmitHandler}>
-                        <InputField
-                            type="text"
-                            placeholder="Email"
-                            onChange={emailOnchangeHandler}
-                            style = {{
-                              color : "whiteSmoke"
-                            }}
-                        />
-                        <br/>
-                        <br/>
-                        <InputField
-                            type="password"
-                            placeholder="Password"
-                            onChange={passwordOnchangeHandler}
-                            style = {{
-                              color : "whiteSmoke"
-                            }}
-                        />
-                        <br/>
-                        <br/>
-                        <GlobalButton
-                          text = "Login"
-                          borderColor = "cyan"
-                          color = "cyan"
-                          backgroundColor = "cyan"
-                          style = {{
-                            width : "276px"
-                          }}
-                        />
-                        <br/>
-
-                    </form>
-                    <br/>
-                    <br/>
-                    <div
-                    
-                          style = {{
-                            backgroundColor : "#3D3F42",
-                            width : "100%",
-                            height : "1px",
-                            margin : "0 auto"
-                          }}
-
-                    ></div>
-
-                      <div className="login-with-google-button-div">
-                        <div onClick={googleSignUpHandler} className="google-Signup-div">
-                          <div className="google-svg-div">
-                            <GoogleSvg/>
-                          </div>
-                          <div className="google-Signup-text-div">
-                            Login with Google
-                          </div>
-                        </div>
-                      </div>
-                      <span className="login-page-signup-link">Not registered yet ?     <a href="/signup"><i className="fas fa-user-plus"></i>  Sign Up</a></span>
-                </div>
             </div>
-            
+            <span className="login-page-signup-link">
+              Not registered yet ?{" "}
+              <Link to="/signup">
+                <i
+                  style={{ fontSize: "0.8rem" }}
+                  className="fas fa-user-plus"
+                ></i>{" "}
+                Sign Up
+              </Link>
+            </span>
+          </div>
         </div>
-        </div>
-    );
+      </div>
+    </div>
+  );
+};
 
-}
-
-export default React.memo(LogIn);
+export default memo(LogIn);

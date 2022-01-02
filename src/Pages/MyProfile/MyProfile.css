@@ -27,15 +27,14 @@
     box-sizing:border-box !important;
 }
 
-.myprofile-profile-pic img{
+.myprofile-profile-pic__div{
     height: 7rem;
     width: 7rem;
-    border-radius: 7rem;
-    border : 2px solid cyan;
-    box-shadow: 2px 2px 2px rgba(128, 128, 128, 0.596);
+    border-radius: 100%;
     position: absolute;
     top: calc(15rem - 3.5rem);
     right: 10px;
+    background-color: #121212;
 }
 
 .myprofile-section-2{
@@ -100,10 +99,9 @@
         width:100%
     }
 
-    .myprofile-profile-pic img{
+    .myprofile-profile-pic__div{
         height: 6rem;
         width: 6rem;
-        border-radius: 6rem;
         top: calc(15rem - 3rem);
     }
 }

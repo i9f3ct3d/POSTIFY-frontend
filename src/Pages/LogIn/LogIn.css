@@ -35,7 +35,7 @@
 
 }
 
-.google-Signup-div{
+.google-login-div{
     width: 276px;
     height: 35px;
     display: flex;
@@ -50,7 +50,7 @@
     transition: transform 300ms ease-in-out, box-shadow 300ms ease-in-out;
 }
 
-.google-svg-div{
+.google-login-svg-div{
     height: 100%;
     width: 20%;
     border-radius: 10px;
@@ -62,7 +62,7 @@
     pointer-events: none;
 }
 
-.google-Signup-text-div{
+.google-login-text-div{
     background-color: #5CA3DF;
     height: 100%;
     width: 81%;
@@ -190,7 +190,6 @@
     font-weight: 900;
     font-size: 2.2rem;
     text-align: left;
-    text-shadow: 1px 1px 3px rgba(0 , 0 , 0 , 0.5);
 }
 .input-wrapper-outside
 {
@@ -235,13 +234,18 @@
 .login-page-signup-link
 {
     color: whiteSmoke;
+    font-family: 'Comfortaa' , cursive;
 }
 .login-page-signup-link a
 {
+    font-family: 'Comfortaa' , cursive;
     text-decoration: none;
-    color: rgb(24, 126, 209);
-    font-weight: 600;
+    color: cyan !important;
+    font-size: 0.9rem;
+    text-decoration: none;
 }
+
+
 .login-div a:focus,.login-div a:hover
 {
     color: rgb(9, 46, 77);

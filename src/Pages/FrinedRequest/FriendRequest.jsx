@@ -1,148 +1,143 @@
-import React, { useEffect, useState } from "react";
-import './FriendRequest.css'
-import Navbar from '../../component/navbar/navbar'
-import LeftNavbar from '../../component/leftNavbar/leftNavbar'
-import RightOnlineUsersBar from '../../component/rightOnlineUsersBar/rightOnlineUsersBar'
+import { lazy, memo, Suspense, useEffect, useRef, useState } from "react";
+import "./FriendRequest.css";
 import Cookies from "js-cookie";
 import axios from "axios";
-import FriendRequestCard from "./components/FriendRequestCard";
-import BackgroundAnimation from '../../component/BackgroundAnimation/BackgroundAnimation'
 
-const FriendRequest=(props)=>{
+import RightOnlineUsersBar from "../../component/rightOnlineUsersBar/rightOnlineUsersBar";
+const FriendRequestCard = lazy(() => import("./components/FriendRequestCard"));
 
-    const [user , setUser] = useState(null);
-    const [friendReqRecievedUsersArray , setFriendReqRecievedUsersArray] = useState(null);
+const FriendRequest = (props) => {
+    const [user, setUser] = useState(null);
+    const [friendReqRecievedUsersArray, setFriendReqRecievedUsersArray] = useState(null);
+    const cookie = Cookies.get("x-auth-token");
+    const noFriendReqRef = useRef();
 
-    const cookie = Cookies.get('x-auth-token');
+    useEffect(() => {
+        if (window.innerWidth > 900)
+            props && props.showLeftNavbar && props.showLeftNavbar();
+        else props && props.hideLeftNavbar && props.hideLeftNavbar();
+    }, []);
 
-    useEffect(()=>{
-
-        const fetch = async() => {
-
-            props && props.showLoader && props.showLoader();
+    useEffect(() => {
+        const fetch = async () => {
+            props && props.setProgress && props.setProgress(10);
 
             try {
-                
-                const res = await axios.get(process.env.REACT_APP_BACKEND_API_URL+"fetchuser/?token="+cookie);
+                props && props.setProgress && props.setProgress(20);
+                const res = await axios.get(
+                    process.env.REACT_APP_BACKEND_API_URL + "fetchuser/?token=" + cookie
+                );
 
-                if(res.status === 200 && res.data.credentials === "valid"){
+                props && props.setProgress && props.setProgress(40);
 
+                if (res.status === 200 && res.data.credentials === "valid") {
                     setUser(res.data.user);
 
+                    props && props.setProgress && props.setProgress(70);
                 }
-    
+
+                props && props.setProgress && props.setProgress(100);
             } catch (error) {
                 window.location = "/error";
             }
-
-        }
+        };
 
         fetch();
+    }, []);
 
-
-    },[])
-
-
-    useEffect(()=>{
-
-        if(user){
-
-            const fetch = async() => {
-
+    useEffect(() => {
+        if (user) {
+            const fetch = async () => {
                 try {
+                    const res = await axios.post(
+                        process.env.REACT_APP_BACKEND_API_URL +
+                        "getreceivedrequestuserdata",
+                        {
+                            friendReqRecieved: user.friendReqRecieved,
+                        }
+                    );
 
-                    const res = await axios.post(process.env.REACT_APP_BACKEND_API_URL+"getreceivedrequestuserdata",{
-                        friendReqRecieved : user.friendReqRecieved,
-                    });
-    
-                    if(res.status === 200){
-    
-                        setFriendReqRecievedUsersArray(res.data.friendReqRecievedUsersArray);
-    
+                    if (res.status === 200) {
+                        setFriendReqRecievedUsersArray(
+                            res.data.friendReqRecievedUsersArray
+                        );
+
+                        if(!res.data.friendReqRecievedUsersArray || res.data.friendReqRecievedUsersArray.length === 0){
+                            noFriendReqRef.current.style.display = 'block'
+                        }
                     }
-                    
                 } catch (error) {
                     window.location = "/error";
                 }
-
-                props && props.hideLoader && props.hideLoader();
-
-            }
+            };
 
             fetch();
-
         }
+    }, [user]);
 
-    },[user])
-
-
-
-    return(
+    return (
         <div className="friend-request-page-full-div">
-            <Navbar/>
-            <BackgroundAnimation/>
-            <LeftNavbar
-                profilePic = {user && user.profilePic}
-                username = {user && user.username}
-            />
-            <RightOnlineUsersBar
-                viewingUserid={user && user._id}
-            />
+            <RightOnlineUsersBar viewingUserid={user && user._id} />
             <div className="friend-request-page-inner-div">
-                {
-                    friendReqRecievedUsersArray && friendReqRecievedUsersArray.map((eachUser)=>{
-                        return(
+                {/* { */}
+                <Suspense fallback={<></>}>
+                    {friendReqRecievedUsersArray &&
+                        friendReqRecievedUsersArray.map((eachUser) => {
+                            return (
                                 <FriendRequestCard
-
-                                    key = {eachUser._id}
-                                    userid = {eachUser._id}
-                                    username = {eachUser.username}
-                                    userProfilePic = {eachUser.profilePic}
-                                    confirmFriendButtonClickHandler = {async()=>{
-
+                                    key={eachUser._id}
+                                    userid={eachUser._id}
+                                    username={eachUser.username}
+                                    userProfilePic={eachUser.profilePic}
+                                    confirmFriendButtonClickHandler={async () => {
                                         try {
+                                            const res = await axios.post(
+                                                process.env.REACT_APP_BACKEND_API_URL +
+                                                "acceptfriendreq/?token=" +
+                                                cookie,
+                                                {
+                                                    friendUserId: eachUser._id,
+                                                }
+                                            );
 
-                                            const res = await axios.post(process.env.REACT_APP_BACKEND_API_URL+"acceptfriendreq/?token="+cookie,{
-                                                "friendUserId":eachUser._id
-                                            });
-
-                                            
-                                            if(res.status === 204){
-                                                window.location="/login";
+                                            if (res.status === 204) {
+                                                window.location = "/login";
                                             }
-                                            
                                         } catch (error) {
-                                            window.location="/error";
+                                            window.location = "/error";
                                         }
                                     }}
-
-                                    cancelFriendRequestButtonClickHandler = {async()=>{
+                                    cancelFriendRequestButtonClickHandler={async () => {
                                         try {
+                                            const res = await axios.post(
+                                                process.env.REACT_APP_BACKEND_API_URL +
+                                                "removerecievedfriendreq/?token=" +
+                                                cookie,
+                                                {
+                                                    friendUserId: eachUser._id,
+                                                }
+                                            );
 
-                                            const res = await axios.post(process.env.REACT_APP_BACKEND_API_URL+"removerecievedfriendreq/?token="+cookie,{
-                                                "friendUserId":eachUser._id
-                                            });
-
-
-                                            if(res.status === 204){
-                                                window.location="/login";
-
-                                            }else if(res.status === 200){
-
-                                                setFriendReqRecievedUsersArray(prev => prev.filter( u => u._id !== eachUser._id));
+                                            if (res.status === 204) {
+                                                window.location = "/login";
+                                            } else if (res.status === 200) {
+                                                setFriendReqRecievedUsersArray((prev) =>
+                                                    prev.filter((u) => u._id !== eachUser._id)
+                                                );
                                             }
-
-                                            } catch (error) {
-                                            window.location="/error";
-                                            }
+                                        } catch (error) {
+                                            window.location = "/error";
+                                        }
                                     }}
                                 />
-                        );
-                    })
-                }
+                            );
+                        })}
+                </Suspense>
+                <span style={{display : 'none' , color : 'white' , fontFamily : 'Barlow Condensed' , fontSize : '2rem' , marginTop : '20px'}} ref = {noFriendReqRef}>No FriendRequest Yet ...</span>
+                {/* } */}
             </div>
         </div>
     );
-}
+};
 
-export default FriendRequest;
+export default memo(FriendRequest);

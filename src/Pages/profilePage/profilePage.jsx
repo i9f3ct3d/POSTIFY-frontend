@@ -1,17 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react';
+import {lazy , Suspense, memo , useEffect, useRef, useState } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import Navbar from '../../component/navbar/navbar';
-import PostCard from '../../component/postCard/postCard';
 import { BiDotsVerticalRounded } from "react-icons/bi";
 
 import './profilePage.css';
 import PopUp from './components/PopUp/popUp';
-import LeftNavbar from '../../component/leftNavbar/leftNavbar';
 import RightOnlineUsersBar from '../../component/rightOnlineUsersBar/rightOnlineUsersBar';
-import BackgroundAnimation from '../../component/BackgroundAnimation/BackgroundAnimation';
-import StarAnimation from '../../component/StarAnimation/StarAnimation';
-import GlobalButton from '../../component/GlobalButton/GlobalButton';
+import { useHistory, useParams } from 'react-router-dom';
+import Avatar from '../../component/Avatar/Avatar';
+import PostCardLoader from '../../component/PostCardLoader/PostCardLoader';
+
+const GlobalButton = lazy(() => import( '../../component/GlobalButton/GlobalButton'))
+const PostCard = lazy(() => import( '../../component/postCard/postCard'))
 
 const ProfilePage = (props) => {
 
@@ -20,7 +20,6 @@ const ProfilePage = (props) => {
     const [searchedUserPosts , setSearchedUserPosts] = useState();
     const [myUserid , setMyUserid] = useState();
 
-    // const [useEffectRefresh , setUseEffectRefresh] = useState(false);
     const [showPopUp , setShowPopUp] = useState(false);
     const [popUpStatement , setPopUpStatement] = useState("");
     const [popUpFunction , setPopUpFunction] = useState(()=>{});
@@ -33,8 +32,25 @@ const ProfilePage = (props) => {
     const friendReqCancelRef = useRef();
     const friendReqConfirmRef = useRef();
 
+    const { searcheduserid } = useParams();
+
+    const history = useHistory();
+
+
+
+    useEffect(() => {
+
+        if(window.innerWidth > 900) props && props.showLeftNavbar && props.showLeftNavbar();
+        else props && props.hideLeftNavbar && props.hideLeftNavbar();
+    
+    },[])
+
     const fetch = async()=>{
-        props && props.showLoader && props.showLoader();
+        props && props.setProgress && props.setProgress(10);
+
+        let searchedUserid = searcheduserid;
+
+
         if(!cookie)
         {
             window.location = '/error';
@@ -42,23 +58,24 @@ const ProfilePage = (props) => {
 
         if(cookie)
         {
-            const search = window.location.search;
-            const query = new URLSearchParams(search);
-
-            const searchedUserid = query.get('searcheduserid');
+            
 
             if(!searchedUserid)
             {
                 ///////////// Show a no match of user block////////////
-                window.location = '/error';
+                return;
             }
             else{
 
                 try {
 
+                    props && props.setProgress && props.setProgress(20);
+
                     const response = await axios.post(process.env.REACT_APP_BACKEND_API_URL + "getuser/?token="+cookie,{
                         "searchedUserid":searchedUserid
                     });
+
+                    props && props.setProgress && props.setProgress(50);
 
                     if(response.status === 204){
                         cookie && Cookies.remove('x-auth-token');
@@ -73,6 +90,8 @@ const ProfilePage = (props) => {
                         setSearchedUser(resSearchedUser);
                         setSearchedUserPosts(resSearchedUserPosts);
                         setMyUserid(resMyUserid)
+
+                        props && props.setProgress && props.setProgress(80);
 
                         if(resSearchedUser.friends && resSearchedUser.friendReqRecieved && resSearchedUser.friendReqSent){
                             if(!resSearchedUser.friends.includes(resMyUserid) && !resSearchedUser.friendReqRecieved.includes(resMyUserid) && !resSearchedUser.friendReqSent.includes(resMyUserid)){
@@ -111,30 +130,30 @@ const ProfilePage = (props) => {
                                 friendReqConfirmRef.current.style.display = "inline-block";
                             }
                         }
-
+                        
                     }
                     
-                    props && props.hideLoader && props.hideLoader();
+                    props && props.setProgress && props.setProgress(100);
+
 
                 } catch (error) {
-                    window.location('/error');
+                    window.location = '/error';
                 }
 
             }
         }
 
-        }
+    }
 
-    useEffect(()=>{
+    useEffect(() => {
 
-        fetch();
+        searcheduserid && fetch();
 
-    },[])
+    } , [searcheduserid])
 
     const addFriendButtonClickHandler=async(event)=>{
 
         event.preventDefault();
-        props && props.showLoader && props.showLoader();
 
 
         try {
@@ -152,8 +171,6 @@ const ProfilePage = (props) => {
                 fetch();
             }
 
-            // props && props.hideLoader && props.hideLoader();
-
             
         } catch (error) {
             window.location="/error";
@@ -162,8 +179,6 @@ const ProfilePage = (props) => {
 
 
     async function  removeSentFriendReq (){
-
-        props && props.showLoader && props.showLoader();
 
 
         try {
@@ -179,7 +194,6 @@ const ProfilePage = (props) => {
                 // setUseEffectRefresh(prev => !prev);
                 fetch();
             }
-            // props && props.hideLoader && props.hideLoader();
 
         } catch (error) {
             window.location="/error";
@@ -191,7 +205,6 @@ const ProfilePage = (props) => {
 
         event.preventDefault();
 
-        props && props.showLoader && props.showLoader();
 
 
         try {
@@ -209,7 +222,6 @@ const ProfilePage = (props) => {
                 fetch();
             }
 
-            // props && props.hideLoader && props.hideLoader();
 
             
         } catch (error) {
@@ -219,7 +231,6 @@ const ProfilePage = (props) => {
 
     const unfriendButtonHandler=async()=>{
 
-        props && props.showLoader && props.showLoader();
 
 
         try {
@@ -237,7 +248,6 @@ const ProfilePage = (props) => {
                 fetch();
             }
 
-            // props && props.hideLoader && props.hideLoader();
 
             
         } catch (error) {
@@ -248,8 +258,6 @@ const ProfilePage = (props) => {
     }
 
     const cancelReceivedRequestButtonClickHandler = async () => {
-
-        props && props.showLoader && props.showLoader();
 
         try {
 
@@ -266,7 +274,6 @@ const ProfilePage = (props) => {
                 fetch();
             }
 
-            // props && props.hideLoader && props.hideLoader();
 
             
         } catch (error) {
@@ -274,35 +281,19 @@ const ProfilePage = (props) => {
         }
     }
 
+
+
     const messageButtonClickHandler=(e)=>{
         e.preventDefault();
 
-        window.location="/messagepage/?myuserid="+myUserid+"&searcheduserid="+searchedUser._id;
+        history.push(`/messagepage/${myUserid}/${searchedUser._id}`)
 
     }
-
-    const ref = useRef();
-    const starAnimationDivRef = useRef();
-    const timeoutRef = useRef(null);
 
 
 
     return(
         <div className="profilepage-full-div">
-            <Navbar/>
-            <BackgroundAnimation/>
-            <LeftNavbar
-                profilePic = {searchedUser && searchedUser.profilePic}
-                username = {searchedUser && searchedUser.username}
-            />
-
-            <div
-                style={{display : "none"}} 
-                ref={starAnimationDivRef}>
-                <StarAnimation
-                    ref={ref}
-                />
-            </div>
 
             <PopUp
                 show={showPopUp}
@@ -320,8 +311,8 @@ const ProfilePage = (props) => {
                         <div className="profilepage-cover-pic">
 
                         </div>
-                        <div className="profilepage-profile-pic">
-                            <img alt = "profilePic" src={searchedUser && searchedUser.profilePic ? (searchedUser.profilePic[0] === "u" ? process.env.REACT_APP_BACKEND_API_URL+searchedUser.profilePic : searchedUser.profilePic) : noPic} />
+                        <div className="profilepage-profile-pic__div">
+                            <Avatar height = '100%' width = '100%' image = {searchedUser && searchedUser.profilePic} />
                         </div>
                     </div>
                 </section>
@@ -329,7 +320,7 @@ const ProfilePage = (props) => {
                     <p className="profilepage-section-2-username">{searchedUser && searchedUser.username}</p>
                     <div className = "profilepage-section-2-buttons">
 
-                    
+                    <Suspense fallback = {<></>}>
                     <GlobalButton
                         icon = {<i className="fas fa-user-plus"></i>}
                         text = "Add Friend"
@@ -406,6 +397,7 @@ const ProfilePage = (props) => {
                         color = "cyan"
                         backgroundColor = "cyan"
                     />
+                    </Suspense>
                     <i onClick={messageButtonClickHandler} className="far fa-comments send-message-icon"></i>
                     <BiDotsVerticalRounded
                         className = "add-friend-dots"
@@ -413,39 +405,21 @@ const ProfilePage = (props) => {
                 </div>
                 </section>
                 <section className="profilepage-section-3">
-                {
-                    searchedUserPosts && searchedUserPosts.map((eachPost)=>{
-                        return(
-                            <PostCard
-                                userEmail={searchedUser.email}
-                                post={eachPost}
-                                key={eachPost._id}
-                                mainUserId={searchedUser._id}
-                                turnOnConfetti = {()=>{
-                                
-                                if(timeoutRef.current){
-                                    clearTimeout(timeoutRef.current)
-                                }
-
-                                ref.current.play(0 , 50);
-                                starAnimationDivRef.current.style.display = "block"
-
-                                timeoutRef.current = setTimeout(()=>{
-
-                                    starAnimationDivRef.current.style.display = "none"
-                                    ref.current.stop();
-
-                                },1950)
-
-                            }}
-                                turnOffConfetti = {()=>{
-                                    starAnimationDivRef.current.style.display = "none"
-                                    ref.current.stop();
-                                }}
-                            />
-                        );
-                    })
-                }
+                <br/>
+                <Suspense fallback = {<PostCardLoader top = {544} />}>
+                    {
+                        searchedUserPosts && searchedUserPosts.map((eachPost)=>{
+                            return(
+                                <PostCard
+                                    userEmail={searchedUser.email}
+                                    post={eachPost}
+                                    key={eachPost._id}
+                                    mainUserId={searchedUser._id}
+                                />
+                            );
+                        })
+                    }
+                </Suspense>
                 </section>
                 
             </div>

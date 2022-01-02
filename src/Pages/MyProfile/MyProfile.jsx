@@ -1,141 +1,111 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Cookies from 'js-cookie';
-import axios from 'axios';
-import Navbar from '../../component/navbar/navbar';
-import PostCard from '../../component/postCard/postCard';
-import LeftNavbar from '../../component/leftNavbar/leftNavbar';
+import { lazy, Suspense, memo, useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import axios from "axios";
+import "./MyProfile.css";
+import RightOnlineUsersBar from "../../component/rightOnlineUsersBar/rightOnlineUsersBar";
+import Avatar from "../../component/Avatar/Avatar";
+import PostCardLoader from "../../component/PostCardLoader/PostCardLoader";
 
-import './MyProfile.css';
-import BackgroundAnimation from '../../component/BackgroundAnimation/BackgroundAnimation';
-import StarAnimation from '../../component/StarAnimation/StarAnimation';
-import RightOnlineUsersBar from '../../component/rightOnlineUsersBar/rightOnlineUsersBar';
+const PostCard = lazy(() => import("../../component/postCard/postCard"));
 
-const MyProfile=(props)=>{
+const MyProfile = (props) => {
+    const [userData, setUserData] = useState();
+    const [userPosts, setUserPosts] = useState();
 
-    const [userData , setUserData]=useState();
-    const [userPosts , setUserPosts]=useState();
+    useEffect(() => {
+        if (window.innerWidth > 900)
+            props && props.showLeftNavbar && props.showLeftNavbar();
+        else props && props.hideLeftNavbar && props.hideLeftNavbar();
+    }, []);
 
-    useEffect(()=>{
+    useEffect(() => {
+        props && props.setProgress && props.setProgress(10);
 
-        props && props.showLoader && props.showLoader();
+        const cookie = Cookies.get("x-auth-token");
 
-        const cookie=Cookies.get('x-auth-token');
+        const fetch = async () => {
+            if (!cookie || cookie === undefined) {
+                window.location = "/login";
+            } else {
+                try {
+                    props && props.setProgress && props.setProgress(20);
+                    const res = await axios.get(
+                        process.env.REACT_APP_BACKEND_API_URL +
+                        "getmyprofile/?token=" +
+                        cookie
+                    );
 
-        const fetch=async()=>{
-            if(!cookie || cookie===undefined)
-            {
-                window.location="/login";
+                    props && props.setProgress && props.setProgress(40);
 
-            }
-            else{
-                try
-                {
-                    const res = await axios.get(process.env.REACT_APP_BACKEND_API_URL+"getmyprofile/?token="+cookie);
-
-                    if(res.status===204)
-                    {
-                        window.location="/login";
-                    }
-                    else if(res.status===200){
-
+                    if (res.status === 204) {
+                        window.location = "/login";
+                    } else if (res.status === 200) {
                         setUserData(res.data.userData);
-                        setUserPosts(res.data.userPosts);
+                        setUserPosts(res.data.userPosts.reverse());
+
+                        props && props.setProgress && props.setProgress(70);
                     }
 
-                    props && props.hideLoader && props.hideLoader();
-
-                }catch(error)
-                {
-                    window.location="/error";
+                    props && props.setProgress && props.setProgress(100);
+                } catch (error) {
+                    window.location = "/error";
                 }
-
             }
-
-
-        }
+        };
 
         fetch();
+    }, []);
 
-    },[])
-
-    const ref = useRef();
-    const starAnimationDivRef = useRef();
-    const timeoutRef = useRef(null);
-
-    return(
+    return (
         <div className="myprofile-full-div">
-            <Navbar/>
-            <BackgroundAnimation/>
-            <LeftNavbar
-                profilePic = {userData && userData.profilePic}
-                username = {userData && userData.username}
-            />
-            <RightOnlineUsersBar
-                viewingUserid={userData && userData._id}
-            />
-            <div
-            style={{display : "none"}} 
-            ref={starAnimationDivRef}>
-                <StarAnimation
-                    ref={ref}
-                />
-            </div>
+            <RightOnlineUsersBar viewingUserid={userData && userData._id} />
             <div className="myprofile-inner-div">
                 <section className="myprofile-section-1">
                     <div className="myprofile-avatar-div">
-                        <div className="myprofile-cover-pic">
-
-                        </div>
-                        <div className="myprofile-profile-pic">
-                            <img src={userData && userData.profilePic && (userData.profilePic[0] === "u" ? process.env.REACT_APP_BACKEND_API_URL+userData.profilePic : userData.profilePic)} />
+                        <div className="myprofile-cover-pic"></div>
+                        <div className="myprofile-profile-pic__div">
+                            <Avatar
+                                height="100%"
+                                width="100%"
+                                image={
+                                    userData &&
+                                    userData.profilePic &&
+                                    (userData.profilePic[0] === "u"
+                                        ? process.env.REACT_APP_BACKEND_API_URL +
+                                        userData.profilePic
+                                        : userData.profilePic)
+                                }
+                            />
                         </div>
                     </div>
                 </section>
                 <section className="myprofile-section-2">
-                    <p className="myprofile-section-2-username">{userData && userData.username}</p>
-                    <p className="myprofile-section-2-useremail">{userData && userData.email}</p>
+                    <p className="myprofile-section-2-username">
+                        {userData && userData.username}
+                    </p>
+                    <p className="myprofile-section-2-useremail">
+                        {userData && userData.email}
+                    </p>
                 </section>
                 <section className="myprofile-section-3">
-                {
-                    userPosts && userPosts.map((eachPost)=>{
-                        return(
-                            <PostCard
-                            userEmail={userData.email}
-                            post={eachPost}
-                            key={eachPost._id}
-                            mainUserId={userData._id}
-                            turnOnConfetti = {()=>{
-                                
-                                if(timeoutRef.current){
-                                    clearTimeout(timeoutRef.current)
-                                }
-
-                                ref.current.play(0 , 50);
-                                starAnimationDivRef.current.style.display = "block"
-
-                                timeoutRef.current = setTimeout(()=>{
-
-                                    starAnimationDivRef.current.style.display = "none"
-                                    ref.current.stop();
-
-                                },1950)
-
-                            }}
-
-                            turnOffConfetti = {()=>{
-                                starAnimationDivRef.current.style.display = "none"
-                                ref.current.stop();
-                            }}
-                        />
-                        );
-                    })
-                }
+                    <br />
+                    <Suspense fallback={<PostCardLoader top={544} />}>
+                        {userPosts &&
+                            userPosts.map((eachPost) => {
+                                return (
+                                    <PostCard
+                                        userEmail={userData.email}
+                                        post={eachPost}
+                                        key={eachPost._id}
+                                        mainUserId={userData._id}
+                                    />
+                                );
+                            })}
+                    </Suspense>
                 </section>
-                
             </div>
         </div>
     );
+};
 
-}
-
-export default MyProfile;
+export default memo(MyProfile);

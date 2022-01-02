@@ -1,62 +1,107 @@
-import React, { useEffect, useState } from "react";
+import React, { lazy, Suspense, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import PostCardPage from "../PostCardPage/PostCardPage";
-import Navbar from "../../component/navbar/navbar";
 import "./HomePage.css";
-import LeftNavbar from "../../component/leftNavbar/leftNavbar";
 import Avatar from "../../component/Avatar/Avatar";
 import RightOnlineUsersBar from "../../component/rightOnlineUsersBar/rightOnlineUsersBar";
-import BackgroundAnimation from '../../component/BackgroundAnimation/BackgroundAnimation'
+import newPostLotti from "../../images/newpostLotti.json";
+import LottiAnimation from "../lottiAnimation";
+import { useHistory, Link } from "react-router-dom";
+import PostCardLoader from "../../component/PostCardLoader/PostCardLoader";
+const PostCardPage = lazy(() => import("../PostCardPage/PostCardPage"));
+
 
 const HomePage = (props) => {
-
-  
   const [posts, setposts] = useState([]);
-  const [viewingUser , setViewingUser] = useState(null);
+  const [viewingUser, setViewingUser] = useState(null);
+  const history = useHistory();
+  const isFetchingPostsRef = useRef(false);
+  const pageCountRef = useRef(1);
+  const postEndingRef = useRef();
+
+  const postEndingInnerDivRef1 = useRef();
+  const postEndingInnerDivRef2 = useRef();
+
+  const fetchPosts = async () => {
+    if (isFetchingPostsRef.current === true || pageCountRef.current === null)
+      return;
+
+    const cookie = Cookies.get("x-auth-token");
+
+    try {
+      isFetchingPostsRef.current = true;
+      const res = await axios.get(
+        process.env.REACT_APP_BACKEND_API_URL +
+        "getposts/?token=" +
+        cookie +
+        "&page=" +
+        pageCountRef.current +
+        "&limit=" +
+        5
+      );
+
+      if (res.status === 200) {
+        isFetchingPostsRef.current = false;
+
+        if (res.data.posts.next) {
+          pageCountRef.current = res.data.posts.next.page;
+        } else {
+          pageCountRef.current = null;
+          postEndingRef.current.innerHTML =
+            '<h1 style = "color: white;">We are all caught up</h1>';
+        }
+
+        setposts((prev) => [...prev, ...res.data.posts.result]);
+      } else {
+        Cookies.remove("x-auth-token");
+        window.location = "/error";
+      }
+    } catch (error) {
+      Cookies.remove("x-auth-token");
+      window.location = "/error";
+    }
+  };
 
   useEffect(() => {
+    if (window.innerWidth > 900) {
+      props && props.showLeftNavbar && props.showLeftNavbar();
+    } else {
+      props && props.hideLeftNavbar && props.hideLeftNavbar();
+    }
+  }, []);
 
-    
+  useEffect(() => {
+    viewingUser && pageCountRef && fetchPosts();
+  }, [viewingUser]);
+
+  useEffect(() => {
+    props && props.setProgress && props.setProgress(10);
     const cookie = Cookies.get("x-auth-token");
     ////////////fixed when cookie is undefined/////////specifically when user does not have cookie at all////////////
     if (cookie === undefined) {
       window.location = "/login";
-    } 
-    else {
+    } else {
       const fetchData = async () => {
-
-        props && props.showLoader && props.showLoader();
+        props && props.setProgress && props.setProgress(20);
 
         try {
           const res = await axios.get(
-            process.env.REACT_APP_BACKEND_API_URL + "home/?token=" + cookie
+            process.env.REACT_APP_BACKEND_API_URL + "fetchuser/?token=" + cookie
           );
 
-          if(res.status===200)
-          {
-            if(res.data.credentials === "not logged in" || res.data.credentials === "invalid")
-            {
-              Cookies.remove('x-auth-token')
-              window.location="/login";
-              return;
-            }
-            else if(res.data.credentials==="valid")
-            {
+          props && props.setProgress && props.setProgress(40);
 
-              setViewingUser(res.data.user);
-              setposts(res.data.Posts);
-              // setIsLoading(false);
-            }
+          if (res.status === 200 && res.data.credentials === "valid") {
+            setViewingUser(res.data.user);
+            props && props.setProgress && props.setProgress(100);
+          } else {
+            Cookies.remove("x-auth-token");
+            window.location = "/login";
           }
-
         } catch (error) {
-          Cookies.remove('x-auth-token')
+          Cookies.remove("x-auth-token");
           window.location = "/error";
-          return;
         }
-
-        props && props.hideLoader && props.hideLoader();
       };
       fetchData();
     }
@@ -64,13 +109,15 @@ const HomePage = (props) => {
 
   function AddImageSvg(props) {
     return (
-      <svg xmlns="http://www.w3.org/2000/svg" 
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
         width="100%"
         height="100%"
         xmlSpace="preserve"
-        preserveAspectRatio="xMidYMid meet" 
+        preserveAspectRatio="xMidYMid meet"
         viewBox="0 0 400 400"
-      {...props}>
+        {...props}
+      >
         <g fillRule="evenodd">
           <path
             d="M28.6 10c-.136.22-.867.4-1.624.4-.757 0-1.376.18-1.376.4 0 .22-.54.4-1.2.4-.66 0-1.2.18-1.2.4 0 .22-.439.4-.976.4-.537 0-1.088.18-1.224.4-.136.22-.597.4-1.024.4-.427 0-.776.18-.776.4 0 .22-.236.4-.525.4-.288 0-.911.36-1.383.8-.472.44-1.096.8-1.387.8-.291 0-.788.36-1.105.8-.317.44-.789.8-1.048.8-.838 0-6.952 6.442-6.952 7.325 0 .274-.36.758-.8 1.075-.44.317-.8.724-.8.905 0 .181-.36.715-.8 1.187-.44.472-.8 1.095-.8 1.383 0 .289-.18.525-.4.525-.22 0-.4.36-.4.8 0 .44-.18.8-.4.8-.22 0-.4.54-.4 1.2 0 .66-.18 1.2-.4 1.2-.22 0-.4.525-.4 1.167 0 .641-.225 1.241-.5 1.333-.736.245-.736 290.755 0 291 .275.092.5.692.5 1.333 0 .642.18 1.167.4 1.167.22 0 .4.36.4.8 0 .44.18.8.4.8.22 0 .4.36.4.8 0 .44.18.8.4.8.22 0 .4.36.4.8 0 .44.18.8.4.8.22 0 .4.36.4.8 0 .44.18.8.4.8.22 0 .4.27.4.6 0 .33.18.6.4.6.22 0 .4.177.4.393 0 .603 5.651 6.807 6.2 6.807.153 0 .783.54 1.4 1.2.617.66 1.369 1.2 1.672 1.2.303 0 .811.36 1.128.8.317.44.897.8 1.288.8.392 0 .712.18.712.4 0 .22.36.4.8.4.44 0 .8.18.8.4 0 .22.36.4.8.4.44 0 .8.18.8.4 0 .22.54.4 1.2.4.66 0 1.2.18 1.2.4 0 .22.529.4 1.176.4.647 0 1.288.18 1.424.4.136.22 1.047.4 2.024.4.977 0 1.776.18 1.776.4 0 .266 36.351.4 108.253.4h108.254l.946 1.1c.52.605.946 1.285.947 1.512 0 .226.36.671.8.988.44.317.8.735.8.928 0 .193.54.855 1.2 1.472.66.617 1.2 1.303 1.2 1.526 0 .925 11.548 12.055 13.954 13.448.355.206.865.566 1.132.8 1.36 1.192 1.723 1.426 2.209 1.426.291 0 .788.36 1.105.8.317.44.897.8 1.288.8.392 0 .712.18.712.4 0 .22.236.4.525.4.288 0 .911.36 1.383.8.472.44 1.046.8 1.275.8a.41.41 0 01.417.4c0 .22.36.4.8.4.44 0 .8.18.8.4 0 .22.36.4.8.4.44 0 .8.18.8.4 0 .22.36.4.8.4.44 0 .8.18.8.4 0 .22.36.4.8.4.44 0 .8.18.8.4 0 .22.349.4.776.4.427 0 .888.18 1.024.4.136.22.687.4 1.224.4.537 0 .976.18.976.4 0 .22.54.4 1.2.4.66 0 1.2.18 1.2.4 0 .22.54.4 1.2.4.66 0 1.2.18 1.2.4 0 .22.439.4.976.4.537 0 1.088.18 1.224.4.136.22.856.4 1.6.4.744 0 1.452.161 1.574.358.121.197.897.461 1.723.588.827.127 2.673.441 4.103.699 5.013.902 29.542.517 30.58-.48.209-.201 1.053-.365 1.876-.365s1.608-.18 1.744-.4c.136-.22.766-.4 1.4-.4.634 0 1.264-.18 1.4-.4.136-.22.766-.4 1.4-.4.634 0 1.264-.18 1.4-.4.136-.22.676-.4 1.2-.4.524 0 1.064-.18 1.2-.4.136-.22.597-.4 1.024-.4.427 0 .776-.18.776-.4 0-.22.54-.4 1.2-.4.66 0 1.2-.18 1.2-.4 0-.22.36-.4.8-.4.44 0 .8-.18.8-.4 0-.22.36-.4.8-.4.44 0 .8-.18.8-.4 0-.22.253-.4.562-.4.666 0 3.979-1.668 4.171-2.1.074-.165.389-.3.7-.3.312 0 .567-.18.567-.4 0-.22.278-.4.617-.4.339 0 1.003-.36 1.475-.8.472-.44 1.095-.8 1.383-.8.289 0 .525-.18.525-.4 0-.22.225-.4.5-.4.275-.001.982-.406 1.57-.9a17.028 17.028 0 012.2-1.528c.622-.345 1.376-1.155 1.677-1.8.3-.644.705-1.485.9-1.867.507-.998.435-2.985-.143-3.91-.399-.64-.39-.971.047-1.695.427-.707.43-.793.016-.4-.753.714-1.877.618-3.119-.266-2.683-1.91-4.447-1.556-9.682 1.946-3.019 2.019-10.117 5.756-13.066 6.878-.495.188-1.305.504-1.8.702-1.279.511-3.018 1.07-5.1 1.64-.99.271-2.25.634-2.8.806-.55.172-2.26.508-3.8.747l-5.433.84c-1.448.224-4.778.401-7.4.394-45.61-.121-80.496-44.627-69.126-88.187.287-1.1.636-2.45.774-3 .139-.55.399-1.36.578-1.8.179-.44.543-1.43.807-2.2 1.346-3.921 4.616-10.431 7.284-14.503 16.946-25.865 48.245-38.185 77.563-30.531 6.013 1.569 13.908 4.899 17.825 7.517.92.614 1.865 1.117 2.1 1.117.235 0 .428.18.428.4 0 .22.201.4.447.4 1.535 0 11.852 9.047 15.508 13.6.795.99 1.544 1.89 1.664 2 .121.11.652.83 1.181 1.6.529.77 1.076 1.49 1.215 1.6 1.287 1.015 6.363 10.638 8.333 15.8 5.35 14.018 5.905 30.451 1.535 45.4-1.921 6.569-6.695 16.447-9.707 20.084-2.342 2.829-2.495 6.958-.324 8.759.301.25.548.774.548 1.163 0 .942.783 1.194 3.708 1.194 2.519 0 5.083-1.159 5.089-2.3.002-.275.141-.5.309-.5s.75-.72 1.294-1.6c.544-.88 1.126-1.6 1.294-1.6.168 0 .306-.36.306-.8 0-.44.152-.8.337-.8.186 0 .771-.855 1.3-1.9.53-1.045 1.098-1.96 1.263-2.033.165-.074.3-.416.3-.76 0-.753 2.039-5.051 2.485-5.24.173-.074.315-.468.315-.877 0-.408.18-.854.4-.99.22-.136.4-.687.4-1.224 0-.537.18-.976.4-.976.22 0 .4-.349.4-.776 0-.427.18-.888.4-1.024.22-.136.4-.676.4-1.2 0-.524.18-1.064.4-1.2.22-.136.4-.867.4-1.624 0-.757.16-1.376.356-1.376.34 0 .587-1.027 1.108-4.6.128-.88.436-1.728.685-1.885.682-.432.635-32.091-.049-32.775-.275-.275-.5-1.184-.5-2.02 0-.836-.18-1.52-.4-1.52-.22 0-.4-.72-.4-1.6 0-.88-.18-1.6-.4-1.6-.22 0-.4-.54-.4-1.2 0-.66-.18-1.2-.4-1.2-.22 0-.4-.54-.4-1.2 0-.66-.18-1.2-.4-1.2-.22 0-.4-.362-.4-.805 0-.778-.142-1.164-1.138-3.09-.254-.492-.462-1.167-.462-1.5 0-.333-.18-.605-.4-.605-.22 0-.4-.36-.4-.8 0-.44-.18-.8-.4-.8-.22 0-.4-.36-.4-.8 0-.44-.18-.8-.4-.8-.22 0-.4-.316-.4-.703 0-.663-1.83-4.465-2.357-4.897-.134-.11-.512-.74-.839-1.4-.683-1.38-2.678-4.098-3.704-5.047-.385-.356-.7-.851-.7-1.099 0-.249-.72-1.195-1.6-2.102-.88-.907-1.6-1.803-1.6-1.993 0-.498-7.91-8.366-9.8-9.748-.88-.644-1.891-1.494-2.247-1.89-.356-.397-.901-.721-1.212-.721-.31 0-.824-.36-1.141-.8-.317-.44-.807-.8-1.088-.8-.282 0-.512-.18-.512-.4 0-.22-.193-.4-.429-.4-1.632 0-1.571 3.875-1.571-99.148 0-64.905-.135-98.088-.4-98.252-.22-.136-.4-1.036-.4-2s-.18-1.864-.4-2c-.22-.136-.4-.777-.4-1.424 0-.647-.18-1.176-.4-1.176-.22 0-.4-.54-.4-1.2 0-.66-.18-1.2-.4-1.2-.22 0-.4-.36-.4-.8 0-.44-.18-.8-.4-.8-.22 0-.4-.279-.4-.619 0-.769-2.495-4.712-3.818-6.036-.54-.54-.985-1.108-.988-1.263-.012-.492-2.141-2.678-3.594-3.69-.77-.536-1.799-1.37-2.287-1.852-.488-.483-1.253-.994-1.7-1.136-.447-.142-.813-.426-.813-.631 0-.205-.36-.373-.8-.373-.44 0-.8-.18-.8-.4 0-.22-.36-.4-.8-.4-.44 0-.8-.136-.8-.302 0-.167-.585-.542-1.3-.834l-2.2-.898c-.495-.201-1.305-.534-1.8-.739-.495-.205-1.53-.507-2.3-.672-2.64-.566-225.984-.621-226.613-.056-.308.275-.79.704-1.073.952-1.941 1.703-2.38 3.299-1.301 4.725.323.428.587 1.12.587 1.539 0 .419.375 1.288.833 1.932 1.806 2.535-6.931 2.353 112.956 2.353 62.097 0 109.792.153 110.451.353.638.195 1.97.594 2.96.887 2.068.612 5.411 2.285 6.791 3.398 4.15 3.349 6.056 5.666 8.053 9.789 2.493 5.147 2.356-.786 2.356 101.756V231.2h-.808c-.444 0-1.915-.45-3.269-1-1.353-.55-2.779-1-3.168-1-.389 0-.806-.159-.926-.354-.121-.195-.716-.45-1.324-.567-.608-.117-1.825-.422-2.705-.676-3.519-1.019-8.487-1.932-12.288-2.26-1.478-.128-2.872-.453-3.096-.724-.275-.331-.443-28.572-.512-86.056-.086-70.904-.196-85.7-.642-86.363-1.786-2.654 13.161-2.388-140.7-2.502l-138.039-.101-1.361.916c-2.994 2.013-2.722-10.984-2.741 130.687l-.018 127 .836 1.4c.46.77 1.224 1.711 1.698 2.091.812.651 6.487.692 96.389.7 101.892.01 97.074-.094 97.074 2.09 0 .69.184 2.438.41 3.886.672 4.32 1.148 6.483 2.777 12.633.544 2.055 1.634 5.125 2.465 6.948.438.961.702 1.996.585 2.3-.277.722-205.773.838-208.931.117-6.771-1.545-10.801-3.755-14.699-8.063-2.352-2.598-5.407-8.239-5.407-9.983 0-.527-.181-1.14-.401-1.36-.483-.483-.335-278.904.148-280.759.633-2.427 1.728-4.745 3.497-7.4 2.328-3.496 8.279-8.8 9.873-8.8.198 0 .939-.289 1.647-.642 3.329-1.661 4.658-1.729 33.956-1.744 25.19-.013 28.251-.082 29.38-.666 1.859-.961 3.1-2.6 3.1-4.094 0-.416.27-.98.6-1.254.673-.559.817-2 .2-2-.22 0-.4-.291-.4-.646 0-.355-.665-1.255-1.478-2L91.044 9.6H59.945c-20.3 0-31.184.139-31.345.4m283.309 115.6c.061 35.53.011 65.011-.111 65.514-.331 1.372.075 1.744-20.522-18.788-21.958-21.889-22.772-22.541-30.676-24.554-8.873-2.259-17.056-.441-26.482 5.883-2.25 1.51-4.277 2.745-4.505 2.745-.227 0-.413.15-.413.332 0 .183-.495.588-1.1.9-.605.313-1.449.883-1.875 1.268-.427.385-1.012.7-1.3.7-.289 0-.525.151-.525.336 0 .184-.457.544-1.015.798-.558.254-1.233.649-1.5.877-1.214 1.038-17.903 11.989-18.271 11.989-.228 0-.414.158-.414.351 0 .194-.54.576-1.2.849-.66.273-1.2.655-1.2.849 0 .193-.27.351-.6.351-.33 0-.6.136-.6.302 0 .167-.506.527-1.125.801-.619.273-1.511.857-1.983 1.297-.472.44-.939.8-1.038.8-.154 0-14.867 9.73-17.327 11.458-6.44 4.525-13.616 5.913-18.927 3.659-2.069-.878-3.006-1.322-3.2-1.517-.11-.111-.692-.455-1.293-.765-.602-.309-1.412-.857-1.8-1.216-.389-.358-1.607-1.265-2.707-2.015a98.33 98.33 0 01-3.844-2.783c-1.015-.782-2.185-1.652-2.6-1.933a392.582 392.582 0 01-4.07-2.878c-4.157-2.967-6.468-4.086-11.664-5.653-2.364-.713-11.281-.713-13.644 0-4.628 1.397-6.263 2.158-13.135 6.111-1.847 1.063-3.439 1.932-3.539 1.932-.099 0-.658.332-1.242.738-.584.406-2.232 1.342-3.662 2.079-1.43.738-3.05 1.638-3.6 2.001-.55.363-1.99 1.201-3.2 1.863-3.569 1.951-6.119 3.371-7.4 4.119-.66.386-2.1 1.203-3.2 1.817-1.1.614-3.26 1.823-4.8 2.686s-3.97 2.216-5.4 3.006a246.49 246.49 0 00-4.518 2.564c-1.054.62-2.016 1.127-2.138 1.127-.121 0-.698.333-1.282.739-2.196 1.528-5.803 3.293-6.322 3.093-.579-.222-.849-147.789-.273-148.366.147-.147 58.962-.222 130.7-.167L311.8 61l.109 64.6M112.4 86.604c-27.214 6.186-36.183 38.457-16.026 57.665 14.239 13.568 37.883 11.26 49.842-4.865 7.078-9.543 8.406-25.224 2.953-34.847l-1.542-2.721C144.048 95.52 135.037 88.8 128 87.2c-1.21-.275-2.722-.657-3.36-.85-1.661-.501-9.645-.336-12.24.254m14.229 11.835c11.435 4.247 17.765 17.19 13.773 28.161-2.624 7.212-7.059 11.485-15.202 14.649-1.846.718-10.508.715-12.416-.003C102.462 137.359 96.8 129.692 96.8 119.6c0-15.461 15.524-26.474 29.829-21.161m132.455 60.413c4.314 1.736 4.735 2.118 28.616 25.916l23.9 23.817v15.835l-1.026.39c-.564.214-1.689.393-2.5.397-8.17.041-24.406 5.766-34.474 12.156-15.877 10.076-28.806 26.621-34.728 44.437-1.963 5.906-3.649 13.831-3.665 17.22-.004.891-.223 1.836-.487 2.1-.371.371-21.396.48-92.2.48H50.8v-78.715l5.7-3.201a849.418 849.418 0 018.1-4.501c1.32-.714 2.584-1.44 2.809-1.614.225-.174 1.395-.84 2.6-1.481 1.205-.64 2.866-1.552 3.691-2.026l3-1.723c1.262-.725 5.969-3.368 15.7-8.818A705.073 705.073 0 0098.6 196a808.507 808.507 0 016.8-3.828 244.49 244.49 0 004-2.279c10.977-6.516 17.888-5.076 32.6 6.791 9.112 7.351 14.369 9.506 23.2 9.512 9.922.007 9.324.303 39-19.348 45.474-30.112 41.787-27.829 46.2-28.613 1.617-.287 7.471.129 8.684.617m-142.897 71.947c-3.05 1.51-4.464 8.556-3.016 15.026 1.097 4.905 6.553 6.38 9.66 2.611l1.169-1.418v-6.529c0-7.59-.277-8.509-2.927-9.712-2.128-.966-2.896-.963-4.886.022m102.413-.045c-2.944 1.355-4.157 6.723-3.219 14.236.683 5.467 6.143 7.436 9.719 3.505l1.3-1.428v-6.56c0-7.806-.28-8.629-3.373-9.922-1.805-.754-2.478-.728-4.427.169m-63.91 8.606c-6.592 3.583-2.125 11.674 8.326 15.083 12.99 4.237 30.744-6.586 23.186-14.133-2.161-2.158-5.493-1.961-8.195.483-5.02 4.544-11.379 4.526-16.574-.047-2.115-1.862-4.838-2.422-6.743-1.386m161.127 23.332c-3.979 1.01-3.989 1.061-4.217 21.108l-.2 17.6-17.6.2c-18.889.215-18.622.183-20.172 2.361-1.33 1.868-1.049 5.554.537 7.031 1.768 1.647 1.263 1.6 19.596 1.808l17.639.2.2 17.4c.205 17.8.25 18.307 1.771 19.829 1.603 1.603 5.195 1.877 7.073.539 2.371-1.687 2.356-1.563 2.356-19.915 0-9.233.109-17.072.243-17.42.216-.563 2.066-.633 16.75-.633 18.463 0 18.592-.011 20.393-1.813 2.354-2.354 2.135-6.005-.491-8.169l-1.477-1.218h-17.26c-13.776 0-17.348-.106-17.697-.526-.296-.358-.472-6.11-.549-17.968l-.112-17.442-1-1.084c-1.626-1.761-3.663-2.427-5.783-1.888"
@@ -110,53 +157,110 @@ const HomePage = (props) => {
           />
         </g>
       </svg>
-    )
+    );
   }
 
+  const observer = new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting) {
+      postEndingInnerDivRef1.current.style.animation =
+        "animate-posts-ending-loader 1.5s ease-in-out infinite";
+      postEndingInnerDivRef2.current.style.animation =
+        "animate-posts-ending-loader 1.5s ease-in-out infinite";
+      fetchPosts();
+    } else {
+      postEndingInnerDivRef1.current.style.animation = "none";
+      postEndingInnerDivRef2.current.style.animation = "none";
+    }
+  });
+
+  useEffect(() => {
+    observer.observe(postEndingRef.current);
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   return (
     <div className="home-page-container">
-      <BackgroundAnimation/>
-      <Navbar/>
-      <LeftNavbar
-        profilePic = {viewingUser && viewingUser.profilePic}
-        username = {viewingUser && viewingUser.username}
-      />
-      <RightOnlineUsersBar
-        viewingUserid={viewingUser && viewingUser._id}
-      />
-      <div onClick={()=>{window.location="/newpost"}} className="home-page-new-post-div">
+      <RightOnlineUsersBar viewingUserid={viewingUser && viewingUser._id} />
+      <div
+        onClick={() => {
+          history.push("/newpost");
+        }}
+        className="home-page-new-post-div"
+      >
         <div className="home-page-new-post-upper-div">
           <div className="home-page-new-post-avatar-div">
             <Avatar
-              height = "3rem"
-              width = "3rem"
-              image = {viewingUser && viewingUser.profilePic}
-              borderColor = "cyan"
+              height="3rem"
+              width="3rem"
+              image={viewingUser && viewingUser.profilePic}
+              borderColor="cyan"
             />
           </div>
           <div className="home-page-new-post-link-div">
-            <span className="home-page-new-post-link-div-custom-placeholder">Write something ...</span>
+            <span className="home-page-new-post-link-div-custom-placeholder">
+              Write something ...
+            </span>
           </div>
         </div>
-        <div style={{height : "1px" , width : "99%" , marginBottom : "10px"}} className="post-card-underline"></div>
+        <div
+          style={{ height: "1px", width: "99%", marginBottom: "10px" }}
+          className="post-card-underline"
+        ></div>
         <div className="home-page-new-post-lower-div">
           <div className="home-page-new-post-lower-div-add-image-svg">
-            <AddImageSvg/>
+            <AddImageSvg />
           </div>
           {" Photo"}
         </div>
       </div>
-
-
-
       <div className="post-card">
-        {posts && <PostCardPage posts={posts} viewingUserProfilePic={viewingUser && viewingUser.profilePic} username={viewingUser && viewingUser.username} userEmail={viewingUser && viewingUser.email} userId={viewingUser && viewingUser._id} />}
+        <Suspense fallback={<PostCardLoader top = {234} />}>
+          {posts && (
+            <PostCardPage
+              posts={posts}
+              viewingUserProfilePic={viewingUser && viewingUser.profilePic}
+              username={viewingUser && viewingUser.username}
+              userEmail={viewingUser && viewingUser.email}
+              userId={viewingUser && viewingUser._id}
+            />
+          )}
+          
+        </Suspense>
       </div>
+      <div ref={postEndingRef} className="home-page__postcard-ending">
+        <div
+          ref={postEndingInnerDivRef1}
+          className="home-page__postcard-ending__inner-div"
+        >
+          <div className="home-page__postcard-ending__left"></div>
+          <div className="home-page__postcard-ending__right">
+            <div className="home-page__postcard-ending__right_1"></div>
+            <div className="home-page__postcard-ending__right_2"></div>
+            <div className="home-page__postcard-ending__right_3"></div>
+            <div className="home-page__postcard-ending__right_4"></div>
+          </div>
+        </div>
+
+        <div
+          ref={postEndingInnerDivRef2}
+          className="home-page__postcard-ending__inner-div"
+        >
+          <div className="home-page__postcard-ending__left"></div>
+          <div className="home-page__postcard-ending__right">
+            <div className="home-page__postcard-ending__right_1"></div>
+            <div className="home-page__postcard-ending__right_2"></div>
+            <div className="home-page__postcard-ending__right_3"></div>
+            <div className="home-page__postcard-ending__right_4"></div>
+          </div>
+        </div>
+      </div>
+
       <div className="postIt-container">
-        <a id="new-post-icon" href="/newpost">
-          <i id="icon-feather" className="fas fa-feather-alt"></i>
-        </a>
+        <Link id="new-post-icon" to="/newpost">
+          <LottiAnimation lotti={newPostLotti} height="100%" width="100%" />
+        </Link>
       </div>
     </div>
   );

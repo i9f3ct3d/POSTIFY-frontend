@@ -1,9 +1,18 @@
-.avatar-image{
+.avatar__outer-div{
+    display: inline-flex;
     border-radius: 100%;
-    border: 3px solid cyan;
+    border: 2px solid cyan;
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar-image{
+    box-sizing: border-box;
+    border-radius: 100%;
     box-shadow: 3px 3px 5px rgba(0 , 0 , 0 , 0.5);
     transition: transform 500ms ease-in-out;
     cursor: pointer;
+    border: 2px solid transparent !important;
 }
 
 .avatar-image:hover{

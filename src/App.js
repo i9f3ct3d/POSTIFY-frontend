@@ -1,185 +1,294 @@
-import './App.css';
-import React , { Suspense , lazy, useRef } from 'react';
-import { BrowserRouter as Router, Route , Switch,  Redirect} from "react-router-dom";
+import "./App.css";
+import { Suspense, lazy, useState } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from "react-router-dom";
 
-import SignUp from "./Pages/SignUp/SignUp"
-import LogIn from "./Pages/LogIn/LogIn"
+import Loader from "./component/Loader/Loader";
+import LoadingBar from "react-top-loading-bar";
+import Cookies from "js-cookie";
 
-import ErrorPage from "./Pages/http-error-page/http-error";
-import Contact from "./Pages/Contact/Contact"
-import MyProfile from './Pages/MyProfile/MyProfile';
-import AuthCheck from './Pages/authcheck';
-import Loader from './component/Loader/Loader';
+const BackgroundAnimation = lazy(() => import('./component/BackgroundAnimation/BackgroundAnimation'))
+const Navbar = lazy(() => import("./component/navbar/navbar"));
+const LeftNavbar = lazy(() => import("./component/leftNavbar/leftNavbar"));
+const AuthCheck = lazy(() => import("./Pages/authcheck"));
+const ErrorPage = lazy(() => import("./Pages/http-error-page/http-error"));
+const SignUp = lazy(() => import("./Pages/SignUp/SignUp"));
+const LogIn = lazy(() => import("./Pages/LogIn/LogIn"));
+const HomePage = lazy(() => import("./Pages/Home/HomePage"));
+const NewPostPage = lazy(() => import("./Pages/NewPostPage/NewPostPage"));
+const PostContentPage = lazy(() => import("./Pages/PostContentPage/PostContentPage"));
+const FriendRequest = lazy(() => import("./Pages/FrinedRequest/FriendRequest"));
+const Notification = lazy(() => import("./Pages/Notification/Notification"));
+const ProfilePage = lazy(() => import("./Pages/profilePage/profilePage"));
+const SavedPostsPage = lazy(() => import("./Pages/savedPostsPage/savedPostsPage"));
+const MessagePage = lazy(() => import("./Pages/messagePage/messagePage"));
+const MyProfile = lazy(() => import("./Pages/MyProfile/MyProfile"));
+const Contact = lazy(() => import("./Pages/Contact/Contact"));
 
-
-const HomePage =  lazy(() => import("./Pages/Home/HomePage"));
-const NewPostPage = lazy(()=>import("./Pages/NewPostPage/NewPostPage"))
-const PostContentPage = lazy(()=>import("./Pages/PostContentPage/PostContentPage"));
-const FriendRequest = lazy(()=>import("./Pages/FrinedRequest/FriendRequest"));
-const Notification = lazy(()=>import("./Pages/Notification/Notification"));
-const ProfilePage = lazy(()=>import("./Pages/profilePage/profilePage"));
-const SavedPostsPage = lazy(()=>import("./Pages/savedPostsPage/savedPostsPage"));
-const MessagePage = lazy(()=>import("./Pages/messagePage/messagePage"));
-
-
-var isShowing = false;
 
 function App() {
 
-  const LoaderRef = useRef();
+  async function isPostInfoPage() {
+    const pageLocation = window.location.pathname;
+    const postinfoPageRoute = "/postinfo";
 
-  const showLoader = () => {
+    let pageI = 0;
 
-    if(isShowing === false){
+    for await (const i of postinfoPageRoute) {
+      if (i !== pageLocation[pageI]) {
+        return false;
+      }
 
-      isShowing = true;
-      
-      LoaderRef && LoaderRef.current && LoaderRef.current.show();
-    }
-    
-  }
-  
-  const hideLoder = () => {
-
-    if(isShowing){
-
-      isShowing = false;
-      LoaderRef && LoaderRef.current && LoaderRef.current.hide();
-      setTimeout(()=>{
-        LoaderRef && LoaderRef.current && LoaderRef.current.reset();
-      },500)
+      pageI++;
     }
 
+    return true;
   }
+
+  const showLeftNavbar = async () => {
+    const leftNavbar = document.getElementById("#left-navbar-full-div");
+
+    if (leftNavbar) {
+      leftNavbar.style.display = "block";
+
+      if (
+        window.innerWidth <= 900 ||
+        window.location.pathname === "/newpost" ||
+        (await isPostInfoPage())
+      ) {
+        leftNavbar.style.backgroundColor = "#121212";
+        leftNavbar.style.height = "100vh";
+        leftNavbar.style.transform = "translateX(0) translateZ(0)";
+        leftNavbar.style.boxShadow = "8px -4px 10px rgba(0 , 0 , 0 , 0.5)";
+      } else {
+        leftNavbar.style.backgroundColor = "transparent";
+        leftNavbar.style.height = "unset";
+        leftNavbar.style.transform = "translateX(0) translateZ(0)";
+        leftNavbar.style.boxShadow = "none";
+      }
+    }
+  };
+
+  const hideLeftNavbar = () => {
+    const leftNavbar = document.getElementById("#left-navbar-full-div");
+
+    if (leftNavbar) {
+      leftNavbar.style.display = "none";
+
+      leftNavbar.style.backgroundColor = "#242527";
+      leftNavbar.style.height = "100vh";
+      leftNavbar.style.transform = "translateX(-101%) translateZ(0)";
+      leftNavbar.style.boxShadow = "8px -4px 10px rgba(0 , 0 , 0 , 0.5)";
+    }
+  };
+
+  const [progress, setProgress] = useState(0);
+  const cookie = Cookies.get("x-auth-token");
 
   return (
     <div className="App">
-      <Loader
-        ref = {LoaderRef}
-      />
       <Router>
-      <Switch>
-        <Route path = "/login" exact>
-          <LogIn
-            showLoader = {showLoader}
-            hideLoader = {hideLoder}
-          />
-        </Route>
-        <Route path = "/signup" exact>
-          <SignUp
-            showLoader = {showLoader}
-            hideLoader = {hideLoder}
-          />
-        </Route>
-
-        <Route path="/home" exact>
-          <Suspense fallback={<Loader/>}>
-            <HomePage
-              showLoader = {showLoader}
-              hideLoader = {hideLoder}
-            />
-          </Suspense>
-        </Route>
-
-
-        <Route path="/newpost" exact>
-        <Suspense fallback={<Loader/>}>
-          <NewPostPage
-            showLoader = {showLoader}
-            hideLoader = {hideLoder}
-          />
+        <LoadingBar
+          color="cyan"
+          progress={progress}
+          onLoaderFinished={() => setProgress(0)}
+        />
+        <Suspense fallback={<span></span>}>
+          <BackgroundAnimation />
         </Suspense>
-        </Route>
-
-
-        <Route path="/postinfo" exact>
-          <Suspense fallback={<Loader/>}>
-          <PostContentPage
-            showLoader = {showLoader}
-            hideLoader = {hideLoder}
-          />
-          </Suspense>
-        </Route>
-
-
-        <Route path="/contact" exact>
-          <Contact/>
-        </Route>
-
-        <Route path="/friendrequest" exact>
-        <Suspense fallback={<Loader/>}>
-          <FriendRequest
-            showLoader = {showLoader}
-            hideLoader = {hideLoder}
-          />
+        <Suspense fallback={<span></span>}>
+          {window.location.pathname !== "/contact" &&
+            window.location.pathname !== "/error" && <LeftNavbar />}
         </Suspense>
-        </Route>
 
-
-        
-        <Route path="/notification" exact>
-          <Suspense fallback={<Loader/>}>
-          <Notification
-            showLoader = {showLoader}
-            hideLoader = {hideLoder}
-          />
-          </Suspense>
-        </Route>
-
-
-
-        <Route path="/profilepage" exact>
-          <Suspense fallback={<Loader/>}>
-          <ProfilePage
-            showLoader = {showLoader}
-            hideLoader = {hideLoder}
-          />
-          </Suspense>
-        </Route>
-
-
-        <Route path="/myprofile" exact>
-            <Suspense fallback={<Loader/>}>
-              <MyProfile
-                showLoader = {showLoader}
-                hideLoader = {hideLoder}
+        <Suspense fallback={<span></span>}>
+          {window.location.pathname !== "/contact" &&
+            window.location.pathname !== "/error" && (
+              <Navbar
+                showLeftNavbar={showLeftNavbar}
+                hideLeftNavbar={hideLeftNavbar}
               />
-            </Suspense>
-        </Route>
-
-
-
-        <Route path="/savedposts" exact>
-            <Suspense fallback={<Loader/>}>
-          <SavedPostsPage
-            showLoader = {showLoader}
-            hideLoader = {hideLoder}
-          />
-            </Suspense>
-        </Route>
-
-
-
-        <Route path="/messagepage" exact>
-            <Suspense fallback={<></>}>
-              <MessagePage
-                showLoader = {showLoader}
-                hideLoader = {hideLoder}
+            )}
+        </Suspense>
+        <Suspense fallback={<Loader />}>
+          <Switch>
+            <Route path="/login" exact>
+              <LogIn
+                hideLeftNavbar={hideLeftNavbar}
               />
-            </Suspense>
-        </Route>
+            </Route>
+            <Route path="/signup" exact>
+              <SignUp
+                hideLeftNavbar={hideLeftNavbar}
+              />
+            </Route>
 
+            <Route path="/home" exact>
+              {cookie ? (
+                <HomePage
+                  showLeftNavbar={showLeftNavbar}
+                  hideLeftNavbar={hideLeftNavbar}
+                  setProgress={(givenProgress) => {
+                    setProgress(givenProgress);
+                  }}
+                />
+              ) : (
+                <div>
+                  <Redirect to="/login" />
+                </div>
+              )}
+            </Route>
 
-        <Route path="/authcheck/:token" exact>
-          <AuthCheck/>
-        </Route>
+            <Route path="/newpost" exact>
+              {cookie ? (
+                <NewPostPage
+                  showLeftNavbar={showLeftNavbar}
+                  hideLeftNavbar={hideLeftNavbar}
+                  setProgress={(givenProgress) => {
+                    setProgress(givenProgress);
+                  }}
+                />
+              ) : (
+                <div>
+                  <Redirect to="/login" />
+                </div>
+              )}
+            </Route>
 
+            <Route path="/postinfo/:postid/:userid" exact>
+              {cookie ? (
+                <PostContentPage
+                  showLeftNavbar={showLeftNavbar}
+                  hideLeftNavbar={hideLeftNavbar}
+                  setProgress={(givenProgress) => {
+                    setProgress(givenProgress);
+                  }}
+                />
+              ) : (
+                <div>
+                  <Redirect to="/login" />
+                </div>
+              )}
+            </Route>
 
-        <Route path="/error" exact>
-          <ErrorPage/>
-        </Route>
-        <Redirect to="/signup"/>
-      </Switch>
+            <Route path="/contact" exact>
+              <Contact
+                showLeftNavbar={showLeftNavbar}
+                hideLeftNavbar={hideLeftNavbar}
+              />
+              {/* <div>Contact Me</div> */}
+            </Route>
+
+            <Route path="/friendrequest" exact>
+              {cookie ? (
+                <FriendRequest
+                  showLeftNavbar={showLeftNavbar}
+                  hideLeftNavbar={hideLeftNavbar}
+                  setProgress={(givenProgress) => {
+                    setProgress(givenProgress);
+                  }}
+                />
+              ) : (
+                <div>
+                  <Redirect to="/login" />
+                </div>
+              )}
+            </Route>
+
+            <Route path="/notification" exact>
+              {cookie ? (
+                <Notification
+                  showLeftNavbar={showLeftNavbar}
+                  hideLeftNavbar={hideLeftNavbar}
+                  setProgress={(givenProgress) => {
+                    setProgress(givenProgress);
+                  }}
+                />
+              ) : (
+                <div>
+                  <Redirect to="/login" />
+                </div>
+              )}
+            </Route>
+
+            <Route path="/profilepage/:searcheduserid" exact>
+              {cookie ? (
+                <ProfilePage
+                  showLeftNavbar={showLeftNavbar}
+                  hideLeftNavbar={hideLeftNavbar}
+                  setProgress={(givenProgress) => {
+                    setProgress(givenProgress);
+                  }}
+                />
+              ) : (
+                <div>
+                  <Redirect to="/login" />
+                </div>
+              )}
+            </Route>
+
+            <Route path="/myprofile" exact>
+              {cookie ? (
+                <MyProfile
+                  showLeftNavbar={showLeftNavbar}
+                  hideLeftNavbar={hideLeftNavbar}
+                  setProgress={(givenProgress) => {
+                    setProgress(givenProgress);
+                  }}
+                />
+              ) : (
+                <div>
+                  <Redirect to="/login" />
+                </div>
+              )}
+            </Route>
+
+            <Route path="/savedposts" exact>
+              {cookie ? (
+                <SavedPostsPage
+                  showLeftNavbar={showLeftNavbar}
+                  hideLeftNavbar={hideLeftNavbar}
+                  setProgress={(givenProgress) => {
+                    setProgress(givenProgress);
+                  }}
+                />
+              ) : (
+                <div>
+                  <Redirect to="/login" />
+                </div>
+              )}
+            </Route>
+
+            <Route path="/messagepage/:myuserid/:searcheduserid" exact>
+              {cookie ? (
+                <MessagePage
+                  showLeftNavbar={showLeftNavbar}
+                  hideLeftNavbar={hideLeftNavbar}
+                  setProgress={(givenProgress) => {
+                    setProgress(givenProgress);
+                  }}
+                />
+              ) : (
+                <div>
+                  <Redirect to="/login" />
+                </div>
+              )}
+            </Route>
+
+            <Route path="/authcheck/:token" exact>
+              <AuthCheck />
+            </Route>
+
+            <Route path="/error" exact>
+              <ErrorPage />
+            </Route>
+            <Redirect to="/home" />
+          </Switch>
+        </Suspense>
       </Router>
     </div>
   );

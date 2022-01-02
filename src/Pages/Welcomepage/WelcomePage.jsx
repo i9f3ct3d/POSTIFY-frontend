@@ -56,8 +56,6 @@ const WelcomePage=()=>{
 
     return(
     <div className="welcome-page-full-div">
-        <Navbar/>
-        <BackgroundAnimation/>
         <section className="welcome-page-head-section">
             <div ref={ref} className="welcome-page-head-section-inner-div">
             <div className="welcome-page-head-section-left-div">

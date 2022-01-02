@@ -1,57 +1,70 @@
 import {
     BrowserRouter as Router,
     Link,
-    useLocation
+    useHistory,
+    useLocation,
+    useParams,
 } from "react-router-dom";
 import axios from "axios";
 import Cookie from "js-cookie";
-import "./PostContentPage.css"
-import { useState, useEffect, useRef } from "react";
+import "./PostContentPage.css";
+import { useState, useEffect, useRef , memo } from "react";
 
-import Navbar from "../../component/navbar/navbar";
 import Avatar from "../../component/Avatar/Avatar";
-import BackgroundAnimation from "../../component/BackgroundAnimation/BackgroundAnimation";
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-import LottiAnimation from "../lottiAnimation";
-import CommentAnimation from '../../images/commentAnimation.json'
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import { GiFlexibleStar } from 'react-icons/gi'
+import { BsPen } from 'react-icons/bs'
+import { AiOutlineSend } from 'react-icons/ai'
 
-import starReactAnimation from '../../images/starReactAnimation.json'
-import Lottie from 'lottie-web'
-import LeftNavbar from "../../component/leftNavbar/leftNavbar";
+import starReactAnimation from "../../images/starReactAnimation.json";
+import Lottie from "lottie-web";
 import RightOnlineUsersBar from "../../component/rightOnlineUsersBar/rightOnlineUsersBar";
 
-function useQuery() {
-    return new URLSearchParams(useLocation().search);
-}
-
 const PostContentPage = (props) => {
-    let query = useQuery();
-    const postid = query.get("postid");
-    const viewingUserid = query.get("userid");
 
-    const [post , setPost] = useState(null);
-    const [currentUser , setCurrentUser] = useState(null);
-    const [isLiked , setIsLiked] = useState(false);
-    const [likeCount , setLikeCount] = useState(0);
+    const history = useHistory();
+    const { postid, userid } = useParams();
+    const viewingUserid = userid;
+
+    const [post, setPost] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null);
+    const [isLiked, setIsLiked] = useState(false);
+    const [likeCount, setLikeCount] = useState(0);
+
+    useEffect(() => {
+        props && props.hideLeftNavbar && props.hideLeftNavbar();
+    }, []);
 
     const fetchData = async () => {
-
-        props && props.showLoader && props.showLoader();
+        props && props.setProgress && props.setProgress(10);
 
         try {
             const cookie = Cookie.get("x-auth-token");
-            const res = await axios.get(process.env.REACT_APP_BACKEND_API_URL + 'fetchuser/?token=' + cookie);
-            
-            if(res.data.credentials==="invalid")
-            {
-                window.location="/login";
-            }
-           setCurrentUser(res.data.user);
+            const res = await axios.get(
+                process.env.REACT_APP_BACKEND_API_URL + "fetchuser/?token=" + cookie
+            );
 
-            const response = await axios.get(process.env.REACT_APP_BACKEND_API_URL + 'postinfo?postid=' + postid);
-            setPost(response.data);
-            setLikeCount(response.data.likeArray.length)
+            props && props.setProgress && props.setProgress(30);
+
+            if (res.data.credentials === "invalid") {
+                window.location = "/login";
+            }
+            setCurrentUser(res.data.user);
+
+            const response = await axios.get(
+                process.env.REACT_APP_BACKEND_API_URL + "postinfo?postid=" + postid
+            );
             
+            if(response.data && (!response.data.postImage || response.data.postImage === "false")){
+                if(postcardContentPagePostImageDivRef && postcardContentPagePostImageDivRef.current){
+                    postcardContentPagePostImageDivRef.current.style.display = 'none'
+                }
+            }
+            setPost(response.data);
+            setLikeCount(response.data.likeArray.length);
+
+            props && props.setProgress && props.setProgress(70);
+
             const isIncluded = response.data.likeArray.includes(viewingUserid);
 
             if (isIncluded) {
@@ -60,22 +73,19 @@ const PostContentPage = (props) => {
                 setIsLiked(false);
             }
 
-            // setIsLoading(false);
-
-            props && props.hideLoader && props.hideLoader();
-
+            props && props.setProgress && props.setProgress(100);
         } catch (error) {
             window.location = "/error";
         }
     };
+
     useEffect(() => {
         fetchData();
     }, []);
 
-    const [lastCancelToken , setLastCancelToken] = useState(null);
+    const [lastCancelToken, setLastCancelToken] = useState(null);
 
     const handleLikeClick = async (event) => {
-
         lastCancelToken && lastCancelToken.cancel();
 
         const CancelToken = axios.CancelToken;
@@ -83,392 +93,408 @@ const PostContentPage = (props) => {
 
         setLastCancelToken(source);
 
-        setIsLiked(prev => !prev);
+        setIsLiked((prev) => !prev);
 
-        if(isLiked && likeCount > 0){
-
-            setLikeCount(prev => (prev - 1));
-            starAnim.goToAndStop(0,true);
-
-        }else if(!isLiked){
-
-            setLikeCount(prev => (prev + 1));
-            starAnim.setSpeed(0.5)
+        if (isLiked && likeCount > 0) {
+            setLikeCount((prev) => prev - 1);
+            starAnim.goToAndStop(0, true);
+        } else if (!isLiked) {
+            setLikeCount((prev) => prev + 1);
+            starAnim.setSpeed(0.5);
             starAnim.play();
             dontRunUseEffect.current = true;
-
-        }else{
-            setLikeCount(prev => (prev + 1));
-            starAnim.setSpeed(0.5)
+        } else {
+            setLikeCount((prev) => prev + 1);
+            starAnim.setSpeed(0.5);
             starAnim.play();
             dontRunUseEffect.current = true;
             return;
         }
 
-
-
         try {
-            const res = await axios.post(process.env.REACT_APP_BACKEND_API_URL + "likepost", {
-                postid: postid,
-                userid: currentUser._id,
-                username: currentUser.username,
-                userProfilePic : currentUser.profilePic,
-            },{
-                cancelToken : source.token,
-            })
-
-
+            const res = await axios.post(
+                process.env.REACT_APP_BACKEND_API_URL + "likepost",
+                {
+                    postid: postid,
+                    userid: currentUser._id,
+                    username: currentUser.username,
+                    userProfilePic: currentUser.profilePic,
+                },
+                {
+                    cancelToken: source.token,
+                }
+            );
         } catch (error) {
             const e = new Error(error);
 
-            if(e.message !== "Cancel"){
-                window.location="/error";
+            if (e.message !== "Cancel") {
+                window.location = "/error";
             }
         }
+    };
 
-    }
-
-
-    const textAreaOnFocus=()=>{
-
-        const placeholder = document.querySelector(".postcard-content-page-comment-section-custom-placeholder");
+    const textAreaOnFocus = () => {
+        const placeholder = document.querySelector(
+            ".postcard-content-page-comment-section-custom-placeholder"
+        );
         placeholder.style.top = "-12px";
         placeholder.innerHTML = "Comment";
         placeholder.style.color = "cyan";
         placeholder.style.backgroundColor = "#121212";
-        document.querySelector(".postcard-content-page-comment-section-div").style.borderColor = "cyan";
-        
-    }
-    
+        document.querySelector(
+            ".postcard-content-page-comment-section-div"
+        ).style.borderColor = "cyan";
+    };
+
     const textAreaOnBlur = (e) => {
-        
-        if(e.target.value.trim().length === 0){
-            const placeholder = document.querySelector(".postcard-content-page-comment-section-custom-placeholder");
+        if (e.target.value.trim().length === 0) {
+            const placeholder = document.querySelector(
+                ".postcard-content-page-comment-section-custom-placeholder"
+            );
             placeholder.style.top = "9px";
             placeholder.innerHTML = "Comment ...";
             placeholder.style.color = "#909192";
             placeholder.style.backgroundColor = "#121212";
-            document.querySelector(".postcard-content-page-comment-section-div").style.borderColor = "#3D3F42";
+            document.querySelector(
+                ".postcard-content-page-comment-section-div"
+            ).style.borderColor = "#3D3F42";
         }
-
-    }
-
-    
-    const textAreaOnInput=(e)=>{
-        e.target.style.height = "5px";
-        e.target.style.height = (e.target.scrollHeight)+"px";
-        document.querySelector(".postcard-content-page-comment-section-div").style.height = (e.target.scrollHeight + 8)+"px";
-    }
+    };
 
     const showuserPageHandler = () => {
-
-        if(post && currentUser){
-
-            if(post.userid === currentUser._id){
-                window.location = "/myprofile";
+        if (post && currentUser) {
+            if (post.userid === currentUser._id) {
+                history.push("/myprofile");
                 return;
             }
 
-            window.location="/profilepage?searcheduserid="+post.userid;
+            history.push(`/profilepage/${post.userid}`);
         }
-    }
+    };
 
-    function getMonth(n){
-
-        switch(n){
-            case 1 : {
+    function getMonth(n) {
+        switch (n) {
+            case 1: {
                 return "Jan";
             }
-            case 2 : {
+            case 2: {
                 return "Feb";
             }
-            case 3 : {
+            case 3: {
                 return "Mar";
             }
-            case 4 : {
+            case 4: {
                 return "Apr";
             }
-            case 5 : {
+            case 5: {
                 return "May";
             }
-            case 6 : {
+            case 6: {
                 return "Jun";
             }
-            case 7 : {
+            case 7: {
                 return "Jul";
             }
-            case 8 : {
+            case 8: {
                 return "Aug";
             }
-            case 9 : {
+            case 9: {
                 return "Sep";
             }
-            case 10 : {
+            case 10: {
                 return "Oct";
             }
-            case 11 : {
+            case 11: {
                 return "Nov";
             }
-            case 12 : {
+            case 12: {
                 return "Dec";
             }
-            default : {
+            default: {
                 return "Jan";
             }
         }
-
     }
 
-    const getDate=(s)=>{
-
+    const getDate = (s) => {
         const stringDate = new Date(s);
         const month = getMonth(stringDate.getMonth());
         const date = stringDate.getDate();
 
         let ansString = "";
 
-        if(date % 10 === 1){
+        if (date % 10 === 1) {
             ansString += date + "st ";
-        }else if(date % 10 === 2){
+        } else if (date % 10 === 2) {
             ansString += date + "nd ";
-        }else if(date % 10 === 3){
+        } else if (date % 10 === 3) {
             ansString += date + "rd ";
-        }else{
+        } else {
             ansString += date + "th";
         }
 
         ansString += month;
 
         return ansString;
-
-    }
+    };
 
     const postcardContentPagePostImageDivRef = useRef();
     const commentRef = useRef();
 
-    const commentOnPostHandler = async(e) => {
-
+    const commentOnPostHandler = async (e) => {
         e.preventDefault();
 
         const typedComment = commentRef.current.value.trim();
-            if(typedComment.length > 0){
+        if (typedComment.length > 0) {
 
-                props && props.showLoader && props.showLoader();
-
-                try {
-                    
-                    const res = await axios.post(process.env.REACT_APP_BACKEND_API_URL+"postinfo",{
-
-                        "postid" : postid,
-                        "comment":typedComment,
-                        "userEmail":currentUser.email,
-                        "username":currentUser.username,
-                        "userProfilePic":currentUser.profilePic,
-                        "userid":viewingUserid,
-
-                    })
-
-                    if(res.status === 200){
-
-                        // setRunUseEffect(prev=>!prev);
-                        fetchData();
-
-                    }else{
-                        window.location = "/error";
+            try {
+                const res = await axios.post(
+                    process.env.REACT_APP_BACKEND_API_URL + "postinfo",
+                    {
+                        postid: postid,
+                        comment: typedComment,
+                        userEmail: currentUser.email,
+                        username: currentUser.username,
+                        userProfilePic: currentUser.profilePic,
+                        userid: viewingUserid,
                     }
+                );
 
-                    commentRef.current.value = "";
-                    
-                } catch (error) {
+                if (res.status === 200) {
+                    // setRunUseEffect(prev=>!prev);
+                    fetchData();
+                } else {
                     window.location = "/error";
                 }
 
+                commentRef.current.value = "";
+            } catch (error) {
+                window.location = "/error";
             }
-
-    }
-
-
+        }
+    };
 
     const starReactAnimationRef = useRef(null);
-    const [starAnim , setStarAnim] = useState(null)
+    const [starAnim, setStarAnim] = useState(null);
 
-      useEffect(()=>{
-
+    useEffect(() => {
         const anim = Lottie.loadAnimation({
-            container : starReactAnimationRef.current, 
-            renderer : 'canvas',
-            loop : false,
-            autoplay : false,
-            path : "../../images/starReactAnimation.json",
-            animationData : starReactAnimation,
-        })
+            container: starReactAnimationRef.current,
+            renderer: "canvas",
+            loop: false,
+            autoplay: false,
+            path: "../../images/starReactAnimation.json",
+            animationData: starReactAnimation,
+            height : '5rem',
+            width : '5rem'
+        });
 
-        
         setStarAnim(anim);
+    }, []);
 
+    const dontRunUseEffect = useRef(false);
 
-      },[])
-
-      const dontRunUseEffect = useRef(false);
-
-      useEffect(()=>{
-
-        if(isLiked !== null && starAnim && !dontRunUseEffect.current){
-
-            if(isLiked){
-
-                starAnim.goToAndStop(30,true);
-                
-            }else{
-                
-                starAnim.goToAndStop(0,true);
+    useEffect(() => {
+        if (isLiked !== null && starAnim && !dontRunUseEffect.current) {
+            if (isLiked) {
+                starAnim.goToAndStop(30, true);
+            } else {
+                starAnim.goToAndStop(0, true);
             }
-
         }
-
-      },[starAnim , isLiked])
-
-
+    }, [starAnim, isLiked]);
 
     return (
         <div className="postcard-content-page-full-div">
-            
-            <Navbar />
-            <BackgroundAnimation/>
-
-            <LeftNavbar
-                profilePic = {currentUser && currentUser.profilePic}
-                username = {currentUser && currentUser.username}
-                style = {{
-                    backgroundColor : "#242527",
-                    height : "100vh",
-                    transform : "translateX(-101%) translateZ(0)",
-                }}
-                crossCloserStyle = {{
-                    display : "inline-block"
-                }}
-            />
             <RightOnlineUsersBar
                 viewingUserid={currentUser && currentUser._id}
-                style = {{
-                    backgroundColor : "#242527",
-                    height : "100vh",
-                    transform : "translateX(101%) translateZ(0)",
+                style={{
+                    backgroundColor: "#242527",
+                    height: "100vh",
+                    transform: "translateX(101%) translateZ(0)",
+                    boxShadow: "-8px -4px 10px rgba(0 , 0 , 0 , 0.5)",
                 }}
-                crossCloserStyle = {{
-                    display : "inline-block"
+                crossCloserStyle={{
+                    display: "inline-block",
                 }}
             />
 
             <div className="postcard-content-page-post-card-main-div">
-            <div className="postcard-content-page-post-card-header">
-                <div className="postcard-content-page-post-author-image">
-                    <LazyLoadImage placeholderSrc = {process.env.PUBLIC_URL + "/logo192.png"} height="4rem" width="4rem" onClick = {showuserPageHandler} id="postcard-content-page-post-author-pic" alt="posterPic" src={post && (post.authorProfilePic ? ( post.authorProfilePic[0] === "u" ? process.env.REACT_APP_BACKEND_API_URL + post.authorProfilePic : post.authorProfilePic ): "https://qph.fs.quoracdn.net/main-qimg-2b21b9dd05c757fe30231fac65b504dd")} />
+                <div className="postcard-content-page-post-card-header">
+                    <div className="postcard-content-page-post-author-image">
+                        <Avatar
+                            height = "4rem"
+                            width = "4rem"
+                            image = {post && post.authorProfilePic && post.authorProfilePic}
+                        />
+                    </div>
+                    <div className="postcard-content-page-post-card-author">
+                        <span onClick={showuserPageHandler}>{post && post.username}</span>
+                    </div>
+                    <span className="postcard-content-page-post-card-date">
+                        {post && post.postDate && getDate(post.postDate)}
+                    </span>
                 </div>
-                <div className="postcard-content-page-post-card-author">
-                    <h4 onClick = {showuserPageHandler}>{post && post.username}</h4>
+                <div className="postcard-content-page-post-card-title-div">
+                    <span className="postcard-content-page-post-card-title">
+                        {post && post.heading}
+                    </span>
                 </div>
-                <p className="postcard-content-page-post-card-date">{post && post.postDate && getDate(post.postDate)}</p>
-            </div>
-            <div className="postcard-content-page-post-card-title-div">
-                <h3 className="postcard-content-page-post-card-title">{post && post.heading}</h3>
-            </div>
-            <div className="postcard-content-page-post-card-content-div">
-                <p className="postcard-content-page-post-card-content">{post && post.postcontent}</p>
-            </div>
-            {post && post.postImage && post.postImage!=="false" && <div ref = {postcardContentPagePostImageDivRef} className="postcard-content-page-post-card-img-div">
-                <LazyLoadImage afterLoad={()=>{
-                    postcardContentPagePostImageDivRef.current.style.height = "unset";
-                }} placeholderSrc = {process.env.PUBLIC_URL + "/logo192.png"} height="100%" width="100%" alt="postImage" className="postcard-content-page-post-card-img" src={process.env.REACT_APP_BACKEND_API_URL + post.postImage} />
-            </div>}
-            <div className="postcard-content-page-post-card-like-count-div">
-                <i className="fa-star fas" style={{ color: "gold" , fontSize : "1.2rem"}}>{"             "}{likeCount}</i>
-            </div>
-            <div className="postcard-content-page-post-card-underline" style={{ width: "99%", height: "1px" }}></div>
-            
-
-
-
-
-            
-            <div className="postcard-content-page-post-card-like-div">
-                {/* <i 
-                    className={`fa-star ${isLiked ? "fas" : "far"}`} 
-                    style={{ color: isLiked ? "gold" : "grey", cursor: "pointer", marginTop: "10px" }} 
-                    onClick={handleLikeClick}>Star</i> */}
-
-                <div className="postcard-content-page-post-card-like-div-like-button">
-                    <div className="postcard-content-page-post-card-like-div-like-button-lottie-container" ref={starReactAnimationRef}></div>
-                    <div onClick={handleLikeClick}  className="postcard-content-page-post-card-like-div-like-button-touchable-div"></div>
-                    <span onClick = {handleLikeClick} className = "postcard-content-page-post-card-like-div-like-button-text">Star</span>
+                <div className="postcard-content-page-post-card-content-div">
+                    <span className="postcard-content-page-post-card-content">
+                        {post && post.postcontent}
+                    </span>
                 </div>
+                <div
+                    ref={postcardContentPagePostImageDivRef}
+                    className="postcard-content-page-post-card-img-div"
+                >
+                {post && post.postImage && post.postImage !== "false" && (
+                        <LazyLoadImage
+                            afterLoad={() => {
+                                postcardContentPagePostImageDivRef.current.style.height = "unset";
+                            }}
+                            placeholderSrc={process.env.PUBLIC_URL + "/logo192.png"}
+                            height="100%"
+                            width="100%"
+                            alt="postImage"
+                            className="postcard-content-page-post-card-img"
+                            src={process.env.REACT_APP_BACKEND_API_URL + post.postImage}
+                        />
+                )}
+                </div>
+                <div className="postcard-content-page-post-card-like-count-div">
+                    <GiFlexibleStar
+                        className = 'postcard-content-page-post-card-like-icon'
+                    />
+                    <span className="postcard-content-page-post-card-like-count">{likeCount && likeCount}</span>
+                </div>
+                <div
+                    className="postcard-content-page-post-card-underline"
+                    style={{ width: "99%", height: "1px" , marginBottom : '10px'}}
+                ></div>
 
-                <i className="fas fa-pen" style={{ position: "absolute", right: "0", marginTop: "10px", color: "grey", cursor: "pointer" }}>Comment</i>
+                <div className="postcard-content-page-post-card-like-div">
+                    <div onClick = {handleLikeClick} className="postcard-content-page-post-card-like-div-like-button">
+                        <div
+                            className="postcard-content-page-post-card-like-div-like-button-lottie-container"
+                            ref={starReactAnimationRef}
+                        ></div>
+                        <span
+                            className="postcard-content-page-post-card-like-div-like-button-text"
+                        >
+                            Star
+                        </span>
+                    </div>
+                    <div className="postcard-content-page-post-card-like-div__comment-button__div">
+                        <BsPen
+                            className = 'postcard-content-page-post-card-like-div__comment-icon'
+                        />
+                        <span className="postcard-content-page-post-card-like-div__comment-button__div__span" >Comment</span>
+                    </div>
+                </div>
+                <div
+                    className="postcard-content-page-post-card-underline"
+                    style={{ width: "99%", height: "1px" , marginBottom : '10px'}}
+                ></div>
 
-            </div>
-
-
-
-
-
-
-
-            {
-                <div className="postcard-content-page-post-card-comments-div">
-                    <h3>Comments</h3>
-                    <div className="postcard-content-page-post-card-underline" style={{ marginBottom: "50px",marginTop : "0", height: "7px" ,width : "9rem", backgroundColor : "yellow" , borderRadius : "7px"}}></div>
-                    
-                    <div className="postcard-content-page-comment-section-div">
-                        <div className="postcard-content-page-comment-section-avatar-div">
-                            <Avatar
-                                height = "1.5rem"
-                                width = "1.5rem"
-                                image = {currentUser && currentUser.profilePic}
-                            />
+                
+                    <div className="postcard-content-page-post-card-comments-div">
+                        <div className="postcard-content-page-post-card-comments-div__title-div">
+                            <span className="postcard-content-page-post-card-comments-div__title">C</span>
+                            <span className="postcard-content-page-post-card-comments-div__title__middle">omment</span>
+                            <span className="postcard-content-page-post-card-comments-div__title">S</span>
                         </div>
-                        <div className = "postcard-content-page-comment-section-input-div">
-                            <form onSubmit = {commentOnPostHandler}>
-                            <input style = {{resize : "both"}} ref={commentRef} onFocus={textAreaOnFocus} onBlur={textAreaOnBlur} className="postcard-content-page-comment-section-textarea" type="text" required/>
-                            <div onClick = {commentOnPostHandler} type = "submit" className="postcard-content-page-comment-button-div">
-                                <LottiAnimation
-                                    lotti = {CommentAnimation}
-                                    height = "4rem"
-                                    width = "4rem"
-                                    className = "postcard-content-page-comment-button"
+
+                        <div className="postcard-content-page-comment-section-div">
+                            <div className="postcard-content-page-comment-section-avatar-div">
+                                <Avatar
+                                    height="1.5rem"
+                                    width="1.5rem"
+                                    image={currentUser && currentUser.profilePic}
                                 />
                             </div>
-                            </form>
-                        </div>
-                        <span className="postcard-content-page-comment-section-custom-placeholder">Comment ...</span>
-                    </div>
-                    {post && post.comments && post.comments.length > 0 && <div className="postcard-content-page-post-card-underline" style={{ marginBottom: "50px",marginTop : "50px", height: "1px" }}></div>}
-                    {
-
-                        post && post.comments && post.comments.map((eachComment, index)=>{
-                            return(
-                                <div key={index} className="postcard-content-page-post-card-each-comment">
-                                    <div>
-                                        <img alt="commenterPic" src={(eachComment.userProfilePic && eachComment.userProfilePic !== undefined) ? (eachComment.userProfilePic[0] === "u" ? process.env.REACT_APP_BACKEND_API_URL + eachComment.userProfilePic : eachComment.userProfilePic) : "https://qph.fs.quoracdn.net/main-qimg-2b21b9dd05c757fe30231fac65b504dd"} />
+                            <div className="postcard-content-page-comment-section-input-div">
+                                <form onSubmit={commentOnPostHandler}>
+                                    <input
+                                        style={{ resize: "both" }}
+                                        ref={commentRef}
+                                        onFocus={textAreaOnFocus}
+                                        onBlur={textAreaOnBlur}
+                                        className="postcard-content-page-comment-section-textarea"
+                                        type="text"
+                                        required
+                                    />
+                                    <div
+                                        onClick={commentOnPostHandler}
+                                        type="submit"
+                                        className="postcard-content-page-comment-button-div"
+                                    >
+                                        <AiOutlineSend
+                                            className="postcard-content-page-comment-button"
+                                        />
                                     </div>
-                                    <h4>{eachComment.username}</h4>
-                                    <br/>
-                                    <p style={{ paddingTop: eachComment.commentContent.length < 58 && "5px", paddingBottom: eachComment.commentContent.length < 58 && "10px" }}>{eachComment.commentContent}</p>
-                                    <br/>
-                                    <br/>
-                                </div>
-                            );
-                        })
+                                </form>
+                            </div>
+                            <span className="postcard-content-page-comment-section-custom-placeholder">
+                                Comment ...
+                            </span>
+                        </div>
+                        {post && post.comments && post.comments.length > 0 && (
+                            <div
+                                className="postcard-content-page-post-card-underline"
+                                style={{
+                                    marginBottom: "50px",
+                                    marginTop: "50px",
+                                    height: "1px",
+                                    width : '100%'
+                                }}
+                            ></div>
+                        )}
 
-                    }
-                    
-
-                </div>
-            }
+                        {post &&
+                            post.comments &&
+                            post.comments.map((eachComment, index) => {
+                                return (
+                                    <div
+                                        key={index}
+                                        className="postcard-content-page-post-card-each-comment"
+                                    >
+                                        <div className="postcard-content-page__each-comment__avatar-div">
+                                            <Avatar
+                                                height="100%"
+                                                width="100%"
+                                                image={
+                                                    eachComment.userProfilePic &&
+                                                    eachComment.userProfilePic
+                                                }
+                                            />
+                                        </div>
+                                        <div className="postcard-content-page__each-comment__right-div">
+                                            <span className="postcard-content-page__each-comment__author-name">
+                                                {eachComment.username}
+                                            </span>
+                                            <p
+                                                className="postcard-content-page__each-comment__content"
+                                                style={{
+                                                    paddingTop:
+                                                        eachComment.commentContent.length < 58 && "5px",
+                                                    paddingBottom:
+                                                        eachComment.commentContent.length < 58 && "10px",
+                                                }}
+                                            >
+                                                {eachComment.commentContent}
+                                            </p>
+                                        </div>
+                                        <br />
+                                        <br />
+                                    </div>
+                                );
+                            })}
+                    </div>
+                
+            </div>
         </div>
-        </div>
-
-    )
-
-
-}
-export default PostContentPage;
+    );
+};
+export default memo(PostContentPage);
