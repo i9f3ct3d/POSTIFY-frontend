@@ -30,7 +30,7 @@ const ChatBubble = (props) => {
     const observer = new IntersectionObserver(
         async ([entry]) => {
 
-            entry.isIntersecting && seenMessage();
+            await seenMessage();
 
         }
     )

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef , memo } from "react";
 import "./Avatar.css";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Link } from "react-router-dom";
@@ -84,4 +84,4 @@ const Avatar = (props) => {
     );
 };
 
-export default React.memo(Avatar);
+export default memo(Avatar);

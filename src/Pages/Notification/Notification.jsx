@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import "./Notification.css"
 import Cookies from "js-cookie";
 import axios from "axios";
 import Avatar from "../../component/Avatar/Avatar";
-import RightOnlineUsersBar from "../../component/rightOnlineUsersBar/rightOnlineUsersBar";
 import { useHistory } from "react-router-dom";
 
 const Notification=(props)=>{
@@ -15,7 +14,21 @@ const Notification=(props)=>{
 
     useEffect(() => {
 
-        if(window.innerWidth > 900) props && props.showLeftNavbar && props.showLeftNavbar();
+        if(window.innerWidth > 900){
+            props && props.showLeftNavbar && props.showLeftNavbar();
+            const rightOnlineUsersBar = document.getElementById('#right__online-users__bar');
+            if(rightOnlineUsersBar){
+                rightOnlineUsersBar.style.backgroundColor = 'transparent'
+                rightOnlineUsersBar.style.height = '100vh'
+                rightOnlineUsersBar.style.transform = 'translateX(0) translateZ(0)'
+                rightOnlineUsersBar.style.boxShadow = 'none'
+            }
+      
+            const crossCloser = document.getElementById('#right__online-users__bar-cross-closer');
+            if(crossCloser){
+                crossCloser.style.display = 'none'
+            }
+        }
         else props && props.hideLeftNavbar && props.hideLeftNavbar();
     
     },[])
@@ -139,9 +152,6 @@ const Notification=(props)=>{
         <div className="notification-page-full-div">
             <div className="notification-page-navbar-div">
             </div>
-            <RightOnlineUsersBar
-                viewingUserid = {user && user._id}
-            />
             <div className="notification-div">
                 <div className="notification-inner-div">
                     {
@@ -180,4 +190,4 @@ const Notification=(props)=>{
     );
 }
 
-export default Notification;
+export default memo(Notification);

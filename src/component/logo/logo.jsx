@@ -1,7 +1,6 @@
-import React from "react";
 import "./logo.css";
 import LogoLotti from '../../images/LogoLotti.json'
-import { lazy , Suspense , useRef } from "react";
+import { lazy , memo, Suspense , useRef } from "react";
 const LottiAnimation = lazy(() => import( "../../Pages/lottiAnimation"));
 
 const Logo=props=>
@@ -48,4 +47,4 @@ const Logo=props=>
     )
 }
 
-export default React.memo(Logo);
+export default memo(Logo);

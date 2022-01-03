@@ -1,4 +1,4 @@
-import React , {forwardRef, useEffect, useState} from "react";
+import {memo,forwardRef, useEffect, useState} from "react";
 import Lottie from "react-lottie";
 
 const LottieAnimation = ({ lotti, width, height , isStopped , isloop , speed} , ref) => {
@@ -31,4 +31,4 @@ const LottieAnimation = ({ lotti, width, height , isStopped , isloop , speed} , 
   );
 };
 
-export default React.memo(forwardRef(LottieAnimation));
+export default memo(forwardRef(LottieAnimation));

@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, lazy, Suspense, memo } from 'react';
 import './savedPostsPage.css';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import PostCard from '../../component/postCard/postCard';
-import RightOnlineUsersBar from '../../component/rightOnlineUsersBar/rightOnlineUsersBar';
+const PostCard = lazy(() => import( '../../component/postCard/postCard'))
 
 const SavedPostsPage=(props)=>{
 
@@ -12,7 +11,21 @@ const SavedPostsPage=(props)=>{
 
     useEffect(() => {
 
-        if(window.innerWidth > 900) props && props.showLeftNavbar && props.showLeftNavbar();
+        if(window.innerWidth > 900){
+            props && props.showLeftNavbar && props.showLeftNavbar();
+            const rightOnlineUsersBar = document.getElementById('#right__online-users__bar');
+            if(rightOnlineUsersBar){
+                rightOnlineUsersBar.style.backgroundColor = 'transparent'
+                rightOnlineUsersBar.style.height = '100vh'
+                rightOnlineUsersBar.style.transform = 'translateX(0) translateZ(0)'
+                rightOnlineUsersBar.style.boxShadow = 'none'
+            }
+      
+            const crossCloser = document.getElementById('#right__online-users__bar-cross-closer');
+            if(crossCloser){
+                crossCloser.style.display = 'none'
+            }
+        }
         else props && props.hideLeftNavbar && props.hideLeftNavbar();
     
     },[])
@@ -52,27 +65,26 @@ const SavedPostsPage=(props)=>{
     return(
 
         <div className="saved-posts-page-full-div">
-            <RightOnlineUsersBar
-                viewingUserid={viewingUser && viewingUser._id}
-            />
-
             {
-                posts && viewingUser && posts.length > 0 && posts.map((eachPost)=>{
+                posts && viewingUser && posts.length > 0 && 
+                <Suspense fallback = {<></>}>
+                    {posts.map((eachPost)=>{
 
-                    return(
-                        <PostCard
-                            viewingUserProfilePic = {viewingUser.profilePic}
-                            userEmail = {viewingUser.email}
-                            mainUserId = {viewingUser._id}
-                            viewingUsername = {viewingUser.username}
-                            post = {eachPost}
-                            key = {eachPost._id}
-                        />
-                    );
-                })
+                        return(
+                            <PostCard
+                                viewingUserProfilePic = {viewingUser.profilePic}
+                                userEmail = {viewingUser.email}
+                                mainUserId = {viewingUser._id}
+                                viewingUsername = {viewingUser.username}
+                                post = {eachPost}
+                                key = {eachPost._id}
+                            />
+                        );
+                    })}
+                </Suspense>
             }
         </div>
 
     );
 }
-export default SavedPostsPage;
+export default memo(SavedPostsPage);

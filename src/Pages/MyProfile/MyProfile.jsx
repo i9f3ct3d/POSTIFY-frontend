@@ -2,7 +2,6 @@ import { lazy, Suspense, memo, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import "./MyProfile.css";
-import RightOnlineUsersBar from "../../component/rightOnlineUsersBar/rightOnlineUsersBar";
 import Avatar from "../../component/Avatar/Avatar";
 import PostCardLoader from "../../component/PostCardLoader/PostCardLoader";
 
@@ -14,7 +13,21 @@ const MyProfile = (props) => {
 
     useEffect(() => {
         if (window.innerWidth > 900)
+        {
             props && props.showLeftNavbar && props.showLeftNavbar();
+            const rightOnlineUsersBar = document.getElementById('#right__online-users__bar');
+            if(rightOnlineUsersBar){
+                rightOnlineUsersBar.style.backgroundColor = 'transparent'
+                rightOnlineUsersBar.style.height = '100vh'
+                rightOnlineUsersBar.style.transform = 'translateX(0) translateZ(0)'
+                rightOnlineUsersBar.style.boxShadow = 'none'
+            }
+      
+            const crossCloser = document.getElementById('#right__online-users__bar-cross-closer');
+            if(crossCloser){
+                crossCloser.style.display = 'none'
+            }
+        }
         else props && props.hideLeftNavbar && props.hideLeftNavbar();
     }, []);
 
@@ -58,7 +71,6 @@ const MyProfile = (props) => {
 
     return (
         <div className="myprofile-full-div">
-            <RightOnlineUsersBar viewingUserid={userData && userData._id} />
             <div className="myprofile-inner-div">
                 <section className="myprofile-section-1">
                     <div className="myprofile-avatar-div">

@@ -18,7 +18,6 @@ import { AiOutlineSend } from 'react-icons/ai'
 
 import starReactAnimation from "../../images/starReactAnimation.json";
 import Lottie from "lottie-web";
-import RightOnlineUsersBar from "../../component/rightOnlineUsersBar/rightOnlineUsersBar";
 
 const PostContentPage = (props) => {
 
@@ -304,20 +303,25 @@ const PostContentPage = (props) => {
         }
     }, [starAnim, isLiked]);
 
+    useEffect(() => {
+
+        const rightOnlineUsersBar = document.getElementById('#right__online-users__bar');
+        if(rightOnlineUsersBar){
+            rightOnlineUsersBar.style.backgroundColor = '#242527'
+            rightOnlineUsersBar.style.height = '100vh'
+            rightOnlineUsersBar.style.transform = 'translateX(101%) translateZ(0)'
+            rightOnlineUsersBar.style.boxShadow = '-8px -4px 10px rgba(0 , 0 , 0 , 0.5)'
+        }
+
+        const crossCloser = document.getElementById('#right__online-users__bar-cross-closer');
+        if(crossCloser){
+            crossCloser.style.display = 'inline-block'
+        }
+
+    },[])
+
     return (
         <div className="postcard-content-page-full-div">
-            <RightOnlineUsersBar
-                viewingUserid={currentUser && currentUser._id}
-                style={{
-                    backgroundColor: "#242527",
-                    height: "100vh",
-                    transform: "translateX(101%) translateZ(0)",
-                    boxShadow: "-8px -4px 10px rgba(0 , 0 , 0 , 0.5)",
-                }}
-                crossCloserStyle={{
-                    display: "inline-block",
-                }}
-            />
 
             <div className="postcard-content-page-post-card-main-div">
                 <div className="postcard-content-page-post-card-header">

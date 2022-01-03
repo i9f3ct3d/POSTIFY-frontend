@@ -1,4 +1,4 @@
-import React from 'react'
+import {memo} from 'react'
 import { useEffect } from 'react';
 import { useParams } from 'react-router';
 import Cookies from 'js-cookie';
@@ -24,4 +24,4 @@ function AuthCheck() {
     )
 }
 
-export default React.memo(AuthCheck);
+export default memo(AuthCheck);

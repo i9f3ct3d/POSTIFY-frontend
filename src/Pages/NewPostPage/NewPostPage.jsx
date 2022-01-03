@@ -1,9 +1,8 @@
-import {lazy, memo, Suspense, useEffect, useState} from "react";
+import {memo, useEffect, useState} from "react";
 import PostForm from "../PostForm/PostForm"
 import axios from "axios";
 import Cookies from "js-cookie";
 import "./NewPostPage.css"
-const RightOnlineUsersBar = lazy(() => import("../../component/rightOnlineUsersBar/rightOnlineUsersBar"))
 
 const NewPostPage=(props)=>{
     const[user , setUser]=useState();
@@ -40,23 +39,25 @@ const NewPostPage=(props)=>{
         fetchData();
     },[])
 
+    useEffect(() => {
+
+        const rightOnlineUsersBar = document.getElementById('#right__online-users__bar');
+        if(rightOnlineUsersBar){
+            rightOnlineUsersBar.style.backgroundColor = '#242527'
+            rightOnlineUsersBar.style.height = '100vh'
+            rightOnlineUsersBar.style.transform = 'translateX(101%) translateZ(0)'
+            rightOnlineUsersBar.style.boxShadow = '-8px -4px 10px rgba(0 , 0 , 0 , 0.5)'
+        }
+
+        const crossCloser = document.getElementById('#right__online-users__bar-cross-closer');
+        if(crossCloser){
+            crossCloser.style.display = 'inline-block'
+        }
+
+    },[])
     
     return(
         <div className="new-post-page-full-container">
-            <Suspense fallback = {<></>}>
-                <RightOnlineUsersBar
-                    viewingUserid={user && user._id}
-                    style = {{
-                        backgroundColor : "#242527",
-                        height : "100vh",
-                        transform : "translateX(101%) translateZ(0)",
-                        boxShadow : "-8px -4px 10px rgba(0 , 0 , 0 , 0.5)"
-                    }}
-                    crossCloserStyle = {{
-                        display : "inline-block"
-                    }}
-                />
-            </Suspense>
         <div className="new-post-page-container">      
             {user && <PostForm
                 userid={user._id}

@@ -2,8 +2,6 @@ import { lazy, memo, Suspense, useEffect, useRef, useState } from "react";
 import "./FriendRequest.css";
 import Cookies from "js-cookie";
 import axios from "axios";
-
-import RightOnlineUsersBar from "../../component/rightOnlineUsersBar/rightOnlineUsersBar";
 const FriendRequestCard = lazy(() => import("./components/FriendRequestCard"));
 
 const FriendRequest = (props) => {
@@ -14,8 +12,24 @@ const FriendRequest = (props) => {
 
     useEffect(() => {
         if (window.innerWidth > 900)
+        {
             props && props.showLeftNavbar && props.showLeftNavbar();
+            const rightOnlineUsersBar = document.getElementById('#right__online-users__bar');
+            if(rightOnlineUsersBar){
+                rightOnlineUsersBar.style.backgroundColor = 'transparent'
+                rightOnlineUsersBar.style.height = '100vh'
+                rightOnlineUsersBar.style.transform = 'translateX(0) translateZ(0)'
+                rightOnlineUsersBar.style.boxShadow = 'none'
+            }
+      
+            const crossCloser = document.getElementById('#right__online-users__bar-cross-closer');
+            if(crossCloser){
+                crossCloser.style.display = 'none'
+            }
+        }
         else props && props.hideLeftNavbar && props.hideLeftNavbar();
+
+        
     }, []);
 
     useEffect(() => {
@@ -77,9 +91,7 @@ const FriendRequest = (props) => {
 
     return (
         <div className="friend-request-page-full-div">
-            <RightOnlineUsersBar viewingUserid={user && user._id} />
             <div className="friend-request-page-inner-div">
-                {/* { */}
                 <Suspense fallback={<></>}>
                     {friendReqRecievedUsersArray &&
                         friendReqRecievedUsersArray.map((eachUser) => {

@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import "./postCard.css";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
-import { IoCloseOutline } from "react-icons/io5";
 import Cookies from "js-cookie";
 import Avatar from "../Avatar/Avatar";
 import LottieAnimation from "../../Pages/lottiAnimation";
@@ -511,4 +510,4 @@ const PostCard = (props) => {
   );
 };
 
-export default PostCard;
+export default memo(PostCard);

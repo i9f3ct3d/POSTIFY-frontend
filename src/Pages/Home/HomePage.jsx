@@ -1,9 +1,8 @@
-import React, { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { lazy, memo, Suspense, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import "./HomePage.css";
 import Avatar from "../../component/Avatar/Avatar";
-import RightOnlineUsersBar from "../../component/rightOnlineUsersBar/rightOnlineUsersBar";
 import newPostLotti from "../../images/newpostLotti.json";
 import LottiAnimation from "../lottiAnimation";
 import { useHistory, Link } from "react-router-dom";
@@ -65,9 +64,22 @@ const HomePage = (props) => {
   useEffect(() => {
     if (window.innerWidth > 900) {
       props && props.showLeftNavbar && props.showLeftNavbar();
+      const rightOnlineUsersBar = document.getElementById('#right__online-users__bar');
+      if(rightOnlineUsersBar){
+          rightOnlineUsersBar.style.backgroundColor = 'transparent'
+          rightOnlineUsersBar.style.height = '100vh'
+          rightOnlineUsersBar.style.transform = 'translateX(0) translateZ(0)'
+          rightOnlineUsersBar.style.boxShadow = 'none'
+      }
+
+      const crossCloser = document.getElementById('#right__online-users__bar-cross-closer');
+      if(crossCloser){
+          crossCloser.style.display = 'none'
+      }
     } else {
       props && props.hideLeftNavbar && props.hideLeftNavbar();
     }
+
   }, []);
 
   useEffect(() => {
@@ -182,7 +194,6 @@ const HomePage = (props) => {
 
   return (
     <div className="home-page-container">
-      <RightOnlineUsersBar viewingUserid={viewingUser && viewingUser._id} />
       <div
         onClick={() => {
           history.push("/newpost");
@@ -266,4 +277,4 @@ const HomePage = (props) => {
   );
 };
 
-export default React.memo(HomePage);
+export default memo(HomePage);

@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { lazy, memo, Suspense, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import "./SignUp.css";
@@ -461,4 +461,4 @@ const SignUp = ({ hideLeftNavbar }) => {
   );
 };
 
-export default React.memo(SignUp);
+export default memo(SignUp);

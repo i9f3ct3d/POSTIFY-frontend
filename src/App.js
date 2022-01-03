@@ -1,5 +1,5 @@
 import "./App.css";
-import { Suspense, lazy, useState } from "react";
+import { Suspense, lazy, useState, useRef } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -10,7 +10,7 @@ import {
 import Loader from "./component/Loader/Loader";
 import LoadingBar from "react-top-loading-bar";
 import Cookies from "js-cookie";
-
+const RightOnlineUsersBar = lazy(() => import( "./component/rightOnlineUsersBar/rightOnlineUsersBar"))
 const BackgroundAnimation = lazy(() => import('./component/BackgroundAnimation/BackgroundAnimation'))
 const Navbar = lazy(() => import("./component/navbar/navbar"));
 const LeftNavbar = lazy(() => import("./component/leftNavbar/leftNavbar"));
@@ -87,7 +87,21 @@ function App() {
   };
 
   const [progress, setProgress] = useState(0);
+  const [onlineUsersIdArray , setOnlineUserIdArray] = useState([]);
+
   const cookie = Cookies.get("x-auth-token");
+  const sendMessageSocketRef = useRef();
+  const updateArrivalMessageRef = useRef();
+
+  const callSendMessageSocket = (data) =>{
+    sendMessageSocketRef && sendMessageSocketRef.current && sendMessageSocketRef.current.sendMessageSocket(data);
+  }
+
+  const callUpdateArrivalMessage = (data) => {
+    console.log(updateArrivalMessageRef);
+    updateArrivalMessageRef && updateArrivalMessageRef.current && updateArrivalMessageRef.current.updateArrivalMessage(data)
+  }
+
 
   return (
     <div className="App">
@@ -97,12 +111,26 @@ function App() {
           progress={progress}
           onLoaderFinished={() => setProgress(0)}
         />
+        {window.location.pathname !== '/signup' && window.location.pathname !== '/login' && window.location.pathname !== '/contact' && window.location.pathname !== '/error' && 
+        <Suspense fallback = {<></>}>
+          <RightOnlineUsersBar
+            ref = {sendMessageSocketRef}
+            callUpdateArrivalMessage = {callUpdateArrivalMessage}
+            setOnlineUserIdArray = {(data) => {
+              setOnlineUserIdArray(data)
+            }}
+          />
+        </Suspense>
+        }
         <Suspense fallback={<span></span>}>
           <BackgroundAnimation />
         </Suspense>
         <Suspense fallback={<span></span>}>
-          {window.location.pathname !== "/contact" &&
-            window.location.pathname !== "/error" && <LeftNavbar />}
+          { window.location.pathname !== "/contact" &&
+            window.location.pathname !== "/error" && 
+            window.location.pathname !== "/signup" &&
+            window.location.pathname !== "/login" &&
+            <LeftNavbar />}
         </Suspense>
 
         <Suspense fallback={<span></span>}>
@@ -266,11 +294,14 @@ function App() {
             <Route path="/messagepage/:myuserid/:searcheduserid" exact>
               {cookie ? (
                 <MessagePage
+                  ref = {updateArrivalMessageRef}
                   showLeftNavbar={showLeftNavbar}
                   hideLeftNavbar={hideLeftNavbar}
                   setProgress={(givenProgress) => {
                     setProgress(givenProgress);
                   }}
+                  callSendMessageSocket = {callSendMessageSocket}
+                  onlineUsersIdArray = {onlineUsersIdArray}
                 />
               ) : (
                 <div>

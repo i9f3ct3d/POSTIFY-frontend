@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react'
+import { forwardRef, memo } from 'react'
 import './Loader.css'
 
 const Loader = ({className , style , loaderStyle} , ref) => {
@@ -94,4 +94,4 @@ const Loader = ({className , style , loaderStyle} , ref) => {
     )
 }
 
-export default React.memo(forwardRef(Loader));
+export default memo(forwardRef(Loader));

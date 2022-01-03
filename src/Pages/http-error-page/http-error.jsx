@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import BackgroundAnimation from "../../component/BackgroundAnimation/BackgroundAnimation";
+import { memo, useEffect } from "react";
 import "./http-error.css";
 
 const Httperror=props=>
@@ -24,4 +23,4 @@ const Httperror=props=>
         </div>
     )
 }
-export default React.memo(Httperror);
+export default memo(Httperror);

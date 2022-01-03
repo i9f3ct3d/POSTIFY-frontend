@@ -1,4 +1,4 @@
-import React, { useState , forwardRef } from 'react';
+import { memo, useState , forwardRef } from 'react';
 
 import './inputField.css';
 
@@ -22,4 +22,4 @@ const InputField = (props , ref) =>{
     );
 }
 
-export default React.memo(forwardRef(InputField));
+export default memo(forwardRef(InputField));

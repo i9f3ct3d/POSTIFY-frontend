@@ -1,4 +1,4 @@
-import React , { forwardRef } from 'react'
+import { memo ,  forwardRef } from 'react'
 import './GlobalButton.css'
 
 const GlobalButton = (props , ref) => {
@@ -13,4 +13,4 @@ const GlobalButton = (props , ref) => {
     )
 }
 
-export default React.memo(forwardRef(GlobalButton));
+export default memo(forwardRef(GlobalButton));

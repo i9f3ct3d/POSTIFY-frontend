@@ -1,4 +1,4 @@
-import React from "react"
+import { memo } from "react"
 
 import "./PostCardPage.css";
 import Postcard from "../../component/postCard/postCard"
@@ -27,4 +27,4 @@ const PostCardPage=(props)=>{
     )
 }
 
-export default PostCardPage;
+export default memo(PostCardPage);

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import emailjs from 'emailjs-com';
 import "./Contact.css"
 
@@ -200,4 +200,4 @@ const Contact=({hideLeftNavbar})=>{
     </div>)
 }
 
-export default React.memo(Contact);
+export default memo(Contact);

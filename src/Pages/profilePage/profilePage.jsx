@@ -5,7 +5,6 @@ import { BiDotsVerticalRounded } from "react-icons/bi";
 
 import './profilePage.css';
 import PopUp from './components/PopUp/popUp';
-import RightOnlineUsersBar from '../../component/rightOnlineUsersBar/rightOnlineUsersBar';
 import { useHistory, useParams } from 'react-router-dom';
 import Avatar from '../../component/Avatar/Avatar';
 import PostCardLoader from '../../component/PostCardLoader/PostCardLoader';
@@ -40,7 +39,21 @@ const ProfilePage = (props) => {
 
     useEffect(() => {
 
-        if(window.innerWidth > 900) props && props.showLeftNavbar && props.showLeftNavbar();
+        if(window.innerWidth > 900){
+            props && props.showLeftNavbar && props.showLeftNavbar();
+            const rightOnlineUsersBar = document.getElementById('#right__online-users__bar');
+            if(rightOnlineUsersBar){
+                rightOnlineUsersBar.style.backgroundColor = 'transparent'
+                rightOnlineUsersBar.style.height = '100vh'
+                rightOnlineUsersBar.style.transform = 'translateX(0) translateZ(0)'
+                rightOnlineUsersBar.style.boxShadow = 'none'
+            }
+      
+            const crossCloser = document.getElementById('#right__online-users__bar-cross-closer');
+            if(crossCloser){
+                crossCloser.style.display = 'none'
+            }
+        }
         else props && props.hideLeftNavbar && props.hideLeftNavbar();
     
     },[])
@@ -301,9 +314,6 @@ const ProfilePage = (props) => {
                 confirmPopUp={popUpFunction}
                 statement={popUpStatement}
             />
-            <RightOnlineUsersBar
-                viewingUserid = {myUserid && myUserid}
-            />
             <div style={{display:!showPopUp && "none"}} className="popup-backdrop"></div>
             <div style={{filter:showPopUp && "blur(5px)"}} className="profilepage-inner-div">
                 <section className="profilepage-section-1">
@@ -427,6 +437,6 @@ const ProfilePage = (props) => {
     );
 }
 
-export default ProfilePage;
+export default memo(ProfilePage);
 
 
