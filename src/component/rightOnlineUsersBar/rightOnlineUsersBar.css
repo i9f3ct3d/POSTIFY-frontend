@@ -40,61 +40,6 @@
     position: relative;
 }
 
-.online-users-div-loader{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    background: #1b1b1b;
-    z-index: 2;
-    overflow-y: hidden;
-    display: none;
-}
-
-.online-users-div-loader-part{
-
-    background: #242527;
-    height: 20px;
-    width: 10rem;
-    margin-bottom: 10px;
-    border-radius: 1px 5px 5px 1px;
-    margin-left: 60px;
-    opacity: 1;
-    /* transform: translateY(-20px); */
-    /* animation: animate-loader 2s linear infinite; */
-
-}
-
-.online-users-div-loader-part::before{
-    content:"";
-    position: absolute;
-    left: -50px;
-    top: 50%;
-    width: 40px;
-    height: 40px;
-    border-radius: 100%;
-    background-color: #242527;
-    transform: translateY(-50%);
-}
-
-.online-users-div-loader-part-1{
-    width: 12rem;
-    /* position: relative; */
-}
-.online-users-div-loader-part-2{
-    width: 8rem;
-    position: relative;
-}
-.online-users-div-loader-part-3{
-    width: 10rem;
-    /* position: relative; */
-}
-.online-users-div-loader-part-4{
-    width: 5rem;
-    /* position: relative; */
-}
-
 .right-online-users-bar-eachuser-div{
     width: 100%;
     height: 5rem;

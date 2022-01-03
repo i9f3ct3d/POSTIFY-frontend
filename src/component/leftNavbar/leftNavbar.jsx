@@ -1,101 +1,92 @@
-import React from 'react';
-import Avatar from '../Avatar/Avatar';
-import LeftNavbarLinks from './components/leftnavbarlinks';
-import './leftNavbar.css';
-import { IoCloseOutline } from 'react-icons/io5'
+import {
+    useState,
+    useEffect,
+    useRef,
+    forwardRef,
+    memo,
+    lazy,
+    Suspense,
+} from "react";
+import "./leftNavbar.css";
+import Cookies from "js-cookie";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 
-const LeftNavbar=(props)=>{
+const LeftNavbarLinks = lazy(() => import("./components/leftnavbarlinks"));
+const Avatar = lazy(() => import("../Avatar/Avatar"));
 
-    const leftNavbarLinks = [
-        <LeftNavbarLinks
-            key={1}
-            type = "saved"
-            text = "Saved"
-            onClick = {()=>{window.location="/savedposts"}}
-            delay = {1}
-        />,
-        <LeftNavbarLinks
-            key={2}
-            type = "friends"
-            text = "Friends"
-            delay = {2}
-        />,
-        <LeftNavbarLinks
-            key={3}
-            type = "starred"
-            text = "Starred"
-            delay = {3}
-        />,
-        <LeftNavbarLinks
-            key={4}
-            type = "memories"
-            text = "Memories"
-            delay = {4}
-        />,
-        <LeftNavbarLinks
-            key={5}
-            type = "weather"
-            text = "Weather"
-            delay = {5}
-        />,
-        <LeftNavbarLinks
-        key={6}
-            type = "groups"
-            text = "Groups"
-            delay = {6}
-        />,
-        <LeftNavbarLinks
-            key={7}
-            type = "pages"
-            text = "Pages"
-            delay = {7}
-        />,
-        <LeftNavbarLinks
-            key={8}
-            type = "messenger"
-            text = "Messenger"
-            delay = {8}
-        />
+const LeftNavbar = (props, ref) => {
+    const cookie = useRef(Cookies.get("x-auth-token"));
+    const [user, setUser] = useState(null);
 
-    ]
+    useEffect(() => {
+        const fetch = async () => {
+            try {
+                const res = await axios.get(
+                    process.env.REACT_APP_BACKEND_API_URL +
+                    "leftnavbar/?token=" +
+                    cookie.current
+                );
 
-    const leftNavbarCloseHandler = () => {
-
-        const leftNavbar = document.querySelectorAll(".left-navbar-full-div");
-
-        leftNavbar.forEach(l => {
-            l.style.transform = "translateX(-101%) translateZ(0)"
-        });
-
-    }
-
-    return(
-        <div style = {props && props.style && props.style} className="left-navbar-full-div">
-            <div style = {props && props.crossCloserStyle && props.crossCloserStyle} onClick = {leftNavbarCloseHandler} className="left-navbar-mobile-cross-div">
-                <IoCloseOutline
-                    
-                />
-            </div>
-            <div className="left-navbar-inner-div">
-                <div onClick={()=>{window.location = "/myprofile"}} className="left-navbar-profile-link-div">
-                    <Avatar
-                        height = "2.2rem"
-                        width = "2.2rem"
-                        image = {props && props.profilePic}
-                    />
-                    <span className="left-navbar-profile-link-text">{props && props.username}</span>
-                </div>
-                {
-                    leftNavbarLinks.map((eachLink)=>{
-                        return(
-                            eachLink
-                        );
-                    })
+                if (res.status === 200) {
+                    setUser(res.data);
                 }
+            } catch (error) {
+                window.location = "/error";
+            }
+        };
+
+        cookie.current && fetch();
+    }, []);
+
+    const history = useHistory();
+
+    return (
+        <div id="#left-navbar-full-div" className="left-navbar-full-div">
+            <div className="left-navbar-inner-div">
+                <div
+                    onClick={() => {
+                        history.push("/myprofile");
+                    }}
+                    className="left-navbar-profile-link-div"
+                >
+                    <Suspense fallback={<span></span>}>
+                        <Avatar
+                            height="2.2rem"
+                            width="2.2rem"
+                            image={user && user.userProfilePic}
+                        />
+                    </Suspense>
+                    <span className="left-navbar-profile-link-text">
+                        {user && user.username}
+                    </span>
+                </div>
+                <Suspense fallback={<></>}>
+                    <LeftNavbarLinks
+                        key={1}
+                        type="saved"
+                        text="Saved"
+                        onClick={() => {
+                            history.push("/savedposts");
+                        }}
+                        delay={1}
+                    />
+                    <LeftNavbarLinks key={2} type="friends" text="Friends" delay={2} />
+                    <LeftNavbarLinks key={3} type="starred" text="Starred" delay={3} />
+                    <LeftNavbarLinks key={4} type="memories" text="Memories" delay={4} />
+                    <LeftNavbarLinks key={5} type="weather" text="Weather" delay={5} />
+                    <LeftNavbarLinks key={6} type="groups" text="Groups" delay={6} />
+                    <LeftNavbarLinks key={7} type="pages" text="Pages" delay={7} />
+                    <LeftNavbarLinks
+                        key={8}
+                        type="messenger"
+                        text="Messenger"
+                        delay={8}
+                    />
+                </Suspense>
             </div>
         </div>
     );
+};
 
-}
-
-export default React.memo(LeftNavbar);
+export default memo(forwardRef(LeftNavbar));

@@ -1,10 +1,12 @@
 .chatbubble-div{
     text-align: left;
+    overflow-x: visible;
+    margin: 0 auto 10px 1rem;
 }
 
 .chatbubble-content-div{
     margin: 0;
-    border-radius: 0 10px 10px 10px;
+    border-radius: 0 25px 25px 25px;
     background-color: #262D31;
     color: #C8E7DD;
     font-family: 'Roboto';
@@ -12,19 +14,46 @@
     word-spacing: 2px;
     margin: 0;
     word-break: break-all;
-    margin-bottom: 10px;
-    padding: 15px 10px 0.5rem 15px;
     display: inline-block;
     min-width: 150px;
-    max-width: 70%;
+    max-width: 80%;
     text-align: left;
+    border: 1px solid #121212;
+    position: relative;
+    /* overflow-y: visible; */
+    overflow-x: visible;
+    z-index: 0;
 }
 
+.chatbubble-arrow{
+    position: absolute;
+    width: 1rem;
+    height: 1rem;
+    background-color: rgb(19, 162, 165);
+    top: -1px;
+    right: -16px;
+    clip-path: polygon(0% 0%, 0% 100%, 100% 0%);
+    border-top: 1px solid cyan;
+    z-index: 2;
+
+
+    right: 100%;
+    transform: scaleX(-1);
+    background-color: #262D31;
+    border-top: 1px solid #121212;
+}
+
+.chatbubble-chat-content__div{
+    padding: 0 15px;
+    width: calc(100% - 30px);
+    margin-top: 15px;
+    height: fit-content;
+}
 
 .chatbubble-content{
     font-size: 1rem;
     margin: 0;
-    font-family: 'Comfortaa' , cursive;
+    font-family: 'Roboto' , cursive;
 }
 
 .chatbubble-time-div{
@@ -34,7 +63,8 @@
 
 .chatbubble-time{
     display: inline-block;
-    margin: 5px 0 2px auto;
-    font-size: 0.5rem;
-    color: cyan;
+    margin: 5px 15px 2px auto;
+    font-size: 1rem;
+    color: rgb(204, 201, 201);
+    font-family: 'Barlow Condensed';
 }

@@ -7,24 +7,28 @@
     overflow: hidden;
     transition: transform 500ms ease-in-out;
     z-index: 0;
+    overflow: hidden;
 }
 
 .global-button{
     width: 100%;
     height: 100%;
-    border: 2px solid greenyellow;
-    border-radius: 3px;
+    border: 1.5px solid greenyellow;
     font-family: 'Comfortaa' , cursive;
     background: transparent;
     cursor: pointer;
     color: greenyellow;
-    transition: color 500ms ease-in-out;
+    transition: color 500ms ease-in-out , text-shadow 500ms ease-in-out;
     text-shadow: 1px 1px 5px rgba(0 , 0 , 0 , 0.5);
     font-size: 1rem;
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 0;
+}
+
+.global-button__icon-div{
+    margin-right: 5px;
 }
 
 .global-button-background{
@@ -40,14 +44,42 @@
     border-radius: 5px;
 }
 
+.global-button-top-right-div{
+
+    position: absolute;
+    height: 5px;
+    width: 5px;
+    right: 0;
+    top: 0;
+    background-color: greenyellow;
+    transition: background-color 500ms ease-in-out;
+}
+
+.global-button-bottom-left-div{
+
+    position: absolute;
+    left: 5px;
+    bottom: 5px;
+    height: 7px;
+    width: 7px;
+    border-left: 1px solid greenyellow;
+    border-bottom: 1px solid greenyellow;
+    transition: border-color 500ms ease-in-out;
+
+}
+
 .global-button-full-div:hover .global-button-background{
     transform: rotate(10deg);
 }
 
 .global-button-full-div:hover .global-button{
     color: whiteSmoke !important;
+    text-shadow: 1px 1px 1px rgba(0 , 0 , 0 , 0.5);
 }
 
-.global-button-full-div:hover{
-    transform: scale(1.05);
+.global-button-full-div:hover .global-button-bottom-left-div{
+    border-color: whiteSmoke !important;
+}
+.global-button-full-div:hover .global-button-top-right-div{
+    background-color: whiteSmoke !important;
 }

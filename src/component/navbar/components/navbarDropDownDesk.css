@@ -4,9 +4,6 @@
     border-radius: 100%;
     display: inline-block;
     font-size: 2rem;
-    /* height: 30px;
-    width: 30px; */
-    /* padding: 7px; */
     height: fit-content;
     width: fit-content;
     background: #121212;
@@ -37,7 +34,7 @@
     position: absolute;
     width: 15rem;
     height: auto;
-    border-radius:10px;
+    border-radius:2px;
     overflow: hidden;
     right: -5px;
     top: -5px;
@@ -46,14 +43,14 @@
     justify-content: center;
     align-items: center;
     transform: translateX(40%) translateY(-45%) translateZ(0) scale(0.1);
-    padding: 30px 5px 3px 5px;
+    padding: 30px 5px 10px 5px;
     background: #121212;
     flex-wrap: nowrap;
     z-index: 1;
     cursor: default;
-    box-shadow: -5px 5px 10px rgba(0 , 0 , 0 , 0.5);
     pointer-events: none;
-    transition: transform 500ms ease-in-out,opacity 500ms ease-in-out;
+    transition: transform 200ms ease-in-out,opacity 200ms ease-in-out;
+    border: 1px solid #343538;
 }
 
 
@@ -92,6 +89,12 @@
     transform: scale(1.05) translateZ(0);
 }
 
+.newnavbar-dropdown-desk-aboutus-icon{
+
+    font-size: 1.5rem;
+
+}
+
 
 .newnavbar-dropdown-desk-avatar-aboutus-text{
     margin: 0;
@@ -99,29 +102,9 @@
     font-size: 1.2rem;
     margin-left: 15px;
     font-family: 'Comfortaa' , cursive;
-    font-weight: 600;
+    /* font-weight: 600; */
 }
 
-.newnavbar-dropdown-desk-logout{
-    display: flex;
-    margin-top: 10px;
-    color: red;
-    justify-content: flex-start;
-    align-items: center;
-    cursor: pointer;
-    border-radius: 10px;
-    border: 2px solid red;
-    padding: 5px 10px;
-}
-
-
-.newnavbar-dropdown-desk-avatar-logout-text{
-    margin: 0;
-    text-align: center;
-    font-size: 1.2rem;
-    margin-left: 15px;
-    text-shadow: 3px 3px 5px rgba(255, 0, 0, 0.548);
-}
 
 .newnavbar-dropdown-desk-close-button{
     position: absolute;

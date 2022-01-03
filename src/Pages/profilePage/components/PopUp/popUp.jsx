@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 
 import './popUp.css';
 
@@ -29,4 +29,4 @@ const PopUp=(props)=>{
     );
 }
 
-export default React.memo(PopUp);
+export default memo(PopUp);

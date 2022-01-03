@@ -1,11 +1,11 @@
-import React, { useState , useRef, useEffect} from "react";
+import {lazy , Suspense, useState , useRef, useEffect, memo} from "react";
 import axios from "axios";
-import Cookies from "js-cookie";
 import "./PostForm.css";
-import Navbar from "../../component/navbar/navbar";
 import imageCompression from 'browser-image-compression';
-import BackgroundAnimation from "../../component/BackgroundAnimation/BackgroundAnimation";
 import InputField from '../../component/inputField/inputField'
+import Loader from '../../component/Loader/Loader'
+
+const Avatar = lazy(() => import( "../../component/Avatar/Avatar"))
 
 
 const PostForm = (props) => {
@@ -20,6 +20,7 @@ const PostForm = (props) => {
   const titleInput = useRef();
   const contentInputRef = useRef();
   const formRef = useRef();
+  const loaderRef = useRef();
 
   const pickFileHandler=(event)=>{
     event.preventDefault();
@@ -28,8 +29,9 @@ const PostForm = (props) => {
 
   const onsubmitHandler = async (event) => {
     event.preventDefault();
-
-    props && props.showLoader && props.showLoader();
+    if(loaderRef && loaderRef.current){
+      loaderRef.current.style.display = 'flex';
+    }
 
     let allcondition = true;
 
@@ -93,13 +95,16 @@ const PostForm = (props) => {
           setPreview(null);
           setCompressedImage(null);
 
+          if(loaderRef && loaderRef.current){
+            loaderRef.current.style.display = 'none'
+          }
+
         }
       } catch (error) {
         window.location = "/error";
       }
     }
 
-    props && props.hideLoader && props.hideLoader();
 
   };
 
@@ -208,15 +213,28 @@ const PostForm = (props) => {
 
   return (
     <div style={{width:"100%"}}>
-    <Navbar />
-    <BackgroundAnimation/>
+    <Loader
+      ref = {loaderRef}
+      style = {{
+        marginTop : '64px',
+        backgroundColor : 'rgba(0 , 0 , 0 , 0.5)',
+        backdropFilter : 'blur(5px)',
+        display : 'none'
+      }}
+    />
     <div className="post-form-div">
       <h2 className="content-tagline">Say something about your day</h2>
         <h1 className="content-tagline-h1">so-far</h1>
-        <div className="post-card-underline" style={{height:"1px", width : "50%" , marginBottom : "20px"}}></div>
+        <div className="post-card-underline" style={{height:"1px", width : "100%" , marginBottom : "20px"}}></div>
         <div className="postform-header-div">
           <div className="postform-user-image-div">
-            <img className="postform-user-image" src={props.userProfilePic} alt="userImage"/>
+          <Suspense fallback = {<></>}>
+            <Avatar 
+              height = '4rem'
+              width = '4rem'
+              image = {props.userProfilePic}
+            />
+            </Suspense>
           </div>
           <h4 className="postform-username">{props.username}</h4>
         </div>
@@ -250,10 +268,12 @@ const PostForm = (props) => {
         ></span>
         <br />
           <div className="post-form-add-image-svg-div">
+          <Suspense fallback = {<></>}>
             <AddImageSvg
               onClick={pickFileHandler}
               className="post-form-add-image-svg"
             />
+            </Suspense>
           </div>
           <br/>
         <button className="new-post-submit-button" type="submit">
@@ -265,4 +285,4 @@ const PostForm = (props) => {
   );
 };
 
-export default React.memo(PostForm);
+export default memo(PostForm);

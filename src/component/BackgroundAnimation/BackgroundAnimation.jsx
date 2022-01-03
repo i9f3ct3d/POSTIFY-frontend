@@ -1,18 +1,20 @@
-import React from 'react'
-import LottieAnimation from '../../Pages/lottiAnimation'
-import backgroundAnimation from '../../images/backgroundLotti.json';
-import './BackgroundAnimation.css'
+import { lazy, Suspense, memo } from "react";
+import backgroundAnimation from "../../images/backgroundLotti.json";
+import "./BackgroundAnimation.css";
+const LottieAnimation = lazy(() => import("../../Pages/lottiAnimation"));
 
 function BackgroundAnimation() {
-    return (
-        <div className="background-image-container-full-page">
+  return (
+    <div className="background-image-container-full-page">
+      <Suspense fallback={<></>}>
         <LottieAnimation
-          lotti = {backgroundAnimation}
-          height = "100vh"
-          width = "100vw"
+          lotti={backgroundAnimation}
+          height="calc(100vh - 70px)"
+          width="100vw"
         />
-        </div>
-    )
+      </Suspense>
+    </div>
+  );
 }
 
-export default React.memo(BackgroundAnimation)
+export default memo(BackgroundAnimation);

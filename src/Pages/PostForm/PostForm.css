@@ -7,13 +7,12 @@
   background-color: rgba(0, 0, 0, 0.61);
   backdrop-filter: blur(10px);
   /* filter: drop-shadow(0 0 30px grey); */
-  font-family: 'Comfortaa' , cursive;
+  font-family: cursive;
 }
 
 .content-tagline{
   display: inline-block;
-  color: rgba(54, 53, 53, 0.849);
-  text-shadow: 1px 1px 1px rgba(128, 128, 128, 0.548);
+  color: white;
   letter-spacing: 1px;
   word-spacing: 2px;
   margin-bottom: 0;
@@ -25,7 +24,7 @@
   margin-left: 20px;
   color: rgb(0, 195, 255);
   font-size: 3rem;
-  text-shadow: 1px 1px 1px rgba(128, 128, 128, 0.609);
+  margin-top: 0;
 }
 
 .postform-header-div{
@@ -38,7 +37,6 @@
   height: 4rem;
   width: 4rem;
   border-radius: 4rem;
-  border:2px solid white;
   display: inline-block;
 }
 

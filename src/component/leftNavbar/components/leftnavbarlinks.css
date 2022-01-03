@@ -1,12 +1,12 @@
 .left-navbar-link-full-div{
-    width: 15rem;
+    width: fit-content;
     height: 3rem;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     padding: 10px;
     cursor: pointer;
-    transform: translate3d(-90%, 0, 0);
+    transform: translate3d(-95%, 0, 0);
     transition: transform 200ms ease-in-out;
 }
 
@@ -19,14 +19,13 @@
 .left-navbar-link-text-div{
     width: calc(100% - calc(2rem + 10px));
     text-align: left;
-
+    
 }
 
 .left-navbar-link-text{
     font-family: 'Comfortaa' , cursive;
-    font-size: 1.2rem;
-    font-weight: 500;
     color: cyan;
+    font-size: 1rem;
 }
 
 

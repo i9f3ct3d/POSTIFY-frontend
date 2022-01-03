@@ -7,13 +7,12 @@ import Cookies from 'js-cookie';
 import GlobalButton from '../../GlobalButton/GlobalButton';
 
 const pathNameSet = new Set(
-  ['/signup','/login','/welcomepage']
+  ['/signup','/login','/contact']
 );
 
 const NavbarDropDownDesk = (props)=>{
 
-    const cookie = useRef(Cookies.get('x-auth-token'))
-
+    const cookie = Cookies.get('x-auth-token')
 
     const onlineUsersButtonClick = () => {
 
@@ -58,7 +57,7 @@ const NavbarDropDownDesk = (props)=>{
                     ref = {dropDownDeskRef}
                     className="newnavbar-dropdown-desk">
                       <i onClick={()=>{dropDownDeskCloseHandler();}} className="fas fa-times newnavbar-dropdown-desk-close-button"></i>
-                      <div style={{display : props && !props.cookie && "none"}} className="newnavbar-dropdown-desk-avatar">
+                      <div style={{display : (pathNameSet.has(window.location.pathname) || !cookie) && "none"}} className="newnavbar-dropdown-desk-avatar">
                         <Avatar
                           onClick={()=>{window.location="/myprofile"}}
                           height="4rem"
@@ -67,7 +66,7 @@ const NavbarDropDownDesk = (props)=>{
                         />
                         <p onClick={()=>{window.location="/myprofile"}} className="newnavbar-dropdown-desk-avatar-username">{(props && props.userName!= null) && props.userName}</p>
                       </div>
-                      <div style={{display : props && !props.cookie && "none"}}  className="newnavbar-dropdown-desk-underline"></div>
+                      <div style={{display : (pathNameSet.has(window.location.pathname) || !cookie) && "none"}}  className="newnavbar-dropdown-desk-underline"></div>
                      <div onClick = { () => {
 
                         window.open("https://sushantasaren.vercel.app/")
@@ -76,22 +75,34 @@ const NavbarDropDownDesk = (props)=>{
                         <i className="far fa-address-card newnavbar-dropdown-desk-aboutus-icon"></i>
                         <p className="newnavbar-dropdown-desk-avatar-aboutus-text">About me</p>
                       </div>
-                      <div onClick={()=>{window.location="/contact"}} className="newnavbar-dropdown-desk-aboutus">
+                      <div onClick={()=>{window.open("/contact")}} className="newnavbar-dropdown-desk-aboutus">
                         <i style={{color : "rgb(224, 198, 50)"}} className="far fa-paper-plane newnavbar-dropdown-desk-aboutus-icon"></i>
                         <p style={{color : "rgb(224, 198, 50)"}} className="newnavbar-dropdown-desk-avatar-aboutus-text">Contact me</p>
                       </div>
-                      <div style={{display : pathNameSet.has(window.location.pathname) && "none"}} onClick={onlineUsersButtonClick} className="newnavbar-dropdown-desk-aboutus">
+                      <div style={{display : (pathNameSet.has(window.location.pathname) || !cookie) && "none"}} onClick={onlineUsersButtonClick} className="newnavbar-dropdown-desk-aboutus">
                         <i style={{color : "greenYellow"}} className="fas fa-signal newnavbar-dropdown-desk-aboutus-icon"></i>
                         <p style={{color : "greenYellow"}} className="newnavbar-dropdown-desk-avatar-aboutus-text">Online users</p>
                       </div>
-                    <div style={{display : props && !props.cookie && "none"}}  onClick={()=>{Cookies.remove('x-auth-token'); window.location="/login"}} className="newnavbar-dropdown-desk-logout">
-                        <i className="fas fa-sign-out-alt newnavbar-dropdown-desk-logout-icon"></i>
-                        <p className="newnavbar-dropdown-desk-avatar-logout-text">Log out</p>
-                    </div>
-                    {cookie && !cookie.current && <GlobalButton
+
+                    {!pathNameSet.has(window.location.pathname) && cookie && <GlobalButton
+                        icon = {<i style = {{marginRight : "10px"}}  className = 'fas fa-sign-out-alt'></i>}
+                        text = {"  Log out"}
+                        style = {{width : "100%" , marginBottom : "5px"}}
+                        color = "red"
+                        borderColor = "red"
+                        backgroundColor = "red"
+                        onClick={()=>{
+
+                          Cookies.remove('x-auth-token'); 
+                          window.location="/login"
+
+                        }}
+                    />}
+
+                    {(pathNameSet.has(window.location.pathname) || !cookie) && <GlobalButton
                         icon = {<i style = {{marginRight : "10px"}}  className = 'fas fa-sign-in-alt'></i>}
                         text = {"  Login"}
-                        style = {{width : "100%"}}
+                        style = {{width : "100%" , marginBottom : "5px"}}
                         color = "#5CA3DF"
                         borderColor = "#5CA3DF"
                         backgroundColor = "#5CA3DF"
@@ -99,7 +110,7 @@ const NavbarDropDownDesk = (props)=>{
                             window.location = "/login"
                         }}
                     />}
-                    {cookie && !cookie.current && <GlobalButton
+                    {(pathNameSet.has(window.location.pathname) || !cookie) && <GlobalButton
                         icon = {<i style = {{marginRight : "10px"}}  className = 'fas fa-user-plus'></i>}
                         text = {"  Sign up"}
                         style = {{width : "100%"}}

@@ -1,49 +1,33 @@
-import React, { useEffect, useRef, useState } from "react";
+import { lazy, memo, Suspense, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-
-import Logo from "../../component/logo/logo";
 import "./SignUp.css";
-import Navbar from "../../component/navbar/navbar";
-import { IoArrowRedo } from 'react-icons/io5'
+import { IoArrowRedo } from "react-icons/io5";
 import imageCompression from "browser-image-compression";
-import BackgroundAnimation from '../../component/BackgroundAnimation/BackgroundAnimation'
-import InputField from "../../component/inputField/inputField";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Link } from 'react-router-dom'
+import noPicAvatar from "../../images/noPicAvatar.jpg"
 
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import GlobalButton from "../../component/GlobalButton/GlobalButton";
-import noPicAvatar from '../../images/noPicAvatar.jpg';
+const InputField = lazy(() => import("../../component/inputField/inputField"));
+const Logo = lazy(() => import("../../component/logo/logo"));
+const GlobalButton = lazy(() =>
+  import("../../component/GlobalButton/GlobalButton")
+);
 
-const SignUp = () => {
-
-
+const SignUp = ({ hideLeftNavbar }) => {
   const [file, setFile] = useState();
-  const [preview , setPreview]=useState(noPicAvatar);
-  const [compressedImage , setCompressedImage] = useState(null);
-
-
-  useEffect(()=>{
-    
-    const cookie  = Cookies.get('x-auth-token');
-
-    if(cookie){
-      window.location = "/home";
-    }
-
-  },[])
-
+  const [preview, setPreview] = useState(noPicAvatar);
+  const [compressedImage, setCompressedImage] = useState(null);
 
   const userEmailRef = useRef();
   const usernameRef = useRef();
   const userPasswordRef = useRef();
   const userConfirmPasswordRef = useRef();
 
-
-
-
   let validateEmail = (email) => {
-    let re =/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    let re =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     if (re.test(email)) {
       return true;
@@ -58,11 +42,12 @@ const SignUp = () => {
     const submittingUsername = usernameRef.current.value.trim();
     const submittingUserEmail = userEmailRef.current.value.trim();
     const submittingPassword = userPasswordRef.current.value.trim();
-    const submittingConfirmPassword = userConfirmPasswordRef.current.value.trim();
+    const submittingConfirmPassword =
+      userConfirmPasswordRef.current.value.trim();
 
-    if(submittingUsername.length < 5 || submittingUsername.length > 12){
+    if (submittingUsername.length < 5 || submittingUsername.length > 12) {
       //toast => invalid username
-      toast.error('Username must be 5 to 10 characters long', {
+      toast.error("Username must be 5 to 10 characters long", {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -70,13 +55,13 @@ const SignUp = () => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        });
+      });
       return;
     }
 
-    if(!validateEmail(submittingUserEmail)){
+    if (!validateEmail(submittingUserEmail)) {
       //toast => invalid useremail
-      toast.error('Invalid email entered!', {
+      toast.error("Invalid email entered!", {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -84,13 +69,13 @@ const SignUp = () => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        });
+      });
       return;
     }
 
-    if(!submittingPassword.length){
+    if (!submittingPassword.length) {
       //toast => invalid password
-      toast.error('Invalid password enetered!', {
+      toast.error("Invalid password enetered!", {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -98,12 +83,12 @@ const SignUp = () => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        });
+      });
       return;
     }
 
-    if(submittingPassword !== submittingConfirmPassword){
-      // toast => password didn't matched 
+    if (submittingPassword !== submittingConfirmPassword) {
+      // toast => password didn't matched
       toast.error("Password didn't matched!", {
         position: "bottom-right",
         autoClose: 5000,
@@ -112,121 +97,96 @@ const SignUp = () => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        });
+      });
       return;
     }
 
+    try {
+      const formData = new FormData();
 
+      formData.append("username", submittingUsername);
+      formData.append("email", submittingUserEmail);
+      formData.append("password", submittingPassword);
+      formData.append("isProfilePic", file ? true : false);
+      formData.append("profilePic", compressedImage);
 
-      try {
+      const response = await axios.post(
+        process.env.REACT_APP_BACKEND_API_URL + "signup",
+        formData
+      );
 
-        const formData=new FormData();
-
-        formData.append("username" , submittingUsername);
-        formData.append("email" , submittingUserEmail);
-        formData.append("password" , submittingPassword);
-        formData.append("isProfilePic" , file ? true : false);
-        formData.append("profilePic" , compressedImage);
-
-        const response = await axios.post(
-          process.env.REACT_APP_BACKEND_API_URL + "signup",formData);
-
-        if (response.data.credentials === "valid") {
-          Cookies.set("x-auth-token", response.data.token, { expires: 7 });
-          window.location = "/home";
-
-
-        } else {
-
-          // toast => email is already taken
-          toast.error('Email is already taken!', {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            });
-
-        }
-      } catch (error) {
-        window.location = "/error";
+      if (response.data.credentials === "valid") {
+        Cookies.set("x-auth-token", response.data.token, { expires: 7 });
+        window.location = "/home";
+      } else {
+        // toast => email is already taken
+        toast.error("Email is already taken!", {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       }
+    } catch (error) {
+      window.location = "/error";
+    }
   };
 
-
-  const compressImage = async ()=>{
-
+  const compressImage = async () => {
     try {
-
       const options = {
         maxSizeMB: 0.2,
         maxWidthOrHeight: 1920,
-        useWebWorker: true
-      }
-  
+        useWebWorker: true,
+      };
+
       const compressedFile = await imageCompression(file, options);
-  
+
       setCompressedImage(compressedFile);
-      
     } catch (error) {
-      
       window.location = "/error";
-
     }
+  };
 
-
-  }
-
-
-  useEffect(()=>{
-
-    if(file){
-
-      if(file.size > (200 * 1024)){
-
+  useEffect(() => {
+    if (file) {
+      if (file.size > 200 * 1024) {
         compressImage();
-
-      }else{
+      } else {
         setCompressedImage(file);
       }
-
-
     }
+  }, [file]);
 
-  },[file])
+  const filePickerRef = useRef();
 
-
-  const filePickerRef=useRef();
-
-  const pickFileHandler=(e)=>{
+  const pickFileHandler = (e) => {
     e.preventDefault();
     filePickerRef.current.click();
-  }
+  };
 
-  useEffect(()=>{
-
-    if(!file)
-    {
+  useEffect(() => {
+    if (!file) {
       return;
     }
 
     const fileReader = new FileReader();
 
-    fileReader.onload=()=>{
+    fileReader.onload = () => {
       setPreview(fileReader.result);
-    }
+    };
     fileReader.readAsDataURL(file);
+  }, [file]);
 
-  },[file]);
+  const googleSignUpHandler = async () => {
+    window.location =
+      process.env.REACT_APP_BACKEND_API_URL + "signupusinggoogle";
+  };
 
-  const googleSignUpHandler=async()=>{
-      window.location = process.env.REACT_APP_BACKEND_API_URL+"signupusinggoogle";
-  }
-
-
-  const GoogleSvg=(props)=>{
+  const GoogleSvg = (props) => {
     return (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -236,7 +196,7 @@ const SignUp = () => {
         width="100%"
         height="100%"
         xmlSpace="preserve"
-        preserveAspectRatio="xMidYMid meet" 
+        preserveAspectRatio="xMidYMid meet"
         viewBox="0 0 192 192"
         {...props}
       >
@@ -298,38 +258,34 @@ const SignUp = () => {
           />
         </g>
       </svg>
-    )
-  }
-
+    );
+  };
 
   const imageInputRef = useRef();
   const writtenInputRef = useRef();
 
+  const observer = new IntersectionObserver(([entry]) => {
+    imageInputRef.current.style.opacity = "1";
+    imageInputRef.current.style.transform = "translateX(0) translateZ(0)";
 
-  const observer = new IntersectionObserver(
-    ([entry]) => {
-
-      imageInputRef.current.style.opacity = "1";
-      imageInputRef.current.style.transform = "translateX(0) translateZ(0)";
-
-      writtenInputRef.current.style.opacity = "1";
-      writtenInputRef.current.style.transform = "translateX(0) translateZ(0)";
-
-    }
-  )
+    writtenInputRef.current.style.opacity = "1";
+    writtenInputRef.current.style.transform = "translateX(0) translateZ(0)";
+  });
 
   useEffect(() => {
-    observer.observe(writtenInputRef.current)
+    observer.observe(writtenInputRef.current);
     // Remove the observer as soon as the component is unmounted
-    return () => { observer.disconnect() }
-  }, [])
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
-
+  useEffect(() => {
+    hideLeftNavbar && hideLeftNavbar();
+  }, []);
 
   return (
     <div className="signup-page-div">
-      <Navbar />
-      <BackgroundAnimation/>
       <ToastContainer
         position="bottom-right"
         autoClose={5000}
@@ -340,125 +296,162 @@ const SignUp = () => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme = "colored"
+        theme="colored"
       />
-      <div className="signup-fulldiv" style={{width : "100%"}}>
-        
-        <div className="signup-div" style={{width : "100%"}}>
-          <form className="signup-full-form" onSubmit={onFormSubmitHandler} encType="multipart/form-data">
-
-              <div ref = {imageInputRef} className="img-input">
-                <img onClick={pickFileHandler} className="profile-pic-image-preview" src={preview}  />
-                <br/>
-                <input style={{display:"none"}} ref={filePickerRef} type="file" accept=".jpg , .jpeg , .png" onChange={(e)=>{setFile(e.target.files[0])}}/>
-                
+      <div className="signup-fulldiv" style={{ width: "100%" }}>
+        <div className="signup-div" style={{ width: "100%" }}>
+          <form
+            className="signup-full-form"
+            onSubmit={onFormSubmitHandler}
+            encType="multipart/form-data"
+          >
+            <div ref={imageInputRef} className="img-input">
+              <div className="profile-pic-image-preview-div">
+                <img
+                  onClick={pickFileHandler}
+                  className="profile-pic-image-preview"
+                  src={preview}
+                />
+                <div className="profile-pic-image-shining-div"></div>
+              </div>
+              <br />
+              <input
+                style={{ display: "none" }}
+                ref={filePickerRef}
+                type="file"
+                accept=".jpg , .jpeg , .png"
+                onChange={(e) => {
+                  setFile(e.target.files[0]);
+                }}
+              />
+              <Suspense fallback={<></>}>
                 <GlobalButton
-                  text = "Pick Image"
-                  icon = {<i style = {{marginRight : "10px"}} className="far fa-images"></i>}
-                  onClick = {pickFileHandler}
-                  style = {{
-                    width : "10rem",
-                    marginBottom : "10px"
+                  text="Pick Image"
+                  icon={
+                    <i
+                      style={{ marginRight: "10px" }}
+                      className="far fa-images"
+                    ></i>
+                  }
+                  onClick={pickFileHandler}
+                  style={{
+                    width: "10rem",
+                    marginBottom: "10px",
                   }}
-                  className = "login-page-image-picker-button"
+                  className="login-page-image-picker-button"
                 />
+              </Suspense>
+            </div>
 
+            <div ref={writtenInputRef} className="written-input">
+              <div className="signup-page-message-icon-div">
+                <IoArrowRedo className="signup-page-message-icon" />
               </div>
 
-            <div ref = {writtenInputRef} className="written-input" >
-
-            <div className = "signup-page-message-icon-div">                
-                <IoArrowRedo
-                  className = "signup-page-message-icon"
-                />
+              <div className="signup-page-logo-div">
+                <Suspense fallback={<></>}>
+                  <Logo className="signup-page-logo" />
+                </Suspense>
+                <div className="signup-page-logo-underline"></div>
+                <h1 className="signup-here-text">Sign Up Here</h1>
               </div>
-
-            <div className="signup-page-logo-div">
-              <Logo className = "signup-page-logo"
-              />
-              <div className="signup-page-logo-underline"></div>
-              <h1 className="signup-here-text">Sign Up Here</h1>
-            </div>
-            <div style={{borderRadius : "0 50px 50px 0", height : "10px" , backgroundColor : "cyan", marginLeft : "90px" , width : "15rem"}} className="underline signup-page-underline"></div>
-                
-            <div className="signup-page-inputs-div">
-              <InputField
-                ref = {usernameRef}
-                type = "text"
-                placeholder = "Username"
-                style = {{
-                  color : "whiteSmoke"
-                }}
-              />
-              <br/>
-              <br/>
-              <InputField
-                ref = {userEmailRef}
-                type = "text"
-                placeholder = "Email"
-                style = {{
-                  color : "whiteSmoke"
-                }}
-              />
-              <br/>
-              <br/>
-              <InputField
-                ref = {userPasswordRef}
-                type = "password"
-                placeholder = "Password"
-                style = {{
-                  color : "whiteSmoke"
-                }}
-              />
-              <br/>
-              <br/>
-              <InputField
-                ref = {userConfirmPasswordRef}
-                type = "password"
-                placeholder = "Confirm Password"
-                style = {{
-                  color : "whiteSmoke"
-                }}
-              />
-              <br/>
-              <br/>
-            </div>
-              <GlobalButton
-                          text = "Signup"
-                          borderColor = "greenYellow"
-                          color = "greenYellow"
-                          backgroundColor = "greenYellow"
-                          style = {{
-                            width : "276px",
-                            marginBottom : "20px"
-                          }}
-              />
-              
               <div
-                    
-                    style = {{
-                      backgroundColor : "#3D3F42",
-                      width : "276px",
-                      height : "1px",
-                      margin : "0 auto 10px auto"
-                    }}
-
+                style={{
+                  borderRadius: "0 50px 50px 0",
+                  height: "10px",
+                  backgroundColor: "greenYellow",
+                  marginLeft: "90px",
+                  width: "15rem",
+                }}
+                className="underline signup-page-underline"
               ></div>
 
-          <div onClick={googleSignUpHandler} className="google-Signup-div">
-              <div className="google-svg-div">
-                <GoogleSvg/>
+              <div className="signup-page-inputs-div">
+                <Suspense fallback={<></>}>
+                  <InputField
+                    ref={usernameRef}
+                    type="text"
+                    placeholder="Username"
+                    style={{
+                      color: "whiteSmoke",
+                    }}
+                  />
+                  <br />
+                  <br />
+                  <InputField
+                    ref={userEmailRef}
+                    type="text"
+                    placeholder="Email"
+                    style={{
+                      color: "whiteSmoke",
+                    }}
+                  />
+                  <br />
+                  <br />
+                  <InputField
+                    ref={userPasswordRef}
+                    type="password"
+                    placeholder="Password"
+                    style={{
+                      color: "whiteSmoke",
+                    }}
+                  />
+                  <br />
+                  <br />
+                  <InputField
+                    ref={userConfirmPasswordRef}
+                    type="password"
+                    placeholder="Confirm Password"
+                    style={{
+                      color: "whiteSmoke",
+                    }}
+                  />
+                  <br />
+                  <br />
+                </Suspense>
               </div>
-              <div className="google-Signup-text-div">
-                Sign Up with Google
+              <Suspense fallback={<></>}>
+                <GlobalButton
+                  text="Signup"
+                  borderColor="greenYellow"
+                  color="greenYellow"
+                  backgroundColor="greenYellow"
+                  style={{
+                    width: "276px",
+                    marginBottom: "20px",
+                  }}
+                />
+              </Suspense>
+              <div
+                style={{
+                  backgroundColor: "#3D3F42",
+                  width: "276px",
+                  height: "1px",
+                  margin: "0 auto 10px auto",
+                }}
+              ></div>
+
+              <div onClick={googleSignUpHandler} className="google-Signup-div">
+                <Suspense fallback={<></>}>
+                  <div className="google-svg-div">
+                    <GoogleSvg />
+                  </div>
+                </Suspense>
+                <div className="google-Signup-text-div">
+                  Sign Up with Google
+                </div>
               </div>
-            </div>
-            <span style ={{color : " whiteSmoke"}} >
-              Already registered{" "}
-              <a href="/login">
-                <i className="fas fa-sign-in-alt"></i> login
-              </a>
-            </span>
+              <span style={{ color: " whiteSmoke" }}>
+                Already registered{" "}
+                <Link
+                  style={{
+                    color: "cyan",
+                  }}
+                  to="/login"
+                >
+                  <i className="fas fa-sign-in-alt"></i> login
+                </Link>
+              </span>
             </div>
           </form>
           <br />
@@ -468,4 +461,4 @@ const SignUp = () => {
   );
 };
 
-export default React.memo(SignUp);
+export default memo(SignUp);

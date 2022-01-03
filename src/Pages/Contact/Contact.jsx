@@ -1,8 +1,6 @@
-import React, { useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import emailjs from 'emailjs-com';
 import "./Contact.css"
-import Navbar from "../../component/navbar/navbar"
-import BackgroundAnimation from '../../component/BackgroundAnimation/BackgroundAnimation'
 
 import { RiMailSendLine } from 'react-icons/ri'
 import InputField from "../../component/inputField/inputField";
@@ -13,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { IoArrowRedo } from 'react-icons/io5'
 
-const Contact=()=>{
+const Contact=({hideLeftNavbar})=>{
 
 
 
@@ -27,7 +25,11 @@ const Contact=()=>{
         }
       };
 
+      useEffect(() => {
 
+        hideLeftNavbar && hideLeftNavbar();
+
+      },[])
 
 
     const emailRef = useRef();
@@ -103,8 +105,6 @@ const Contact=()=>{
 
     return(
     <div className="contact-page-div">
-        <BackgroundAnimation/>
-        <Navbar/>
         <ToastContainer
             position="bottom-right"
             autoClose={5000}
@@ -200,4 +200,4 @@ const Contact=()=>{
     </div>)
 }
 
-export default React.memo(Contact);
+export default memo(Contact);

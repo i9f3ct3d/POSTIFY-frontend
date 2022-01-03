@@ -5,11 +5,9 @@ html, body {
 
 .post-card-main-div{
     width:40%;
-    border-radius: 5px;
-    /* background-color: white; */
+    border-radius: 2px;
     background-color: #121212;
     margin:10px auto;
-    /* box-shadow: 4px 4px 4px rgba(128, 128, 128, 0.548); */
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
     padding: 20px 0;
     max-width: 750px;
@@ -40,18 +38,17 @@ html, body {
 
 
 
-.post-card-author h4:nth-child(1){
-    margin: 0;
+.post-card-author span:nth-child(1){
     font-family: 'Comfortaa' , cursive;
     letter-spacing: 1px;
-    /* text-shadow: 2px 2px 3px rgba(128, 128, 128, 0.602); */
-    /* text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5); */
-    color: #050505;
-    color: whitesmoke;
-    color: cyan;
+    color: #eceeea;
     transform: translateZ(0);
-    font-weight: 600;
     font-size: 1.2rem;
+    border-bottom: 1px solid transparent;
+}
+
+.post-card-author span:nth-child(1):hover{
+    border-bottom: 1px solid #eceeea;
 }
 
 .post-card-date{
@@ -62,7 +59,7 @@ html, body {
     margin: 0;
     font-size: 0.8rem;
     font-family: 'Roboto' , sans-serif;
-    color: cyan;
+    color: #eceeea;
 
 }
 
@@ -77,7 +74,6 @@ html, body {
 .post-card-underline{
     height: 1.5px;
     width: 80%;
-    background-color:#CED0D4;
     background-color: #3D3F42;
     margin: 10px auto 0 auto;
 }
@@ -85,47 +81,45 @@ html, body {
 .post-card-title-div{
     margin-top:10px;
     border-radius: 5px;
-    padding:5px 2px;
-    -webkit-box-shadow:inset 3px 3px 5px 2px  rgba(0, 0, 0, 0.5);
-    box-shadow:inset 3px 3px 5px 2px  rgba(0, 0, 0, 0.5);
+    padding: 10px 20px;
+    /* -webkit-box-shadow:inset 3px 3px 5px 2px  rgba(0, 0, 0, 0.5);
+    box-shadow:inset 3px 3px 5px 2px  rgba(0, 0, 0, 0.5); */
     margin-right: 20px;
     margin-left: 20px;
-    background-color: #F0F2F5;
     background-color: #242527;
-    color: white;
+    color: cyan;
+    text-align: left;
 }
 
 
 .post-card-title{
     font-family: 'Barlow Condensed', sans-serif;
-    font-style: italic;
-    font-weight: 600;
+    font-weight: 500;
     font-size: 2rem;
     margin: 0;
     letter-spacing: 0.5px;
+    text-transform: capitalize;
 }
 
 .post-card-content-div{
-    margin-top: 10px;
+    margin: 10px 20px 0 20px;
     text-align: left;
     padding: 10px 20px;
     border-radius: 5px;
-    -webkit-box-shadow:inset 3px 3px 5px 2px rgba(0, 0, 0, 0.5);
-    box-shadow:inset 3px 3px 5px 2px  rgba(0, 0, 0, 0.5);
-    margin-right: 20px;
-    margin-left: 20px;
-    background-color: #F0F2F5;
+    /* -webkit-box-shadow:inset 3px 3px 5px 2px rgba(0, 0, 0, 0.5);
+    box-shadow:inset 3px 3px 5px 2px  rgba(0, 0, 0, 0.5); */
     background-color: #242527;
-    color: white;
 }
 
 .post-card-content{
     margin-bottom: 0;
     margin-top: 0;
-    font-family: 'Comfortaa' , cursive;
+    font-family: 'Barlow Condensed' , cursive;
     letter-spacing: 1px;
     word-spacing: 2.5px;
-    font-weight: 600;
+    font-size: 1.2rem;
+    font-weight: 100;
+    color: white;
 }
 
 .post-card-readmore{
@@ -146,7 +140,6 @@ html, body {
 
 .post-card-img{
     width: 100%;
-
     padding-top: 0.5px;
     padding-bottom: 0.5px;
     cursor: pointer;
@@ -161,11 +154,10 @@ html, body {
     margin-left: 5px;
     margin-right: 20px;
     margin-left: 20px;
+    display: flex;
+    align-items: center;
 }
 
-.post-card-like-count-div i:nth-child(1){
-    font-size: 1.3rem;
-}
 
 .post-card-like-div{
     text-align: left;
@@ -183,6 +175,27 @@ html, body {
     width: 4rem;
     position: relative;
     overflow:visible;
+    transition: transform 100ms ease-in-out;
+}
+
+.post-card-like-div-like-button:active{
+    transform: scale(0.9);
+}
+
+.post-card-like-div-like-button:hover::before{
+    background-color: rgba(255 , 255 , 255 , 0.07);
+}
+
+.post-card-like-div-like-button::before{
+    content: "";
+    position: absolute;
+    width: 6rem;
+    height: 2.5rem;
+    background-color: transparent;
+    left: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 2px;
 }
 
 .post-card-like-div-like-button-touchable-div{
@@ -192,7 +205,6 @@ html, body {
     left: 50%;
     top: 50%;
     transform: translate(-50% , -50%);
-    /* background-color: rgba(128, 128, 128, 0.322); */
     cursor: pointer;
     z-index: 2;
 }
@@ -203,11 +215,11 @@ html, body {
     width: 2rem;
     top: 50%;
     right : -20px;
-    transform: translateY(-25%);
+    transform: translateY(-35%);
     cursor: pointer;
     z-index: 2;
     color: gold;
-    font-family: 'Comfortaa' , cursive;
+    font-family: cursive;
 }
 
 .post-card-like-div-like-button-lottie-container{
@@ -223,11 +235,31 @@ html, body {
     display: flex;
     align-items: center;
     margin-right: 20px;
-    color: #3D3F42;
+    color: #A8ABAF;
+    position: relative;
+    z-index: 2;
+}
+
+.post-card-like-div-comment-button:hover::before{
+    background-color: rgba(255 , 255 , 255 , 0.07);
+}
+
+.post-card-like-div-comment-button::before{
+    content: "";
+    position: absolute;
+    width: 120%;
+    height: 2.5rem;
+    background-color: transparent;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    border-radius: 2px;
+    z-index: 0;
 }
 
 .post-card-like-div-comment-button i:nth-child(1){
     cursor: pointer;
+    z-index: 2;
 }
 
 
@@ -275,35 +307,38 @@ html, body {
     transform: translateY(4px);
 }
 
-.post-card-random-comment img{
-    height: 2rem;
-    width: 2rem;
-    border-radius: 2rem;
-}
 
-.post-card-random-comment h4{
+.post-card-random-comment__username{
     display: inline-block;
-    margin: 0;
-    font-family: 'Comfortaa' , cursive;
+    font-family: 'Barlow Condensed' , cursive;
+    font-size: 1.1rem;
+    font-weight: 200;
     letter-spacing: 1px;
-    color: cyan;
+    color: white;
     text-shadow: 2px 2px 2px rgba(128, 128, 128, 0.445);
-    padding-left: 10px;
+    margin-left: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid transparent;
+}
+
+.post-card-random-comment__username:hover{
+    border-bottom: 1px solid white;
 }
 
 
-.post-card-random-comment p{
+.post-card__random-comment__content{
     color: white;
-    border-radius: 0 50px 50px  50px;
-    margin: 0 auto;
+    border-radius: 0 5px 5px  5px;
+    margin: 5px auto 0 auto;
     padding: 20px 20px;
-    -webkit-box-shadow:inset 3px 3px 5px 2px rgba(0 , 0 , 0 , 0.5);
-    box-shadow:inset 3px 3px 5px 2px rgba(0, 0, 0, 0.5);
+    /* -webkit-box-shadow:inset 3px 3px 5px 2px rgba(0 , 0 , 0 , 0.5);
+    box-shadow:inset 3px 3px 5px 2px rgba(0, 0, 0, 0.5); */
     max-width: 80%;
     background-color: #242527;
     padding-top: 10px;
-    margin-top:10px;
-    font-family: 'Roboto';
+    font-family: 'Barlow Condensed';
+    font-weight: 100;
+    font-size: 1.1rem;
     letter-spacing: 0.7px;
     word-spacing: 3px;
     word-break: break-all;
@@ -342,14 +377,33 @@ html, body {
     display: none;
     position: absolute;
     right: 10px;
-    top: 10px;
+    top: 50px;
     width: 15rem;
-    background: #242527;
+    background-color: #242527;
     padding: 20px 10px;
-    border-radius: 4px 0 4px 4px;
+    border-radius: 4px;
     border: 1px solid #050505;
     z-index: 3;
-    box-shadow: 1px 1px 15px rgba(0 , 0 , 0 , 0.5);
+    filter: drop-shadow(0 0 5px rgba(0 , 0 , 0 , 0.5));
+}
+
+.post-card-dots-bar.open-post-card-dots-bar{
+    display: block;
+}
+
+.post-card-dots-bar::before{
+    content: "";
+    height: 1rem;
+    width: 1rem;
+    background-color: white;
+    position: absolute;
+    z-index: 4;
+    right: 8px;
+    top: -10px;
+    transform: rotate(45deg);
+    background-color: #242527;
+    border-top: 1px solid #050505;
+    border-left: 1px solid #050505;
 }
 
 .post-card-dots-bar-save-post-div{
