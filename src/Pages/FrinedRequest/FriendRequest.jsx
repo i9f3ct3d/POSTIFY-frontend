@@ -4,8 +4,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 const FriendRequestCard = lazy(() => import("./components/FriendRequestCard"));
 
-const FriendRequest = (props) => {
-    const [user, setUser] = useState(null);
+const FriendRequest = ({showLeftNavbar , hideLeftNavbar , setProgress , user}) => {
     const [friendReqRecievedUsersArray, setFriendReqRecievedUsersArray] = useState(null);
     const cookie = Cookies.get("x-auth-token");
     const noFriendReqRef = useRef();
@@ -13,7 +12,7 @@ const FriendRequest = (props) => {
     useEffect(() => {
         if (window.innerWidth > 900)
         {
-            props && props.showLeftNavbar && props.showLeftNavbar();
+            showLeftNavbar && showLeftNavbar();
             const rightOnlineUsersBar = document.getElementById('#right__online-users__bar');
             if(rightOnlineUsersBar){
                 rightOnlineUsersBar.style.backgroundColor = 'transparent'
@@ -27,36 +26,9 @@ const FriendRequest = (props) => {
                 crossCloser.style.display = 'none'
             }
         }
-        else props && props.hideLeftNavbar && props.hideLeftNavbar();
+        else hideLeftNavbar && hideLeftNavbar();
 
         
-    }, []);
-
-    useEffect(() => {
-        const fetch = async () => {
-            props && props.setProgress && props.setProgress(10);
-
-            try {
-                props && props.setProgress && props.setProgress(20);
-                const res = await axios.get(
-                    process.env.REACT_APP_BACKEND_API_URL + "fetchuser/?token=" + cookie
-                );
-
-                props && props.setProgress && props.setProgress(40);
-
-                if (res.status === 200 && res.data.credentials === "valid") {
-                    setUser(res.data.user);
-
-                    props && props.setProgress && props.setProgress(70);
-                }
-
-                props && props.setProgress && props.setProgress(100);
-            } catch (error) {
-                window.location = "/error";
-            }
-        };
-
-        fetch();
     }, []);
 
     useEffect(() => {

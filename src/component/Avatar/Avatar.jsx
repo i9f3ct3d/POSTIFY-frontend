@@ -27,7 +27,6 @@ const Avatar = (props) => {
                     width="100%"
                     alt="avatarPic"
                     onClick={() => {
-                        console.log(props && props.link && props.link);
                         linkRef && linkRef.current && linkRef.current.click();
                     }}
                     className="avatar-image"

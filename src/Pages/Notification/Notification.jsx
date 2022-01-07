@@ -3,19 +3,18 @@ import "./Notification.css"
 import Cookies from "js-cookie";
 import axios from "axios";
 import Avatar from "../../component/Avatar/Avatar";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const Notification=(props)=>{
+const Notification=({showLeftNavbar , setProgress , hideLeftNavbar , user})=>{
 
     const [postNotifications , setPostNotifications] = useState(null);
-    const [user , setUser] = useState(null)
     const cookie = Cookies.get("x-auth-token");
-    const history = useHistory();
+    const navigate = useNavigate();
 
     useEffect(() => {
 
         if(window.innerWidth > 900){
-            props && props.showLeftNavbar && props.showLeftNavbar();
+            showLeftNavbar && showLeftNavbar();
             const rightOnlineUsersBar = document.getElementById('#right__online-users__bar');
             if(rightOnlineUsersBar){
                 rightOnlineUsersBar.style.backgroundColor = 'transparent'
@@ -29,7 +28,7 @@ const Notification=(props)=>{
                 crossCloser.style.display = 'none'
             }
         }
-        else props && props.hideLeftNavbar && props.hideLeftNavbar();
+        else hideLeftNavbar && hideLeftNavbar();
     
     },[])
 
@@ -37,36 +36,25 @@ const Notification=(props)=>{
 
         const fetch=async()=>{
 
-            props && props.setProgress && props.setProgress(10);
+            setProgress && setProgress(10);
 
             try {
                 
                 const res = await axios.get(process.env.REACT_APP_BACKEND_API_URL+"getnotifications/?token="+cookie);
                 
-                props && props.setProgress && props.setProgress(40);
+                setProgress && setProgress(40);
 
                 if(res.status === 200){
-
                     await res.data.allNotifications.sort((a,b)=>{
                         var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
                         var a_date = new Date(a.time.replace(pattern,'$3-$2-$1'));
                         var b_date = new Date(b.time.replace(pattern,'$3-$2-$1'));
                         return new Date(b_date) - new Date(a_date);
                     })
-
-                    // res.data.allNotifications && res.data.allNotifications.length > 0 && setUserid(res.data.allNotifications[0].postOwnerid);
-
                     setPostNotifications(res.data.allNotifications);
-
-                    const response = await axios.get(process.env.REACT_APP_BACKEND_API_URL+"fetchuser/?token="+cookie);
-
-                    if(response.status === 200 && response.data.credentials === "valid"){
-                        setUser(response.data.user);
-                    }
-
                 }
 
-                props && props.setProgress && props.setProgress(100);
+                setProgress && setProgress(100);
             
             } catch (error) {
 
@@ -87,7 +75,7 @@ const Notification=(props)=>{
                 notificationid : notificationid,
             });
 
-            history.push(`/postinfo/${postid}/${user._id}`);
+            navigate(`/postinfo/${postid}/${user._id}`);
 
 
         } catch (error) {

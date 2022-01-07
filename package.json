@@ -22,7 +22,7 @@
     "react-icons": "^4.2.0",
     "react-lazy-load-image-component": "^1.5.1",
     "react-lottie": "^1.2.3",
-    "react-router-dom": "^5.2.0",
+    "react-router-dom": "^6.2.1",
     "react-scripts": "4.0.3",
     "react-toastify": "^8.0.3",
     "react-top-loading-bar": "^2.1.0",

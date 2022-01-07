@@ -5,37 +5,21 @@ import './rightOnlineUsersBar.css'
 import { IoCloseOutline } from 'react-icons/io5'
 import { Howl, Howler } from 'howler';
 import NotificationSound from '../../audio/Notification.mp3'
-import { useHistory } from 'react-router-dom';
-import jwt from 'jsonwebtoken';
-import Cookies from 'js-cookie';
+import { useLocation, useNavigate } from 'react-router-dom';
 const Avatar = lazy(() => import('../Avatar/Avatar'))
 
 const RightOnlineUsersBar = (props,ref) => {
     
     const socket = useRef();
     const [onlineUsersData, setOnlineUsersData] = useState([]);
-    const [viewingUserid, setViewingUserid] = useState(null);
     const [unSeenMessageMap, setUnseenMessageMap] = useState(new Map());
     const [refreshState , setRefreshState] = useState(false);
     const socketOnlineUsersIdArray = useRef([]);
-    
-    useEffect(() => {
-
-        const cookie = Cookies.get('x-auth-token');
-        
-        try {
-            const verify = jwt.verify(cookie , process.env.REACT_APP_JWTSECRET);
-            setViewingUserid(verify.userid);
-        } catch (error) {
-            window.location = '/error'
-        }
-
-    },[])
+    const chattingUserId = useRef(null)
+    const location = useLocation();
 
     useEffect(() => {
-
         props && props.setOnlineUserIdArray && props.setOnlineUserIdArray(onlineUsersData);
-
     },[onlineUsersData])
 
     const playSound = () => {
@@ -43,68 +27,37 @@ const RightOnlineUsersBar = (props,ref) => {
         const sound = new Howl({
             src: [NotificationSound]
         });
-
+        
         sound.play();
         Howler.volume(1);
 
     }
 
+    // setting chattingUserId if the user is on message page
+    useEffect(() => {
+        chattingUserId.current = null;
+    },[location])
 
 
     useImperativeHandle(ref , () =>({
         
         sendMessageSocket : (data) => {
-            // console.log(socketUserArray);
             socketOnlineUsersIdArray.current.includes(data.recieverId) && socket.current.emit("sendMessage", data);
+        },
+        seenMessages : (searchedUserId) => {
+            // when the user enters in the message page it makes all the messages seen from that user
+            setUnseenMessageMap(prev => {
+                if(prev[searchedUserId] !== undefined || prev[searchedUserId] !== null){
+
+                    prev[searchedUserId] = 0
+                    return prev;
+
+                }else return prev;
+            })
+            chattingUserId.current = searchedUserId;
         }
 
     }))
-
-    const playSoundAndFillSocketUnseenMessagesHandler = (data) => {
-        console.log('message Coming');
-        // console.log('message');
-        playSound();
-        fillSocketUnseenMessages(data.senderId);
-        props && props.callUpdateArrivalMessage && props.callUpdateArrivalMessage(data);
-    }
-
-    useEffect(() => {
-
-        socket.current = io(process.env.REACT_APP_SOCKET_API_URL);
-        socket.current.on("getMessage", playSoundAndFillSocketUnseenMessagesHandler)
-
-        return () => {
-            socket.current.off("getMessage",playSoundAndFillSocketUnseenMessagesHandler)
-        }
-
-    }, []);
-
-    const removeUser = (user) => {
-        
-        user && socketOnlineUsersIdArray && socketOnlineUsersIdArray.current && socketOnlineUsersIdArray.current.filter(eachUserId => eachUserId !== user.userId);
-
-        user && setOnlineUsersData((prev) => {
-            console.log(prev);
-            return prev ? prev.filter(eachUser => eachUser._id !== user.userId) : prev
-        })
-        user && setUnseenMessageMap(prev => {
-            delete prev[user.userId]
-            return prev;
-        })
-    }
-
-    useEffect(() => {
-
-        socket.current.on("recentOfflineUser",removeUser);
-        
-        return () => {
-
-            socket.current.off("recentOfflineUser",removeUser);
-
-        }
-
-    },[])
-
 
     const fillSocketUnseenMessages = (newSenderId) => {
 
@@ -128,14 +81,53 @@ const RightOnlineUsersBar = (props,ref) => {
 
     }
 
+    const playSoundAndFillSocketUnseenMessagesHandler = (data) => {
+        if(chattingUserId.current !== data.senderId){
+            playSound();
+            fillSocketUnseenMessages(data.senderId);
+        }
+        props && props.callUpdateArrivalMessage && props.callUpdateArrivalMessage(data);
+    }
 
     useEffect(() => {
 
-        if (props && props.viewingUserid) {
-            setViewingUserid(props.viewingUserid);
+        socket.current = io(process.env.REACT_APP_SOCKET_API_URL);
+        socket.current.on("getMessage", playSoundAndFillSocketUnseenMessagesHandler)
+
+        return () => {
+            socket.current.off("getMessage",playSoundAndFillSocketUnseenMessagesHandler)
         }
 
-    }, [props])
+    }, []);
+
+    const removeUser = (user) => {
+        
+        user && socketOnlineUsersIdArray && socketOnlineUsersIdArray.current && socketOnlineUsersIdArray.current.filter(eachUserId => eachUserId !== user.userId);
+
+        user && setOnlineUsersData((prev) => {
+            return prev ? prev.filter(eachUser => eachUser._id !== user.userId) : prev
+        })
+        user && setUnseenMessageMap(prev => {
+            delete prev[user.userId]
+            return prev;
+        })
+    }
+
+    useEffect(() => {
+
+        socket.current.on("recentOfflineUser",removeUser);
+        
+        return () => {
+
+            socket.current.off("recentOfflineUser",removeUser);
+
+        }
+
+    },[])
+
+
+
+
 
     const isFetchBigDataCalled = useRef(false);
 
@@ -144,11 +136,10 @@ const RightOnlineUsersBar = (props,ref) => {
 
         try {
 
-            if (socketOnlineUsersIdArray.current.length > 0 && viewingUserid) {
-                console.log('fetched');
+            if (socketOnlineUsersIdArray.current.length > 0 && props && props.user && props.user._id) {
                 const res = await axios.post(process.env.REACT_APP_BACKEND_API_URL + "getonlineusers", {
                     "onlineUsersidArray": socketOnlineUsersIdArray.current,
-                    "viewingUserid": viewingUserid
+                    "viewingUserid": props.user._id
                 })
                 
                 if (res.status === 200) {
@@ -171,13 +162,13 @@ const RightOnlineUsersBar = (props,ref) => {
         // < ------------------- Big Data --------------- >
         useEffect(() => {
             fetchBigData.current === false && fetchBigData();
-        }, [viewingUserid])
+        }, [])
     // < ------------------- Big Data --------------- >
 
     const setSocketUserArrayHandler = (users) => {
 
         users.forEach(eachUser => {
-            if(eachUser.userId !== viewingUserid){
+            if(eachUser.userId !== props.user._id){
                 socketOnlineUsersIdArray.current.push(eachUser.userId);
             }
         })
@@ -195,7 +186,7 @@ const RightOnlineUsersBar = (props,ref) => {
             
             const res = await axios.post(process.env.REACT_APP_BACKEND_API_URL + 'getsingleonlineuser',{
                 onlineUserid : user.userId,
-                viewingUserid : viewingUserid,
+                viewingUserid : props.user._id,
             })
 
             if(res.status === 200){
@@ -215,9 +206,9 @@ const RightOnlineUsersBar = (props,ref) => {
 
     useEffect(() => {
 
-        if (viewingUserid) {
+        if (props && props.user) {
 
-            socket.current.emit("addUser", viewingUserid);
+            socket.current.emit("addUser", props.user._id);
             socket.current.on("getAllOnlineUsers",setSocketUserArrayHandler)
 
         }
@@ -226,7 +217,7 @@ const RightOnlineUsersBar = (props,ref) => {
             socket.current.off("getAllOnlineUsers",setSocketUserArrayHandler);
         }
 
-    }, [viewingUserid])
+    }, [])
 
     useEffect(() => {
 
@@ -241,13 +232,10 @@ const RightOnlineUsersBar = (props,ref) => {
 
 
 
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const onlineUserClickHandler = (onlineUserid) => {
-
-        history.push(`/messagepage/${viewingUserid}/${onlineUserid}`);
-
-
+        navigate(`/messagepage/${props.user._id}/${onlineUserid}`);
     }
 
     const onlineUsersBarCloseButtonHandler = () => {
@@ -260,18 +248,12 @@ const RightOnlineUsersBar = (props,ref) => {
 
     }
 
-    // if (!didMount) {
-    //     return null;
-    // }
-
 
     return (
         <div id = '#right__online-users__bar' style={props && props.style && props.style} className="right-online-users-bar-full-div">
 
             <div id = '#right__online-users__bar-cross-closer' style={props && props.crossCloserStyle && props.crossCloserStyle} onClick={onlineUsersBarCloseButtonHandler} className="mobile-right-online-users-bar-close-div">
-                <IoCloseOutline
-
-                />
+                <IoCloseOutline/>
             </div>
 
             <p className="right-online-users-bar-title"><i className="far fa-circle right-online-users-bar-title-icon"></i>Online</p>
@@ -282,7 +264,7 @@ const RightOnlineUsersBar = (props,ref) => {
                 {
                     onlineUsersData && onlineUsersData.map((eachUser, index) => {
 
-                        if (eachUser._id === viewingUserid) {
+                        if (eachUser._id === props.user._id) {
                             return (
                                 <div key={eachUser._id} style={{ display: "none" }}></div>
                             )
@@ -302,7 +284,7 @@ const RightOnlineUsersBar = (props,ref) => {
                                     {<div style={{display : unSeenMessageMap[eachUser._id] == 0 && 'none'}} className="online-user-div-unseen-message-count-div"><span className="online-user-div-unseen-message-count" style={{ color: "cyan", marginLeft: "20px" }}>{unSeenMessageMap[eachUser._id]}</span></div>}
                                 </div>
                                 <div className="right-online-users-bar-eachuser-username-div">
-                                    <span style={{ color: unSeenMessageMap[eachUser._id] && unSeenMessageMap[eachUser._id] > 0 && "cyan" }} className="right-online-users-bar-eachuser-username">{eachUser.username}</span>
+                                    <span style={{ color: unSeenMessageMap[eachUser._id] ? unSeenMessageMap[eachUser._id] > 0 ? "cyan" : "greenYellow" : "greenYellow" }} className="right-online-users-bar-eachuser-username">{eachUser.username}</span>
                                 </div>
                                 <div className="right-online-users-bar-eachuser-div-background"></div>
                             </div>

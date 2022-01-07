@@ -9,32 +9,33 @@ import { useParams } from "react-router-dom";
 const Avatar = lazy(() => import( "../../component/Avatar/Avatar"))
 const ChatBubble = lazy(() => import( "./chatBubble"))
 
-const MessagePage = (props,ref) => {
+const MessagePage = ({hideLeftNavbar , showLeftNavbar , setProgress , onlineUsersIdArray , callSendMessageSocket , callSeenMessages},ref) => {
     const { myuserid, searcheduserid } = useParams();
-
     const [searchedUser, setSearchedUser] = useState(null);
     const [conversationId, setConversationId] = useState("");
     const [allChats, setAllChats] = useState([]);
-
     const cookie = Cookies.get("x-auth-token");
+    const [isFriendOnline, setIsFriendOnline] = useState(false);
 
     useImperativeHandle(ref , (data) => ({
         updateArrivalMessage : (data) => {
-            console.log(data);
 
             if(data && myuserid && searcheduserid && ((data.senderId === myuserid && data.recieverId === searcheduserid) || (data.senderId === searcheduserid && data.recieverId === myuserid))){
-
                 setAllChats(prev => [...prev,data])
-
             }
-
         }
         
     }))
 
+    useEffect(() => {
+        if(searcheduserid){
+            callSeenMessages && callSeenMessages(searcheduserid)
+        }
+    },[searcheduserid])
+
 
     const fetch = async () => {
-        props && props.setProgress && props.setProgress(10);
+        setProgress && setProgress(10);
 
         try {
             //////////////////// Getting ConversationId ////////////////////
@@ -46,7 +47,7 @@ const MessagePage = (props,ref) => {
                 }
             );
 
-            props && props.setProgress && props.setProgress(30);
+            setProgress && setProgress(30);
 
             if (res.status === 204) {
                 window.location = "/login";
@@ -54,7 +55,7 @@ const MessagePage = (props,ref) => {
                 setConversationId(res.data.conversation._id);
             }
 
-            props && props.setProgress && props.setProgress(40);
+            setProgress && setProgress(40);
 
             //////////////////// Getting userDetails ////////////////////
             const response = await axios.post(
@@ -66,15 +67,14 @@ const MessagePage = (props,ref) => {
                 }
             );
 
-            props && props.setProgress && props.setProgress(70);
+            setProgress && setProgress(70);
 
             if (response.status === 204) {
                 window.location = "/login";
             } else if (response.status === 200) {
                 setSearchedUser(response.data.user);
-                // setViewingUser(response.data.viewingUser);
             }
-            props && props.setProgress && props.setProgress(100);
+            setProgress && setProgress(100);
         } catch (error) {
             window.location = "/error";
         }
@@ -117,17 +117,16 @@ const MessagePage = (props,ref) => {
         }
     }, [conversationId]);
 
-    const [isFriendOnline, setIsFriendOnline] = useState(false);
+    
 
     useEffect(() => {
+        if(onlineUsersIdArray){
 
-        if(props && props.onlineUsersIdArray){
-
-            setIsFriendOnline(props.onlineUsersIdArray.some(eachUser => eachUser._id === searcheduserid));
+            setIsFriendOnline(onlineUsersIdArray.some(eachUser => eachUser._id === searcheduserid));
 
         }
     
-    },[props , searcheduserid])
+    },[searcheduserid,onlineUsersIdArray])
 
     const messageSendButtonClickHandler = async (e) => {
         e.preventDefault();
@@ -140,7 +139,7 @@ const MessagePage = (props,ref) => {
 
             let customChatid = uuidv4();
 
-            props && props.callSendMessageSocket && props.callSendMessageSocket({
+            callSendMessageSocket && callSendMessageSocket({
                 senderId: myuserid,
                 recieverId: searcheduserid,
                 chatContent: chatContent,
@@ -223,7 +222,7 @@ const MessagePage = (props,ref) => {
     useEffect(() => {
         if (window.innerWidth > 900)
         {
-            props && props.showLeftNavbar && props.showLeftNavbar()
+            showLeftNavbar && showLeftNavbar()
             const rightOnlineUsersBar = document.getElementById('#right__online-users__bar');
             if(rightOnlineUsersBar){
                 rightOnlineUsersBar.style.backgroundColor = 'transparent'
@@ -237,8 +236,10 @@ const MessagePage = (props,ref) => {
                 crossCloser.style.display = 'none'
             }
         }
-        else props && props.hideLeftNavbar && props.hideLeftNavbar();
+        else hideLeftNavbar && hideLeftNavbar();
     }, []);
+
+
 
     return (
         <div className="messagepage-full-div">

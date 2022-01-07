@@ -1,12 +1,8 @@
 import {
-    BrowserRouter as Router,
-    Link,
-    useHistory,
-    useLocation,
+    useNavigate,
     useParams,
 } from "react-router-dom";
 import axios from "axios";
-import Cookie from "js-cookie";
 import "./PostContentPage.css";
 import { useState, useEffect, useRef , memo } from "react";
 
@@ -18,37 +14,26 @@ import { AiOutlineSend } from 'react-icons/ai'
 
 import starReactAnimation from "../../images/starReactAnimation.json";
 import Lottie from "lottie-web";
+import MiniLoader from "../../component/MiniLoader/MiniLoader";
 
-const PostContentPage = (props) => {
+const PostContentPage = ({hideLeftNavbar , setProgress , user}) => {
 
-    const history = useHistory();
+    const navigate = useNavigate();
     const { postid, userid } = useParams();
     const viewingUserid = userid;
 
     const [post, setPost] = useState(null);
-    const [currentUser, setCurrentUser] = useState(null);
     const [isLiked, setIsLiked] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
 
     useEffect(() => {
-        props && props.hideLeftNavbar && props.hideLeftNavbar();
+        hideLeftNavbar && hideLeftNavbar();
     }, []);
 
     const fetchData = async () => {
-        props && props.setProgress && props.setProgress(10);
+        setProgress && setProgress(10);
 
         try {
-            const cookie = Cookie.get("x-auth-token");
-            const res = await axios.get(
-                process.env.REACT_APP_BACKEND_API_URL + "fetchuser/?token=" + cookie
-            );
-
-            props && props.setProgress && props.setProgress(30);
-
-            if (res.data.credentials === "invalid") {
-                window.location = "/login";
-            }
-            setCurrentUser(res.data.user);
 
             const response = await axios.get(
                 process.env.REACT_APP_BACKEND_API_URL + "postinfo?postid=" + postid
@@ -62,7 +47,7 @@ const PostContentPage = (props) => {
             setPost(response.data);
             setLikeCount(response.data.likeArray.length);
 
-            props && props.setProgress && props.setProgress(70);
+            setProgress && setProgress(70);
 
             const isIncluded = response.data.likeArray.includes(viewingUserid);
 
@@ -72,7 +57,7 @@ const PostContentPage = (props) => {
                 setIsLiked(false);
             }
 
-            props && props.setProgress && props.setProgress(100);
+            setProgress && setProgress(100);
         } catch (error) {
             window.location = "/error";
         }
@@ -115,9 +100,9 @@ const PostContentPage = (props) => {
                 process.env.REACT_APP_BACKEND_API_URL + "likepost",
                 {
                     postid: postid,
-                    userid: currentUser._id,
-                    username: currentUser.username,
-                    userProfilePic: currentUser.profilePic,
+                    userid: user._id,
+                    username: user.username,
+                    userProfilePic: user.profilePic,
                 },
                 {
                     cancelToken: source.token,
@@ -161,13 +146,13 @@ const PostContentPage = (props) => {
     };
 
     const showuserPageHandler = () => {
-        if (post && currentUser) {
-            if (post.userid === currentUser._id) {
-                history.push("/myprofile");
+        if (post && user) {
+            if (post.userid === user._id) {
+                navigate("/myprofile");
                 return;
             }
 
-            history.push(`/profilepage/${post.userid}`);
+            navigate(`/profilepage/${post.userid}`);
         }
     };
 
@@ -252,9 +237,9 @@ const PostContentPage = (props) => {
                     {
                         postid: postid,
                         comment: typedComment,
-                        userEmail: currentUser.email,
-                        username: currentUser.username,
-                        userProfilePic: currentUser.profilePic,
+                        userEmail: user.email,
+                        username: user.username,
+                        userProfilePic: user.profilePic,
                         userid: viewingUserid,
                     }
                 );
@@ -320,6 +305,8 @@ const PostContentPage = (props) => {
 
     },[])
 
+    const miniLoaderRef = useRef()
+
     return (
         <div className="postcard-content-page-full-div">
 
@@ -353,12 +340,21 @@ const PostContentPage = (props) => {
                     ref={postcardContentPagePostImageDivRef}
                     className="postcard-content-page-post-card-img-div"
                 >
+                <MiniLoader
+                    ref = {miniLoaderRef}
+                    style={{
+                        height : '100%',
+                        width : '100%',
+                        opacity : 1,
+                        zIndex : 2,
+                    }}
+                />
                 {post && post.postImage && post.postImage !== "false" && (
                         <LazyLoadImage
                             afterLoad={() => {
+                                miniLoaderRef && miniLoaderRef.current && miniLoaderRef.current.fadeOut && miniLoaderRef.current.fadeOut();
                                 postcardContentPagePostImageDivRef.current.style.height = "unset";
                             }}
-                            placeholderSrc={process.env.PUBLIC_URL + "/logo192.png"}
                             height="100%"
                             width="100%"
                             alt="postImage"
@@ -415,7 +411,7 @@ const PostContentPage = (props) => {
                                 <Avatar
                                     height="1.5rem"
                                     width="1.5rem"
-                                    image={currentUser && currentUser.profilePic}
+                                    image={user && user.profilePic}
                                 />
                             </div>
                             <div className="postcard-content-page-comment-section-input-div">

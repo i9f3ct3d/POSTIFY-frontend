@@ -15,7 +15,7 @@ const GlobalButton = lazy(() =>
   import("../../component/GlobalButton/GlobalButton")
 );
 
-const SignUp = ({ hideLeftNavbar }) => {
+const SignUp = ({ hideLeftNavbar , signup }) => {
   const [file, setFile] = useState();
   const [preview, setPreview] = useState(noPicAvatar);
   const [compressedImage, setCompressedImage] = useState(null);
@@ -101,7 +101,7 @@ const SignUp = ({ hideLeftNavbar }) => {
       return;
     }
 
-    try {
+    // try {
       const formData = new FormData();
 
       formData.append("username", submittingUsername);
@@ -110,17 +110,11 @@ const SignUp = ({ hideLeftNavbar }) => {
       formData.append("isProfilePic", file ? true : false);
       formData.append("profilePic", compressedImage);
 
-      const response = await axios.post(
-        process.env.REACT_APP_BACKEND_API_URL + "signup",
-        formData
-      );
+      const response = await signup({formData});
 
-      if (response.data.credentials === "valid") {
-        Cookies.set("x-auth-token", response.data.token, { expires: 7 });
-        window.location = "/home";
-      } else {
-        // toast => email is already taken
-        toast.error("Email is already taken!", {
+      if(response && response.error){
+
+        toast.error(response.error, {
           position: "bottom-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -129,10 +123,8 @@ const SignUp = ({ hideLeftNavbar }) => {
           draggable: true,
           progress: undefined,
         });
+
       }
-    } catch (error) {
-      window.location = "/error";
-    }
   };
 
   const compressImage = async () => {
@@ -265,11 +257,11 @@ const SignUp = ({ hideLeftNavbar }) => {
   const writtenInputRef = useRef();
 
   const observer = new IntersectionObserver(([entry]) => {
-    imageInputRef.current.style.opacity = "1";
-    imageInputRef.current.style.transform = "translateX(0) translateZ(0)";
+    // imageInputRef.current.style.opacity = "1";
+    // imageInputRef.current.style.transform = "translateX(0) translateZ(0)";
 
     writtenInputRef.current.style.opacity = "1";
-    writtenInputRef.current.style.transform = "translateX(0) translateZ(0)";
+    writtenInputRef.current.style.transform = "translate(0,0) scale(1)";
   });
 
   useEffect(() => {

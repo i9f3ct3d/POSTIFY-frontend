@@ -11,13 +11,13 @@ import starReactAnimation from "../../images/starReactAnimation.json";
 import deleteLotti from "../../images/deleteLotti.json";
 import Lottie from "lottie-web";
 import { GiFlexibleStar } from "react-icons/gi";
+import { BsPencil } from 'react-icons/bs'
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { Link, useHistory } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-// let likedPosts = new Set();
+import MiniLoader from "../MiniLoader/MiniLoader";
 
 const PostCard = (props) => {
   const [randomComment, setRandomComment] = useState(
@@ -31,7 +31,6 @@ const PostCard = (props) => {
   const [isLiked, changeisLiked] = useState(false);
 
   const postCardDotsBar = useRef();
-  const postCardDotsBarCloser = useRef();
 
   const findRandomComment = () => {
     props.post.comments.forEach((comment) => {
@@ -102,12 +101,12 @@ const PostCard = (props) => {
     }
   };
 
-  const history = useHistory();
+  const  navigate = useNavigate();
 
   const viewPostHandler = async (event) => {
     event.preventDefault();
 
-    history.push(`/postinfo/${props.post._id}/${props.mainUserId}`);
+    navigate(`/postinfo/${props.post._id}/${props.mainUserId}`);
   };
 
   const deletePostHandler = async () => {
@@ -223,11 +222,11 @@ const PostCard = (props) => {
   const showuserPageHandler = () => {
     if (props) {
       if (props.mainUserId === props.post.userid) {
-        history.push("/myprofile");
+        navigate("/myprofile");
         return;
       }
 
-      history.push(`/profilepage/${props.post.userid}`);
+      navigate(`/profilepage/${props.post.userid}`);
     }
   };
 
@@ -260,6 +259,7 @@ const PostCard = (props) => {
   }, [starAnim, isLiked]);
 
   const postCardImageDivRef = useRef();
+  const miniLoaderRef = useRef();
 
   return (
     <div className="post-card-main-div">
@@ -285,7 +285,7 @@ const PostCard = (props) => {
           onClick={savePostButtonClickHanlder}
           className="post-card-dots-bar-save-post-div"
         >
-          <div className="post-card-dots-bar-save-post-icon-div">
+        <div className="post-card-dots-bar-save-post-icon-div">
             <LottieAnimation
               lotti={saveAnimation}
               height="1.7rem"
@@ -297,8 +297,6 @@ const PostCard = (props) => {
 
         <Link
           style={{ textDecoration: "none" }}
-          //         const postid = props.post._id;
-          // const userid = props.mainUserId;
           to={`/postinfo/${props.post._id}/${props.mainUserId}`}
           className="post-card-dots-bar-save-post-div"
         >
@@ -336,14 +334,6 @@ const PostCard = (props) => {
               </div>
             </div>
           )}
-
-        {/* <div
-          ref={postCardDotsBarCloser}
-          onClick={postCardBarCrossClickHanlder}
-          className="post-card-dots-bar-save-post-div-close-cross-div"
-        >
-          <IoCloseOutline className="post-card-dots-bar-save-post-div-close-cross" />
-        </div> */}
 
       </div>
       <div className="post-card-header">
@@ -387,12 +377,22 @@ const PostCard = (props) => {
       </div>
       {props.post.postImage && props.post.postImage !== "false" && (
         <div ref={postCardImageDivRef} className="post-card-img-div">
+            <MiniLoader
+                    ref = {miniLoaderRef}
+                    style={{
+                        height : '100%',
+                        width : '100%',
+                        opacity : 1,
+                        zIndex : 2,
+                    }}
+                />
           <LazyLoadImage
             afterLoad={() => {
               postCardImageDivRef.current.style.height = "unset";
               postCardImageDivRef.current.style.maxHeight = "30rem";
+              miniLoaderRef && miniLoaderRef.current && miniLoaderRef.current.fadeOut && miniLoaderRef.current.fadeOut();
             }}
-            placeholderSrc={process.env.PUBLIC_URL + "/logo192.png"}
+            // placeholderSrc={process.env.PUBLIC_URL + "/logo192.png"}
             width="100%"
             height="100%"
             onClick={viewPostHandler}
@@ -420,27 +420,19 @@ const PostCard = (props) => {
 
       <div className="post-card-like-div">
         <div className="post-card-like-div-like-button">
+          <div onClick={handleLikeClick} className="post-card-like-div-like-button__before"></div>
           <div
             className="post-card-like-div-like-button-lottie-container"
             ref={starReactAnimationRef}
           ></div>
-          <div
-            onClick={handleLikeClick}
-            className="post-card-like-div-like-button-touchable-div"
-          ></div>
-          <span
-            style={{ color: !isLiked && "#A8ABAF" }}
-            onClick={handleLikeClick}
-            className="post-card-like-div-like-button-text"
-          >
+          <span style={{ color: !isLiked && "#A8ABAF" }} className="post-card-like-div-like-button-text">
             Star
           </span>
         </div>
 
-        <div className="post-card-like-div-comment-button">
-          <i onClick={viewPostHandler} className="fas fa-pen">
-            {" Comment"}
-          </i>
+        <div onClick={viewPostHandler} className="post-card-like-div-comment-button">
+          <BsPencil/>
+          <span className="post-card-like-div-comment-button__text">Comment</span>
         </div>
       </div>
       <div
@@ -465,11 +457,11 @@ const PostCard = (props) => {
                 onClick={() => {
                   if (props) {
                     if (props.mainUserId === randomComment.commentingUserId) {
-                      history.push("/myprofile");
+                      navigate("/myprofile");
                       return;
                     }
 
-                    history.push(
+                    navigate(
                       `/profilepage/${randomComment.commentingUserId}`
                     );
                   }
@@ -480,11 +472,11 @@ const PostCard = (props) => {
               onClick={() => {
                 if (props) {
                   if (props.mainUserId === randomComment.commentingUserId) {
-                    history.push("/myprofile");
+                    navigate("/myprofile");
                     return;
                   }
 
-                  history.push(
+                  navigate(
                     `/profilepage/${randomComment.commentingUserId}`
                   );
                 }

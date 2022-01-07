@@ -7,14 +7,13 @@ import PostCardLoader from "../../component/PostCardLoader/PostCardLoader";
 
 const PostCard = lazy(() => import("../../component/postCard/postCard"));
 
-const MyProfile = (props) => {
-    const [userData, setUserData] = useState();
+const MyProfile = ({showLeftNavbar , hideLeftNavbar , setProgress , user}) => {
     const [userPosts, setUserPosts] = useState();
 
     useEffect(() => {
         if (window.innerWidth > 900)
         {
-            props && props.showLeftNavbar && props.showLeftNavbar();
+            showLeftNavbar && showLeftNavbar();
             const rightOnlineUsersBar = document.getElementById('#right__online-users__bar');
             if(rightOnlineUsersBar){
                 rightOnlineUsersBar.style.backgroundColor = 'transparent'
@@ -28,11 +27,11 @@ const MyProfile = (props) => {
                 crossCloser.style.display = 'none'
             }
         }
-        else props && props.hideLeftNavbar && props.hideLeftNavbar();
+        else hideLeftNavbar && hideLeftNavbar();
     }, []);
 
     useEffect(() => {
-        props && props.setProgress && props.setProgress(10);
+        setProgress && setProgress(10);
 
         const cookie = Cookies.get("x-auth-token");
 
@@ -41,25 +40,23 @@ const MyProfile = (props) => {
                 window.location = "/login";
             } else {
                 try {
-                    props && props.setProgress && props.setProgress(20);
+                    setProgress && setProgress(20);
                     const res = await axios.get(
                         process.env.REACT_APP_BACKEND_API_URL +
                         "getmyprofile/?token=" +
                         cookie
                     );
 
-                    props && props.setProgress && props.setProgress(40);
+                    setProgress && setProgress(40);
 
                     if (res.status === 204) {
                         window.location = "/login";
                     } else if (res.status === 200) {
-                        setUserData(res.data.userData);
                         setUserPosts(res.data.userPosts.reverse());
-
-                        props && props.setProgress && props.setProgress(70);
+                        setProgress && setProgress(70);
                     }
 
-                    props && props.setProgress && props.setProgress(100);
+                    setProgress && setProgress(100);
                 } catch (error) {
                     window.location = "/error";
                 }
@@ -80,12 +77,8 @@ const MyProfile = (props) => {
                                 height="100%"
                                 width="100%"
                                 image={
-                                    userData &&
-                                    userData.profilePic &&
-                                    (userData.profilePic[0] === "u"
-                                        ? process.env.REACT_APP_BACKEND_API_URL +
-                                        userData.profilePic
-                                        : userData.profilePic)
+                                    user &&
+                                    user.profilePic
                                 }
                             />
                         </div>
@@ -93,10 +86,10 @@ const MyProfile = (props) => {
                 </section>
                 <section className="myprofile-section-2">
                     <p className="myprofile-section-2-username">
-                        {userData && userData.username}
+                        {user && user.username}
                     </p>
                     <p className="myprofile-section-2-useremail">
-                        {userData && userData.email}
+                        {user && user.email}
                     </p>
                 </section>
                 <section className="myprofile-section-3">
@@ -106,10 +99,10 @@ const MyProfile = (props) => {
                             userPosts.map((eachPost) => {
                                 return (
                                     <PostCard
-                                        userEmail={userData.email}
+                                        userEmail={user.email}
                                         post={eachPost}
                                         key={eachPost._id}
-                                        mainUserId={userData._id}
+                                        mainUserId={user._id}
                                     />
                                 );
                             })}

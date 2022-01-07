@@ -1,12 +1,12 @@
 import { memo } from "react"
 import './PostCardLoader.css'
 
-const PostCardLoader = ({top}) => {
+const PostCardLoader = ({top , count , style}) => {
     return (
         <>
-            {new Array(Math.ceil((window.innerHeight - (top ? top : 0)) / 320)).fill(0).map((e,i) => {
+            {new Array(count ? count : (Math.ceil((window.innerHeight - (top ? top : 0)) / 320))).fill(0).map((e,i) => {
               return(
-                <div key = {i} className="home-page__all-posts__loader">
+                <div style = {style ? style : {}} key = {i} className="home-page__all-posts__loader">
                   <div className="home-page__all-posts__loader__avatar"></div>
                   <div className="home-page__all-posts__loader__username"></div>
                   <div className="home-page__all-posts__loader__content"></div>

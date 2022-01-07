@@ -3,15 +3,17 @@ import { Suspense, lazy, useState, useRef } from "react";
 import {
   BrowserRouter as Router,
   Route,
-  Switch,
-  Redirect,
+  Navigate,
+  Routes,
 } from "react-router-dom";
 
 import Loader from "./component/Loader/Loader";
 import LoadingBar from "react-top-loading-bar";
-import Cookies from "js-cookie";
-const RightOnlineUsersBar = lazy(() => import( "./component/rightOnlineUsersBar/rightOnlineUsersBar"))
-const BackgroundAnimation = lazy(() => import('./component/BackgroundAnimation/BackgroundAnimation'))
+import useAuth from "./Pages/Hooks/useAuth";
+
+import PrivateRoutes from "./Pages/PrivateRoute/PrivateRoutes";
+const RightOnlineUsersBar = lazy(() =>import("./component/rightOnlineUsersBar/rightOnlineUsersBar"));
+const BackgroundAnimation = lazy(() =>import("./component/BackgroundAnimation/BackgroundAnimation"));
 const Navbar = lazy(() => import("./component/navbar/navbar"));
 const LeftNavbar = lazy(() => import("./component/leftNavbar/leftNavbar"));
 const AuthCheck = lazy(() => import("./Pages/authcheck"));
@@ -29,79 +31,39 @@ const MessagePage = lazy(() => import("./Pages/messagePage/messagePage"));
 const MyProfile = lazy(() => import("./Pages/MyProfile/MyProfile"));
 const Contact = lazy(() => import("./Pages/Contact/Contact"));
 
-
 function App() {
 
-  async function isPostInfoPage() {
-    const pageLocation = window.location.pathname;
-    const postinfoPageRoute = "/postinfo";
-
-    let pageI = 0;
-
-    for await (const i of postinfoPageRoute) {
-      if (i !== pageLocation[pageI]) {
-        return false;
-      }
-
-      pageI++;
-    }
-
-    return true;
-  }
-
-  const showLeftNavbar = async () => {
-    const leftNavbar = document.getElementById("#left-navbar-full-div");
-
-    if (leftNavbar) {
-      leftNavbar.style.display = "block";
-
-      if (
-        window.innerWidth <= 900 ||
-        window.location.pathname === "/newpost" ||
-        (await isPostInfoPage())
-      ) {
-        leftNavbar.style.backgroundColor = "#121212";
-        leftNavbar.style.height = "100vh";
-        leftNavbar.style.transform = "translateX(0) translateZ(0)";
-        leftNavbar.style.boxShadow = "8px -4px 10px rgba(0 , 0 , 0 , 0.5)";
-      } else {
-        leftNavbar.style.backgroundColor = "transparent";
-        leftNavbar.style.height = "unset";
-        leftNavbar.style.transform = "translateX(0) translateZ(0)";
-        leftNavbar.style.boxShadow = "none";
-      }
-    }
-  };
-
-  const hideLeftNavbar = () => {
-    const leftNavbar = document.getElementById("#left-navbar-full-div");
-
-    if (leftNavbar) {
-      leftNavbar.style.display = "none";
-
-      leftNavbar.style.backgroundColor = "#242527";
-      leftNavbar.style.height = "100vh";
-      leftNavbar.style.transform = "translateX(-101%) translateZ(0)";
-      leftNavbar.style.boxShadow = "8px -4px 10px rgba(0 , 0 , 0 , 0.5)";
-    }
-  };
-
   const [progress, setProgress] = useState(0);
-  const [onlineUsersIdArray , setOnlineUserIdArray] = useState([]);
-
-  const cookie = Cookies.get("x-auth-token");
+  const [onlineUsersIdArray, setOnlineUserIdArray] = useState([]);
+  const leftNavbarRef = useRef();
   const sendMessageSocketRef = useRef();
   const updateArrivalMessageRef = useRef();
 
-  const callSendMessageSocket = (data) =>{
-    sendMessageSocketRef && sendMessageSocketRef.current && sendMessageSocketRef.current.sendMessageSocket(data);
-  }
+  const showLeftNavbar = async () => {
+    leftNavbarRef && leftNavbarRef.current && leftNavbarRef.current.showLeftNavbar();
+  };
+  
+  const hideLeftNavbar = () => {
+    leftNavbarRef && leftNavbarRef.current && leftNavbarRef.current.hideLeftNavbar();
+  };
+
+  const callSendMessageSocket = (data) => {
+    sendMessageSocketRef &&
+      sendMessageSocketRef.current &&
+      sendMessageSocketRef.current.sendMessageSocket(data);
+  };
 
   const callUpdateArrivalMessage = (data) => {
-    console.log(updateArrivalMessageRef);
-    updateArrivalMessageRef && updateArrivalMessageRef.current && updateArrivalMessageRef.current.updateArrivalMessage(data)
+    updateArrivalMessageRef &&
+      updateArrivalMessageRef.current &&
+      updateArrivalMessageRef.current.updateArrivalMessage(data);
+  };
+
+  const callSeenMessages = (data) => {
+    sendMessageSocketRef && sendMessageSocketRef.current && sendMessageSocketRef.current.seenMessages && sendMessageSocketRef.current.seenMessages(data);
   }
 
+  const { isAuth , isLoading ,user, login , signup } = useAuth(false);
 
   return (
     <div className="App">
@@ -111,214 +73,208 @@ function App() {
           progress={progress}
           onLoaderFinished={() => setProgress(0)}
         />
-        {window.location.pathname !== '/signup' && window.location.pathname !== '/login' && window.location.pathname !== '/contact' && window.location.pathname !== '/error' && 
-        <Suspense fallback = {<></>}>
-          <RightOnlineUsersBar
-            ref = {sendMessageSocketRef}
-            callUpdateArrivalMessage = {callUpdateArrivalMessage}
-            setOnlineUserIdArray = {(data) => {
-              setOnlineUserIdArray(data)
-            }}
-          />
-        </Suspense>
-        }
-        <Suspense fallback={<span></span>}>
+        {window.location.pathname !== "/signup" &&
+          window.location.pathname !== "/login" &&
+          window.location.pathname !== "/contact" &&
+          window.location.pathname !== "/error" &&
+          !isLoading &&
+          isAuth && (
+            <Suspense fallback={<></>}>
+              <RightOnlineUsersBar
+                user = {user}
+                ref={sendMessageSocketRef}
+                callUpdateArrivalMessage={callUpdateArrivalMessage}
+                setOnlineUserIdArray={(data) => {
+                  setOnlineUserIdArray(data);
+                }}
+              />
+            </Suspense>
+          )}
+        <Suspense fallback={<></>}>
           <BackgroundAnimation />
         </Suspense>
-        <Suspense fallback={<span></span>}>
-          { window.location.pathname !== "/contact" &&
-            window.location.pathname !== "/error" && 
+        <Suspense fallback={<></>}>
+          {window.location.pathname !== "/contact" &&
+            window.location.pathname !== "/error" &&
             window.location.pathname !== "/signup" &&
             window.location.pathname !== "/login" &&
-            <LeftNavbar />}
+            !isLoading &&
+            isAuth && <LeftNavbar ref = {leftNavbarRef} isAuth={isAuth} user={user} />}
         </Suspense>
 
-        <Suspense fallback={<span></span>}>
+        <Suspense fallback={<></>}>
           {window.location.pathname !== "/contact" &&
             window.location.pathname !== "/error" && (
               <Navbar
+                isAuth={isAuth}
+                user={user}
                 showLeftNavbar={showLeftNavbar}
                 hideLeftNavbar={hideLeftNavbar}
               />
             )}
         </Suspense>
+
         <Suspense fallback={<Loader />}>
-          <Switch>
-            <Route path="/login" exact>
-              <LogIn
-                hideLeftNavbar={hideLeftNavbar}
+          <Routes>
+            <Route
+              path="/login"
+              element={<LogIn hideLeftNavbar={hideLeftNavbar} login={(data) => {return login(data)}} />}
+            />
+
+            <Route
+              path="/signup"
+              element={
+                <SignUp hideLeftNavbar={hideLeftNavbar} signup={ (data) => {return signup(data)}} />
+              }
+            />
+            <Route
+              element={<PrivateRoutes isLoading={isLoading} isAuth={isAuth} />}
+            >
+              <Route
+                path="/home"
+                element={
+                  <HomePage
+                    user = {user}
+                    showLeftNavbar={showLeftNavbar}
+                    hideLeftNavbar={hideLeftNavbar}
+                    setProgress={(givenProgress) => {
+                      setProgress(givenProgress);
+                    }}
+                  />
+                }
               />
-            </Route>
-            <Route path="/signup" exact>
-              <SignUp
-                hideLeftNavbar={hideLeftNavbar}
+
+              <Route
+                path="/newpost"
+                element={
+                  <NewPostPage
+                    user = {user && user}
+                    showLeftNavbar={showLeftNavbar}
+                    hideLeftNavbar={hideLeftNavbar}
+                    setProgress={(givenProgress) => {
+                      setProgress(givenProgress);
+                    }}
+                  />
+                }
               />
-            </Route>
-
-            <Route path="/home" exact>
-              {cookie ? (
-                <HomePage
-                  showLeftNavbar={showLeftNavbar}
-                  hideLeftNavbar={hideLeftNavbar}
-                  setProgress={(givenProgress) => {
-                    setProgress(givenProgress);
-                  }}
-                />
-              ) : (
-                <div>
-                  <Redirect to="/login" />
-                </div>
-              )}
-            </Route>
-
-            <Route path="/newpost" exact>
-              {cookie ? (
-                <NewPostPage
-                  showLeftNavbar={showLeftNavbar}
-                  hideLeftNavbar={hideLeftNavbar}
-                  setProgress={(givenProgress) => {
-                    setProgress(givenProgress);
-                  }}
-                />
-              ) : (
-                <div>
-                  <Redirect to="/login" />
-                </div>
-              )}
-            </Route>
-
-            <Route path="/postinfo/:postid/:userid" exact>
-              {cookie ? (
+            
+            <Route
+              path="/postinfo/:postid/:userid"
+              element={
                 <PostContentPage
+                  user = {user && user}
                   showLeftNavbar={showLeftNavbar}
                   hideLeftNavbar={hideLeftNavbar}
                   setProgress={(givenProgress) => {
                     setProgress(givenProgress);
                   }}
                 />
-              ) : (
-                <div>
-                  <Redirect to="/login" />
-                </div>
-              )}
-            </Route>
+              }
+            />
 
-            <Route path="/contact" exact>
-              <Contact
-                showLeftNavbar={showLeftNavbar}
-                hideLeftNavbar={hideLeftNavbar}
-              />
-              {/* <div>Contact Me</div> */}
-            </Route>
 
-            <Route path="/friendrequest" exact>
-              {cookie ? (
+            <Route
+              path="/friendrequest"
+              element={
                 <FriendRequest
+                  user = {user && user}
                   showLeftNavbar={showLeftNavbar}
                   hideLeftNavbar={hideLeftNavbar}
                   setProgress={(givenProgress) => {
                     setProgress(givenProgress);
                   }}
                 />
-              ) : (
-                <div>
-                  <Redirect to="/login" />
-                </div>
-              )}
-            </Route>
+              }
+            />
 
-            <Route path="/notification" exact>
-              {cookie ? (
+            <Route
+              path="/notification"
+              element={
                 <Notification
+                  user = {user && user}
                   showLeftNavbar={showLeftNavbar}
                   hideLeftNavbar={hideLeftNavbar}
                   setProgress={(givenProgress) => {
                     setProgress(givenProgress);
                   }}
                 />
-              ) : (
-                <div>
-                  <Redirect to="/login" />
-                </div>
-              )}
-            </Route>
+              }
+            />
 
-            <Route path="/profilepage/:searcheduserid" exact>
-              {cookie ? (
+            <Route
+              path="/profilepage/:searcheduserid"
+              element={
                 <ProfilePage
+                  user = {user && user}
                   showLeftNavbar={showLeftNavbar}
                   hideLeftNavbar={hideLeftNavbar}
                   setProgress={(givenProgress) => {
                     setProgress(givenProgress);
                   }}
                 />
-              ) : (
-                <div>
-                  <Redirect to="/login" />
-                </div>
-              )}
-            </Route>
+              }
+            />
 
-            <Route path="/myprofile" exact>
-              {cookie ? (
+            <Route
+              path="/myprofile"
+              element={
                 <MyProfile
+                  user = {user && user}
                   showLeftNavbar={showLeftNavbar}
                   hideLeftNavbar={hideLeftNavbar}
                   setProgress={(givenProgress) => {
                     setProgress(givenProgress);
                   }}
                 />
-              ) : (
-                <div>
-                  <Redirect to="/login" />
-                </div>
-              )}
-            </Route>
+              }
+            />
 
-            <Route path="/savedposts" exact>
-              {cookie ? (
+            <Route
+              path="/savedposts"
+              element={
                 <SavedPostsPage
+                  user = {user && user}
                   showLeftNavbar={showLeftNavbar}
                   hideLeftNavbar={hideLeftNavbar}
                   setProgress={(givenProgress) => {
                     setProgress(givenProgress);
                   }}
                 />
-              ) : (
-                <div>
-                  <Redirect to="/login" />
-                </div>
-              )}
-            </Route>
+              }
+            />
 
-            <Route path="/messagepage/:myuserid/:searcheduserid" exact>
-              {cookie ? (
+            <Route
+              
+              path="/messagepage/:myuserid/:searcheduserid"
+              element={
                 <MessagePage
-                  ref = {updateArrivalMessageRef}
+                  ref={updateArrivalMessageRef}
                   showLeftNavbar={showLeftNavbar}
                   hideLeftNavbar={hideLeftNavbar}
+                  callSeenMessages = {callSeenMessages}
                   setProgress={(givenProgress) => {
                     setProgress(givenProgress);
                   }}
-                  callSendMessageSocket = {callSendMessageSocket}
-                  onlineUsersIdArray = {onlineUsersIdArray}
+                  callSendMessageSocket={callSendMessageSocket}
+                  onlineUsersIdArray={onlineUsersIdArray}
                 />
-              ) : (
-                <div>
-                  <Redirect to="/login" />
-                </div>
-              )}
+              }
+            />
             </Route>
-
-            <Route path="/authcheck/:token" exact>
-              <AuthCheck />
-            </Route>
-
-            <Route path="/error" exact>
-              <ErrorPage />
-            </Route>
-            <Redirect to="/home" />
-          </Switch>
+            <Route path="/authcheck/:token" element={<AuthCheck />} />
+            <Route path="/error" element={<ErrorPage />} />
+            
+            <Route
+              path="/contact"
+              element={
+                <Contact
+                  showLeftNavbar={showLeftNavbar}
+                  hideLeftNavbar={hideLeftNavbar}
+                />
+              }
+            />
+            <Route path="*" element={<Navigate to="/home" />} />
+          </Routes>
         </Suspense>
       </Router>
     </div>

@@ -1,6 +1,4 @@
-import axios from "axios";
 import { useEffect, useRef, lazy, memo, Suspense } from "react";
-import Cookies from "js-cookie";
 import "./LogIn.css";
 import { Link } from "react-router-dom";
 import InputField from "../../component/inputField/inputField";
@@ -13,7 +11,8 @@ import GlobalButton from "../../component/GlobalButton/GlobalButton";
 const LottiAnimation = lazy(() => import("../lottiAnimation"));
 const Logo = lazy(() => import("../../component/logo/logo"));
 
-const LogIn = ({ hideLeftNavbar }) => {
+const LogIn = ({ hideLeftNavbar , login }) => {
+  
   const formEmailRef = useRef("");
   const formPasswordRef = useRef("");
 
@@ -74,30 +73,18 @@ const LogIn = ({ hideLeftNavbar }) => {
       return;
     }
 
-    try {
-      const response = await axios.post(
-        process.env.REACT_APP_BACKEND_API_URL + "login",
-        {
-          email: email,
-          password: password,
-        }
-      );
-      if (response.data.credentials === "valid") {
-        Cookies.set("x-auth-token", response.data.token, { expires: 7 });
-        window.location = "/home";
-      } else {
-        toast.error("Invalid credentials!", {
-          position: "bottom-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      }
-    } catch (error) {
-      window.location = "/error";
+    const response = await login({email , password});
+
+    if(response && response.error){
+      toast.error(response.error, {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
 
@@ -185,11 +172,9 @@ const LogIn = ({ hideLeftNavbar }) => {
   const rightDivRef = useRef();
 
   const observer = new IntersectionObserver(([entry]) => {
-    leftDivRef.current.style.opacity = "1";
-    leftDivRef.current.style.transform = "translateX(0)";
 
     rightDivRef.current.style.opacity = "1";
-    rightDivRef.current.style.transform = "translateX(0)";
+    rightDivRef.current.style.transform = "translate(0,0) scale(1)";
   });
 
   useEffect(() => {

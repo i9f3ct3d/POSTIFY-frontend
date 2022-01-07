@@ -28,7 +28,7 @@
 
 .underline{
   height: 2px;
-  background: grey;
+  background: #3E4042;
   width: 50%;
   margin: 0 auto;
   margin-bottom: 1rem;
@@ -39,4 +39,16 @@ html , body , #root{
   /* background-color: #242527;
   z-index: -5; */
 
+}
+
+::-moz-selection { /* Code for Firefox */
+  color: white;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+  background: cyan;
+}
+
+::selection {
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+  color: white;
+  background: cyan;
 }

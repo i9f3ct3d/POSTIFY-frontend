@@ -2,7 +2,7 @@
 .navbar-top
 {
     position: fixed;
-    width: 100%;
+    width: 100vw;
     height: 4rem;
     background-color: #121212;
     top: 0;
@@ -250,6 +250,7 @@
     background-color: #121212;
     transition: background-color 1s ease-in-out,color 200ms ease-in-out;
     font-size:1.5rem;
+    border-bottom: 2px solid transparent;
 }
 
 .navbar-icon i{
@@ -313,6 +314,9 @@
     transform: translateY(-50%);
     right: 10%;
     cursor: pointer;
+    display: inline-flex;
+    margin-right: 2rem;
+
 }
 .navbar-userdetatil button
 {
@@ -321,27 +325,7 @@
     height:2rem;
     margin: auto 0;
 }
-.navbar-userpic
-{
-    height:3.5rem;
-    width: 3.5rem;
-    border: 2px solid cyan;
-    border-radius: 100%;
-    margin-right: 2rem;
-    background-color: #fff;
-    transition: box-shadow 400ms ease-in-out;
-    box-shadow: 3px 3px 4px rgba(0 , 0 , 0 , 0.5);
-}
-.navbar-userpic:focus,.navbar-userpic:hover
-{
-    box-shadow: 5px 5px 10px #8f8f88,-5px -5px 10px #8f8f88;
-}
-.navbar-userpic h1
-{
-    margin: 0;
-    padding: 0;
-    font-size: 2rem;
-}
+
 .navbar-userinfo-div
 {
     position: absolute;
