@@ -1,52 +1,83 @@
 import {
-    useState,
-    useEffect,
-    useRef,
-    forwardRef,
     memo,
     lazy,
     Suspense,
+    useRef,
+    forwardRef,
 } from "react";
 import "./leftNavbar.css";
-import Cookies from "js-cookie";
-import axios from "axios";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useImperativeHandle } from "react";
 
 const LeftNavbarLinks = lazy(() => import("./components/leftnavbarlinks"));
 const Avatar = lazy(() => import("../Avatar/Avatar"));
 
-const LeftNavbar = (props, ref) => {
-    const cookie = useRef(Cookies.get("x-auth-token"));
-    const [user, setUser] = useState(null);
+const LeftNavbar = ({user},ref) => {
 
-    useEffect(() => {
-        const fetch = async () => {
-            try {
-                const res = await axios.get(
-                    process.env.REACT_APP_BACKEND_API_URL +
-                    "leftnavbar/?token=" +
-                    cookie.current
-                );
+    const navigate = useNavigate();
+    const leftNavbarRef = useRef();
 
-                if (res.status === 200) {
-                    setUser(res.data);
-                }
-            } catch (error) {
-                window.location = "/error";
+    async function isPostInfoPage() {
+        const pageLocation = window.location.pathname;
+        const postinfoPageRoute = "/postinfo";
+    
+        let pageI = 0;
+    
+        for await (const i of postinfoPageRoute) {
+          if (i !== pageLocation[pageI]) {
+            return false;
+          }
+    
+          pageI++;
+        }
+    
+        return true;
+      }
+
+    useImperativeHandle(ref,() => ({
+        showLeftNavbar : async() => {
+            const leftNavbar = leftNavbarRef.current;
+
+            if (leftNavbar) {
+              leftNavbar.style.display = "block";
+        
+              if (
+                window.innerWidth <= 900 ||
+                window.location.pathname === "/newpost" ||
+                (await isPostInfoPage())
+              ) {
+                leftNavbar.style.backgroundColor = "#121212";
+                leftNavbar.style.height = "100vh";
+                leftNavbar.style.transform = "translateX(0) translateZ(0)";
+                leftNavbar.style.boxShadow = "8px -4px 10px rgba(0 , 0 , 0 , 0.5)";
+              } else {
+                leftNavbar.style.backgroundColor = "transparent";
+                leftNavbar.style.height = "unset";
+                leftNavbar.style.transform = "translateX(0) translateZ(0)";
+                leftNavbar.style.boxShadow = "none";
+              }
             }
-        };
+        },
+        hideLeftNavbar : () => {
+            const leftNavbar = leftNavbarRef.current;
 
-        cookie.current && fetch();
-    }, []);
-
-    const history = useHistory();
+            if (leftNavbar) {
+              leftNavbar.style.display = "none";
+        
+              leftNavbar.style.backgroundColor = "#242527";
+              leftNavbar.style.height = "100vh";
+              leftNavbar.style.transform = "translateX(-101%) translateZ(0)";
+              leftNavbar.style.boxShadow = "8px -4px 10px rgba(0 , 0 , 0 , 0.5)";
+            }
+        }
+    }))
 
     return (
-        <div id="#left-navbar-full-div" className="left-navbar-full-div">
+        <div ref = {leftNavbarRef} id="#left-navbar-full-div" className="left-navbar-full-div">
             <div className="left-navbar-inner-div">
                 <div
                     onClick={() => {
-                        history.push("/myprofile");
+                        navigate("/myprofile");
                     }}
                     className="left-navbar-profile-link-div"
                 >
@@ -67,7 +98,7 @@ const LeftNavbar = (props, ref) => {
                         type="saved"
                         text="Saved"
                         onClick={() => {
-                            history.push("/savedposts");
+                            navigate("/savedposts");
                         }}
                         delay={1}
                     />

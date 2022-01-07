@@ -3,7 +3,7 @@ import axios from "axios";
 import "./PostForm.css";
 import imageCompression from 'browser-image-compression';
 import InputField from '../../component/inputField/inputField'
-import Loader from '../../component/Loader/Loader'
+import MiniLoader from "../../component/MiniLoader/MiniLoader";
 
 const Avatar = lazy(() => import( "../../component/Avatar/Avatar"))
 
@@ -29,8 +29,9 @@ const PostForm = (props) => {
 
   const onsubmitHandler = async (event) => {
     event.preventDefault();
-    if(loaderRef && loaderRef.current){
-      loaderRef.current.style.display = 'flex';
+
+    if(loaderRef && loaderRef.current && loaderRef.current.fadeIn){
+      loaderRef.current.fadeIn();
     }
 
     let allcondition = true;
@@ -87,16 +88,14 @@ const PostForm = (props) => {
         );
 
         if (response.data.credentials === "valid") {
-          // Cookies.set("x-auth-token", response.data.token);
-          // window.location = "/home";
 
           formRef.current.reset();
           contentInputRef.current.innerHTML = "";
           setPreview(null);
           setCompressedImage(null);
 
-          if(loaderRef && loaderRef.current){
-            loaderRef.current.style.display = 'none'
+          if(loaderRef && loaderRef.current && loaderRef.current.fadeOut){
+            loaderRef.current.fadeOut();
           }
 
         }
@@ -213,13 +212,11 @@ const PostForm = (props) => {
 
   return (
     <div style={{width:"100%"}}>
-    <Loader
+    <MiniLoader
       ref = {loaderRef}
       style = {{
-        marginTop : '64px',
-        backgroundColor : 'rgba(0 , 0 , 0 , 0.5)',
-        backdropFilter : 'blur(5px)',
-        display : 'none'
+        height : '100vh',
+        width : '100%',
       }}
     />
     <div className="post-form-div">

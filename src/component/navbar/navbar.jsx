@@ -7,9 +7,6 @@ import { IoNotificationsOutline, IoArrowBack } from "react-icons/io5";
 import { BiUserPlus } from "react-icons/bi";
 import { BsPen } from "react-icons/bs";
 import Cookies from "js-cookie";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-
-import noPicAvatar from '../../images/noPicAvatar.jpg'
 import LogoLotti from "../../images/LogoLotti.json";
 
 const Avatar = lazy(() => import("../Avatar/Avatar"));
@@ -17,12 +14,10 @@ const NavbarDropDownDesk = lazy(() => import("./components/navbarDropDownDesk"))
 const GlobalButton = lazy(() => import("../GlobalButton/GlobalButton"));
 const LottiAnimation = lazy(() => import("../../Pages/lottiAnimation"));
 
-
-
 const pathNameSet = new Set(["/signup", "/login", "/welcomepage"]);
 const dontShowOnThisURLS = new Set(["/signup", "/login", "/contact"]);
 
-const Navbar = ({ showLeftNavbar, hideLeftNavbar }) => {
+const Navbar = ({ showLeftNavbar, hideLeftNavbar, isAuth , user }) => {
     const cookie = Cookies.get("x-auth-token");
     const [viewingUser, setViewingUser] = useState(null);
     const [matchedUsers, setMatchedUsers] = useState();
@@ -40,24 +35,8 @@ const Navbar = ({ showLeftNavbar, hideLeftNavbar }) => {
     const mobile_newpostlinkRef = useRef();
 
     useEffect(() => {
-        const fetch = async () => {
-            try {
-                if (cookie !== undefined) {
-                    const res = await axios.get(
-                        process.env.REACT_APP_BACKEND_API_URL + "fetchuser/?token=" + cookie
-                    );
-
-                    if (res.status === 200 && res.data.credentials === "valid") {
-                        setViewingUser(res.data.user);
-                    }
-                }
-            } catch (error) {
-                window.location = "/error";
-            }
-        };
-
-        fetch();
-    }, []);
+        isAuth && setViewingUser(user);
+    }, [isAuth]);
 
     const searchBarOnChangeHandler = async (event) => {
         event.preventDefault();
@@ -127,23 +106,20 @@ const Navbar = ({ showLeftNavbar, hideLeftNavbar }) => {
         <div style={{ height: "0", width: "0", overflow: "visible" }}>
             <Suspense fallback={<span></span>}>
                 <NavbarDropDownDesk
-                    profileImg={viewingUser && viewingUser.profilePic}
-                    userName={viewingUser ? viewingUser.username : null}
-                    cookie={cookie ? true : false}
+                    profileImg={isAuth && viewingUser && viewingUser.profilePic}
+                    userName={isAuth && viewingUser ? viewingUser.username : null}
+                    isAuth={isAuth}
                 />
             </Suspense>
-            {!dontShowOnThisURLS.has(window.location.pathname) && cookie && (
+
+            {!dontShowOnThisURLS.has(window.location.pathname) && isAuth && (
                 <div className="navbar-mobile-icons-div">
                     <div className="navbar-mobile-icons-inside-div">
                         <NavLink
                             ref={mobile_homelinkRef}
                             to="/home"
                             className="navbar-mobile-icon navbar-mobile-feed-icon"
-                            activeStyle={{
-                                color: "cyan",
-                            }}
-                        // style={{color:window.location.pathname === "/home" && "cyan"}}
-                        // onClick={()=>{setNavIconsBottomBorder(window.location.pathname , '/home');}}
+                            style={({ isActive }) => isActive ? { color: 'cyan' } : {}}
                         >
                             <BsHouse />
                         </NavLink>
@@ -151,9 +127,7 @@ const Navbar = ({ showLeftNavbar, hideLeftNavbar }) => {
                             ref={mobile_friendreqlinkRef}
                             to="/friendrequest"
                             className="navbar-mobile-icon navbar-mobile-friend-req-icon"
-                            activeStyle={{
-                                color: "cyan",
-                            }}
+                            style={({ isActive }) => isActive ? { color: 'cyan' } : {}}
                         >
                             <BiUserPlus />
                         </NavLink>
@@ -161,9 +135,7 @@ const Navbar = ({ showLeftNavbar, hideLeftNavbar }) => {
                             ref={mobile_notificationlinkRef}
                             to="/notification"
                             className="navbar-mobile-icon navbar-mobile-notification-icon"
-                            activeStyle={{
-                                color: "cyan",
-                            }}
+                            style={({ isActive }) => isActive ? { color: 'cyan' } : {}}
                         >
                             <IoNotificationsOutline />
                         </NavLink>
@@ -171,9 +143,7 @@ const Navbar = ({ showLeftNavbar, hideLeftNavbar }) => {
                             ref={mobile_newpostlinkRef}
                             to="/newpost"
                             className="navbar-mobile-icon navbar-mobile-newpost-icon"
-                            activeStyle={{
-                                color: "cyan",
-                            }}
+                            style={({ isActive }) => isActive ? { color: 'cyan' } : {}}
                         >
                             <BsPen />
                         </NavLink>
@@ -181,7 +151,7 @@ const Navbar = ({ showLeftNavbar, hideLeftNavbar }) => {
                 </div>
             )}
 
-            {cookie && window.innerWidth <= 1173 && (
+            {isAuth && window.innerWidth <= 1173 && (
                 <div
                     ref={mobileNavbarSearchingDivRef}
                     className="mobile-navbar__user-searching__div"
@@ -203,7 +173,7 @@ const Navbar = ({ showLeftNavbar, hideLeftNavbar }) => {
                         />
                     </div>
                     <div
-                        style={{ height: "1px", width: "100%" , backgroundColor : '#3E4042' }}
+                        style={{ height: "1px", width: "100%", backgroundColor: '#3E4042' }}
                         className="underline"
                     ></div>
                     <div className="mobile-navbar__user-searching__div__lower-div">
@@ -251,7 +221,7 @@ const Navbar = ({ showLeftNavbar, hideLeftNavbar }) => {
                 </div>
             )}
 
-            {cookie !== undefined && (
+            {isAuth && (
                 <div
                     style={{
                         display:
@@ -268,7 +238,7 @@ const Navbar = ({ showLeftNavbar, hideLeftNavbar }) => {
                 </div>
             )}
 
-            {!dontShowOnThisURLS.has(window.location.pathname) && cookie && (
+            {!dontShowOnThisURLS.has(window.location.pathname) && isAuth && (
                 <div
                     ref={searchedDivInputRef}
                     className="navbar-search-div"
@@ -293,7 +263,7 @@ const Navbar = ({ showLeftNavbar, hideLeftNavbar }) => {
                 </div>
             )}
 
-            {cookie && window.innerWidth > 1173 && (
+            {isAuth && window.innerWidth > 1173 && (
                 <div
                     ref={searchedUsersDivRef}
                     className="navbar-searched-users-div"
@@ -379,36 +349,24 @@ const Navbar = ({ showLeftNavbar, hideLeftNavbar }) => {
                 </div>
             )}
 
-            <div
-                style={{
-                    boxShadow: window.location.pathname === "/welcomepage" && "none",
-                    background:
-                        window.location.pathname === "/welcomepage" && "transparent",
-                }}
-                className="navbar-top"
-            >
-                <Suspense fallback={<span></span>}>
+            <div className="navbar-top">
+                <Suspense fallback={<></>}>
                     <div onClick={onLogoClickHandler} className="navbar-logo-div">
                         <LottiAnimation lotti={LogoLotti} height="100%" width="100%" />
                     </div>
                 </Suspense>
 
-                <div
-                    style={{
-                        display:
-                            (dontShowOnThisURLS.has(window.location.pathname) || !cookie) &&
-                            "none",
-                    }}
+                {!dontShowOnThisURLS.has(window.location.pathname) && isAuth && <div
                     className="navbar-icons-div"
                 >
                     <NavLink
                         ref={homelinkRef}
                         className="navbar-icon navbar-feed-icon"
                         to="/home"
-                        activeStyle={{
+                        style={({ isActive }) => isActive ? {
                             color: "cyan",
-                            borderBottom: "2px solid cyan",
-                        }}
+                            borderColor: "cyan",
+                        } : {}}
                     >
                         <BsHouse />
                     </NavLink>
@@ -416,10 +374,10 @@ const Navbar = ({ showLeftNavbar, hideLeftNavbar }) => {
                         ref={friendreqlinkRef}
                         className="navbar-icon navbar-friend-req-icon"
                         to="/friendrequest"
-                        activeStyle={{
+                        style={({ isActive }) => isActive ? {
                             color: "cyan",
-                            borderBottom: "2px solid cyan",
-                        }}
+                            borderColor: "cyan",
+                        } : {}}
                     >
                         <BiUserPlus />
                     </NavLink>
@@ -427,10 +385,10 @@ const Navbar = ({ showLeftNavbar, hideLeftNavbar }) => {
                         ref={notificationlinkRef}
                         className="navbar-icon navbar-notification-icon"
                         to="/notification"
-                        activeStyle={{
+                        style={({ isActive }) => isActive ? {
                             color: "cyan",
-                            borderBottom: "2px solid cyan",
-                        }}
+                            borderColor: "cyan",
+                        } : {}}
                     >
                         <IoNotificationsOutline />
                     </NavLink>
@@ -438,81 +396,70 @@ const Navbar = ({ showLeftNavbar, hideLeftNavbar }) => {
                         ref={newpostlinkRef}
                         className="navbar-icon navbar-newpost-icon"
                         to="/newpost"
-                        activeStyle={{
+                        style={({ isActive }) => isActive ? {
                             color: "cyan",
-                            borderBottom: "2px solid cyan",
-                        }}
+                            borderColor: "cyan",
+                        } : {}}
                     >
                         <BsPen />
                     </NavLink>
-                </div>
+                </div>}
 
                 <div className="navbar-login-signup-logout-div">
-                    <Suspense fallback={<span></span>}>
+                    {!pathNameSet.has(window.location.pathname) && isAuth && <Suspense fallback={<span></span>}>
                         <div
                             className="navbar-userdetatil"
-                            style={{
-                                display:
-                                    !pathNameSet.has(window.location.pathname) && cookie
-                                        ? "inline-flex"
-                                        : "none",
-                            }}
                         >
-                            <Link to="/myprofile" className="navbar-userpic">
-                                <LazyLoadImage
-                                    id="user-profile-pic"
-                                    src={
-                                        viewingUser && viewingUser.profilePic
-                                            ? viewingUser.profilePic[0] == "u"
-                                                ? process.env.REACT_APP_BACKEND_API_URL +
-                                                viewingUser.profilePic
-                                                : viewingUser.profilePic
-                                            : noPicAvatar
-                                    }
-                                />
-                            </Link>
+                            <Avatar
+                                image={viewingUser && viewingUser.profilePic}
+                                height='3.5rem'
+                                width='3.5rem'
+                                link='/myprofile'
+                            />
                         </div>
-                    </Suspense>
-                    <Suspense fallback={<span></span>}>
-                        {(pathNameSet.has(window.location.pathname) ||
-                            (window.location.pathname == "/contact" && !cookie)) && (
-                                <GlobalButton
-                                    icon={
-                                        <i
-                                            style={{ marginRight: "10px" }}
-                                            className="fas fa-user-plus"
-                                        ></i>
-                                    }
-                                    text={"  Sign up"}
-                                    style={{ marginRight: "10px" }}
-                                    onClick={() => {
-                                        // removeBottomBorder();
-                                        window.location = "/signup";
-                                    }}
-                                    className="navbar-global-buttons"
-                                />
-                            )}
-                        {(pathNameSet.has(window.location.pathname) ||
-                            (window.location.pathname == "/contact" && !cookie)) && (
-                                <GlobalButton
-                                    icon={
-                                        <i
-                                            style={{ marginRight: "10px" }}
-                                            className="fas fa-sign-in-alt"
-                                        ></i>
-                                    }
-                                    text={"   Login"}
-                                    color="#5CA3DF"
-                                    borderColor="#5CA3DF"
-                                    backgroundColor="#5CA3DF"
-                                    onClick={() => {
-                                        // removeBottomBorder();
-                                        window.location = "/login";
-                                    }}
-                                    className="navbar-global-buttons"
-                                />
-                            )}
-                    </Suspense>
+                    </Suspense>}
+
+
+                    {(pathNameSet.has(window.location.pathname) ||
+                        (window.location.pathname == "/contact" && !isAuth)) && <Suspense fallback={<></>}>
+
+
+                            <GlobalButton
+                                icon={
+                                    <i
+                                        style={{ marginRight: "10px" }}
+                                        className="fas fa-user-plus"
+                                    ></i>
+                                }
+                                text={"  Sign up"}
+                                style={{ marginRight: "10px" }}
+                                onClick={() => {
+                                    // removeBottomBorder();
+                                    window.location = "/signup";
+                                }}
+                                className="navbar-global-buttons"
+                            />
+
+
+                            <GlobalButton
+                                icon={
+                                    <i
+                                        style={{ marginRight: "10px" }}
+                                        className="fas fa-sign-in-alt"
+                                    ></i>
+                                }
+                                text={"   Login"}
+                                color="#5CA3DF"
+                                borderColor="#5CA3DF"
+                                backgroundColor="#5CA3DF"
+                                onClick={() => {
+                                    // removeBottomBorder();
+                                    window.location = "/login";
+                                }}
+                                className="navbar-global-buttons"
+                            />
+
+                        </Suspense>}
                 </div>
             </div>
         </div>

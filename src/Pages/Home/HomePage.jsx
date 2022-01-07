@@ -5,7 +5,7 @@ import "./HomePage.css";
 import Avatar from "../../component/Avatar/Avatar";
 import newPostLotti from "../../images/newpostLotti.json";
 import LottiAnimation from "../lottiAnimation";
-import { useHistory, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PostCardLoader from "../../component/PostCardLoader/PostCardLoader";
 const PostCardPage = lazy(() => import("../PostCardPage/PostCardPage"));
 
@@ -13,13 +13,10 @@ const PostCardPage = lazy(() => import("../PostCardPage/PostCardPage"));
 const HomePage = (props) => {
   const [posts, setposts] = useState([]);
   const [viewingUser, setViewingUser] = useState(null);
-  const history = useHistory();
+  const navigate = useNavigate();
   const isFetchingPostsRef = useRef(false);
   const pageCountRef = useRef(1);
   const postEndingRef = useRef();
-
-  const postEndingInnerDivRef1 = useRef();
-  const postEndingInnerDivRef2 = useRef();
 
   const fetchPosts = async () => {
     if (isFetchingPostsRef.current === true || pageCountRef.current === null)
@@ -87,37 +84,12 @@ const HomePage = (props) => {
   }, [viewingUser]);
 
   useEffect(() => {
-    props && props.setProgress && props.setProgress(10);
-    const cookie = Cookies.get("x-auth-token");
-    ////////////fixed when cookie is undefined/////////specifically when user does not have cookie at all////////////
-    if (cookie === undefined) {
-      window.location = "/login";
-    } else {
-      const fetchData = async () => {
-        props && props.setProgress && props.setProgress(20);
 
-        try {
-          const res = await axios.get(
-            process.env.REACT_APP_BACKEND_API_URL + "fetchuser/?token=" + cookie
-          );
-
-          props && props.setProgress && props.setProgress(40);
-
-          if (res.status === 200 && res.data.credentials === "valid") {
-            setViewingUser(res.data.user);
-            props && props.setProgress && props.setProgress(100);
-          } else {
-            Cookies.remove("x-auth-token");
-            window.location = "/login";
-          }
-        } catch (error) {
-          Cookies.remove("x-auth-token");
-          window.location = "/error";
-        }
-      };
-      fetchData();
+    if(props && props.user && !viewingUser){
+      setViewingUser(props.user)
     }
-  }, []);
+
+  }, [props]);
 
   function AddImageSvg(props) {
     return (
@@ -173,16 +145,7 @@ const HomePage = (props) => {
   }
 
   const observer = new IntersectionObserver(([entry]) => {
-    if (entry.isIntersecting) {
-      postEndingInnerDivRef1.current.style.animation =
-        "animate-posts-ending-loader 1.5s ease-in-out infinite";
-      postEndingInnerDivRef2.current.style.animation =
-        "animate-posts-ending-loader 1.5s ease-in-out infinite";
       fetchPosts();
-    } else {
-      postEndingInnerDivRef1.current.style.animation = "none";
-      postEndingInnerDivRef2.current.style.animation = "none";
-    }
   });
 
   useEffect(() => {
@@ -196,7 +159,7 @@ const HomePage = (props) => {
     <div className="home-page-container">
       <div
         onClick={() => {
-          history.push("/newpost");
+          navigate("/newpost");
         }}
         className="home-page-new-post-div"
       >
@@ -241,31 +204,11 @@ const HomePage = (props) => {
         </Suspense>
       </div>
       <div ref={postEndingRef} className="home-page__postcard-ending">
-        <div
-          ref={postEndingInnerDivRef1}
-          className="home-page__postcard-ending__inner-div"
-        >
-          <div className="home-page__postcard-ending__left"></div>
-          <div className="home-page__postcard-ending__right">
-            <div className="home-page__postcard-ending__right_1"></div>
-            <div className="home-page__postcard-ending__right_2"></div>
-            <div className="home-page__postcard-ending__right_3"></div>
-            <div className="home-page__postcard-ending__right_4"></div>
-          </div>
-        </div>
-
-        <div
-          ref={postEndingInnerDivRef2}
-          className="home-page__postcard-ending__inner-div"
-        >
-          <div className="home-page__postcard-ending__left"></div>
-          <div className="home-page__postcard-ending__right">
-            <div className="home-page__postcard-ending__right_1"></div>
-            <div className="home-page__postcard-ending__right_2"></div>
-            <div className="home-page__postcard-ending__right_3"></div>
-            <div className="home-page__postcard-ending__right_4"></div>
-          </div>
-        </div>
+          <PostCardLoader
+            style = {{width : '100%'}}
+            top = {234}
+          />
+          
       </div>
 
       <div className="postIt-container">

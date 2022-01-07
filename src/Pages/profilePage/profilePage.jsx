@@ -5,16 +5,15 @@ import { BiDotsVerticalRounded } from "react-icons/bi";
 
 import './profilePage.css';
 import PopUp from './components/PopUp/popUp';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Avatar from '../../component/Avatar/Avatar';
 import PostCardLoader from '../../component/PostCardLoader/PostCardLoader';
 
 const GlobalButton = lazy(() => import( '../../component/GlobalButton/GlobalButton'))
 const PostCard = lazy(() => import( '../../component/postCard/postCard'))
 
-const ProfilePage = (props) => {
+const ProfilePage = ({showLeftNavbar , hideLeftNavbar , setProgress}) => {
 
-    const noPic = "https://qph.fs.quoracdn.net/main-qimg-2b21b9dd05c757fe30231fac65b504dd";
     const [searchedUser , setSearchedUser] = useState();
     const [searchedUserPosts , setSearchedUserPosts] = useState();
     const [myUserid , setMyUserid] = useState();
@@ -24,7 +23,6 @@ const ProfilePage = (props) => {
     const [popUpFunction , setPopUpFunction] = useState(()=>{});
 
     const cookie = Cookies.get('x-auth-token');
-
     const showAddFriendRef = useRef();
     const showFriendsRef = useRef();
     const showReqSentRef = useRef();
@@ -33,14 +31,14 @@ const ProfilePage = (props) => {
 
     const { searcheduserid } = useParams();
 
-    const history = useHistory();
+    const navigate = useNavigate();
 
 
 
     useEffect(() => {
 
         if(window.innerWidth > 900){
-            props && props.showLeftNavbar && props.showLeftNavbar();
+            showLeftNavbar && showLeftNavbar();
             const rightOnlineUsersBar = document.getElementById('#right__online-users__bar');
             if(rightOnlineUsersBar){
                 rightOnlineUsersBar.style.backgroundColor = 'transparent'
@@ -54,12 +52,12 @@ const ProfilePage = (props) => {
                 crossCloser.style.display = 'none'
             }
         }
-        else props && props.hideLeftNavbar && props.hideLeftNavbar();
+        else hideLeftNavbar && hideLeftNavbar();
     
     },[])
 
     const fetch = async()=>{
-        props && props.setProgress && props.setProgress(10);
+        setProgress && setProgress(10);
 
         let searchedUserid = searcheduserid;
 
@@ -82,13 +80,13 @@ const ProfilePage = (props) => {
 
                 try {
 
-                    props && props.setProgress && props.setProgress(20);
+                    setProgress && setProgress(20);
 
                     const response = await axios.post(process.env.REACT_APP_BACKEND_API_URL + "getuser/?token="+cookie,{
                         "searchedUserid":searchedUserid
                     });
 
-                    props && props.setProgress && props.setProgress(50);
+                    setProgress && setProgress(50);
 
                     if(response.status === 204){
                         cookie && Cookies.remove('x-auth-token');
@@ -104,7 +102,7 @@ const ProfilePage = (props) => {
                         setSearchedUserPosts(resSearchedUserPosts);
                         setMyUserid(resMyUserid)
 
-                        props && props.setProgress && props.setProgress(80);
+                        setProgress && setProgress(80);
 
                         if(resSearchedUser.friends && resSearchedUser.friendReqRecieved && resSearchedUser.friendReqSent){
                             if(!resSearchedUser.friends.includes(resMyUserid) && !resSearchedUser.friendReqRecieved.includes(resMyUserid) && !resSearchedUser.friendReqSent.includes(resMyUserid)){
@@ -146,7 +144,7 @@ const ProfilePage = (props) => {
                         
                     }
                     
-                    props && props.setProgress && props.setProgress(100);
+                    setProgress && setProgress(100);
 
 
                 } catch (error) {
@@ -299,7 +297,7 @@ const ProfilePage = (props) => {
     const messageButtonClickHandler=(e)=>{
         e.preventDefault();
 
-        history.push(`/messagepage/${myUserid}/${searchedUser._id}`)
+        navigate(`/messagepage/${myUserid}/${searchedUser._id}`)
 
     }
 

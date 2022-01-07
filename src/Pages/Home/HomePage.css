@@ -162,7 +162,7 @@
     margin: 0 auto;
     background-color: #121212;
     border-radius: 2px;
-    box-shadow: 4px 4px 15px rgba(0 , 0 , 0, 0.5);
+    /* box-shadow: 4px 4px 15px rgba(0 , 0 , 0, 0.5); */
     overflow: hidden;
 }
 
@@ -178,7 +178,7 @@
     transform: translateZ(0);
 }
 
-@keyframes animate-posts-ending-loader {
+/* @keyframes animate-posts-ending-loader {
 
     0%{
         opacity: 0;
@@ -193,7 +193,7 @@
         transform: translateY(-10px) translateZ(0);
     }
     
-}
+} */
 
 .home-page__postcard-ending__left{
 
