@@ -13,9 +13,15 @@
     overflow: hidden;
 }
 
-.loginPage-background-image, .loginPage-background-image-div{
-    width: auto;
-    height: auto;
+.loginPage-background-image-div{
+    width: 60%;
+    height: 100vh;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.loginPage-background-image{
     display: none;
 }
 
@@ -70,7 +76,7 @@
     justify-content: center;
     align-items: center;
     color: whitesmoke;
-    font-family: 'Comfortaa' , cursive;
+    font-family: 'Barlow Condensed' , cursive;
 }
 
 @media(min-width : 1200px){
@@ -78,7 +84,7 @@
         background: none;
     }
     .loginPage-background-image, .loginPage-background-image-div{
-        display: block;
+        display: flex;
         margin-right: 50px;
     }
 }
@@ -228,11 +234,11 @@
 .login-page-signup-link
 {
     color: whiteSmoke;
-    font-family: 'Comfortaa' , cursive;
+    font-family: 'Barlow Condensed' , cursive;
 }
 .login-page-signup-link a
 {
-    font-family: 'Comfortaa' , cursive;
+    font-family: 'Barlow Condensed' , cursive;
     text-decoration: none;
     color: cyan !important;
     font-size: 0.9rem;

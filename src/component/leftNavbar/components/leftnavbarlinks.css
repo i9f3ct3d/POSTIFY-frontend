@@ -1,6 +1,6 @@
 .left-navbar-link-full-div{
     width: fit-content;
-    height: 3rem;
+    height: 2rem;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -23,9 +23,10 @@
 }
 
 .left-navbar-link-text{
-    font-family: 'Comfortaa' , cursive;
+    font-family: 'Barlow Condensed' , cursive;
     color: cyan;
-    font-size: 1rem;
+    font-size: 1.1rem;
+    font-weight: 300;
 }
 
 

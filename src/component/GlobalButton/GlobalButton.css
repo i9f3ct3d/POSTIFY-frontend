@@ -14,13 +14,14 @@
     width: 100%;
     height: 100%;
     border: 1.5px solid greenyellow;
-    font-family: 'Comfortaa' , cursive;
+    font-family: 'Barlow Condensed' , cursive;
     background: transparent;
     cursor: pointer;
     color: greenyellow;
     transition: color 500ms ease-in-out , text-shadow 500ms ease-in-out;
     text-shadow: 1px 1px 5px rgba(0 , 0 , 0 , 0.5);
-    font-size: 1rem;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -29,6 +30,9 @@
 
 .global-button__icon-div{
     margin-right: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .global-button-background{

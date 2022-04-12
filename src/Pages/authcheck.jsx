@@ -18,7 +18,6 @@ function AuthCheck() {
 
     return (
         <div className="temppage-loader">
-            {/* <BackgroundAnimation/> */}
             <ImSpinner2/>
         </div>
     )

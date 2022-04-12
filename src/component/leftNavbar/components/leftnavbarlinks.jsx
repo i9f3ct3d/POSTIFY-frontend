@@ -17,8 +17,8 @@ const LeftNavbarLinks=(props)=>{
             fill="gold"
             strokeWidth={0}
             viewBox="0 0 536 512"
-            width="2rem"
-            height="2rem"
+            width = "1.6rem"
+            height = "1.6rem"
             xmlns="http://www.w3.org/2000/svg"
             {...props}
           >
@@ -33,8 +33,8 @@ const LeftNavbarLinks=(props)=>{
     function MemoriesSvg(props) {
         return (
           <svg xmlns="http://www.w3.org/2000/svg" 
-            width="2rem"
-            height="2rem"
+            width = "1.6rem"
+            height = "1.6rem"
             xmlSpace="preserve"
             preserveAspectRatio="xMidYMid meet" 
             viewBox="0 0 400 400"
@@ -106,15 +106,15 @@ const LeftNavbarLinks=(props)=>{
                 {
                     props && props.type === "friends" && <LottieAnimation
                       lotti = {friendsAnimation}
-                      width = "2rem"
-                      height = "2rem"
+                      width = "1.6rem"
+                      height = "1.6rem"
                     />
                 }
                 {
                     props && props.type === "saved" && <LottieAnimation
                       lotti = {saveAnimation}
-                      width = "2rem"
-                      height = "2rem"
+                      width = "1.6rem"
+                      height = "1.6rem"
                     />
                 }
                 {
@@ -123,33 +123,32 @@ const LeftNavbarLinks=(props)=>{
                 {
                     props && props.type === "memories" && <MemoriesSvg/>
                 }
-
                 {
                     props && props.type === "weather" && <LottieAnimation
                       lotti = {weatherAnimation}
-                      width = "2rem"
-                      height = "2rem"
+                      width = "1.6rem"
+                      height = "1.6rem"
                     />
                 }
                 {
                     props && props.type === "groups" && <LottieAnimation
                       lotti = {groupsAnimation}
-                      width = "2rem"
-                      height = "2rem"
+                      width = "1.6rem"
+                      height = "1.6rem"
                     />
                 }
                 {
                     props && props.type === "pages" && <LottieAnimation
                       lotti = {pagesAnimation}
-                      width = "2rem"
-                      height = "2rem"
+                      width = "1.6rem"
+                      height = "1.6rem"
                     />
                 }
                 {
                     props && props.type === "messenger" && <LottieAnimation
                       lotti = {messengerAnimation}
-                      width = "2rem"
-                      height = "2rem"
+                      width = "1.6rem"
+                      height = "1.6rem"
                     />
                 }
             </div>

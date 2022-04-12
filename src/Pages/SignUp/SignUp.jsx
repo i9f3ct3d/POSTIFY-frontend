@@ -1,6 +1,4 @@
 import { lazy, memo, Suspense, useEffect, useRef, useState } from "react";
-import axios from "axios";
-import Cookies from "js-cookie";
 import "./SignUp.css";
 import { IoArrowRedo } from "react-icons/io5";
 import imageCompression from "browser-image-compression";
@@ -8,7 +6,9 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from 'react-router-dom'
 import noPicAvatar from "../../images/noPicAvatar.jpg"
+import { AiOutlineLogin } from 'react-icons/ai';
 
+const MiniLoader = lazy(() => import('../../component/MiniLoader/MiniLoader'))
 const InputField = lazy(() => import("../../component/inputField/inputField"));
 const Logo = lazy(() => import("../../component/logo/logo"));
 const GlobalButton = lazy(() =>
@@ -24,6 +24,7 @@ const SignUp = ({ hideLeftNavbar , signup }) => {
   const usernameRef = useRef();
   const userPasswordRef = useRef();
   const userConfirmPasswordRef = useRef();
+  const miniLoaderRef = useRef();
 
   let validateEmail = (email) => {
     let re =
@@ -38,7 +39,7 @@ const SignUp = ({ hideLeftNavbar , signup }) => {
 
   const onFormSubmitHandler = async (event) => {
     event.preventDefault();
-
+    
     const submittingUsername = usernameRef.current.value.trim();
     const submittingUserEmail = userEmailRef.current.value.trim();
     const submittingPassword = userPasswordRef.current.value.trim();
@@ -110,10 +111,11 @@ const SignUp = ({ hideLeftNavbar , signup }) => {
       formData.append("isProfilePic", file ? true : false);
       formData.append("profilePic", compressedImage);
 
+      miniLoaderRef && miniLoaderRef.current && miniLoaderRef.current.fadeIn && miniLoaderRef.current.fadeIn();
       const response = await signup({formData});
-
+      
       if(response && response.error){
-
+        miniLoaderRef && miniLoaderRef.current && miniLoaderRef.current.fadeIn && miniLoaderRef.current.fadeOut();
         toast.error(response.error, {
           position: "bottom-right",
           autoClose: 5000,
@@ -278,6 +280,9 @@ const SignUp = ({ hideLeftNavbar , signup }) => {
 
   return (
     <div className="signup-page-div">
+      <MiniLoader
+        ref = {miniLoaderRef}
+      />
       <ToastContainer
         position="bottom-right"
         autoClose={5000}
@@ -300,6 +305,7 @@ const SignUp = ({ hideLeftNavbar , signup }) => {
             <div ref={imageInputRef} className="img-input">
               <div className="profile-pic-image-preview-div">
                 <img
+                  alt = 'preview'
                   onClick={pickFileHandler}
                   className="profile-pic-image-preview"
                   src={preview}
@@ -350,7 +356,7 @@ const SignUp = ({ hideLeftNavbar , signup }) => {
               <div
                 style={{
                   borderRadius: "0 50px 50px 0",
-                  height: "10px",
+                  height: "5px",
                   backgroundColor: "greenYellow",
                   marginLeft: "90px",
                   width: "15rem",
@@ -433,15 +439,19 @@ const SignUp = ({ hideLeftNavbar , signup }) => {
                   Sign Up with Google
                 </div>
               </div>
-              <span style={{ color: " whiteSmoke" }}>
+              <span style={{ color: " whiteSmoke", fontFamily : 'Barlow Condensed'}}>
                 Already registered{" "}
                 <Link
                   style={{
                     color: "cyan",
+                    fontWeight : '300'
                   }}
                   to="/login"
                 >
-                  <i className="fas fa-sign-in-alt"></i> login
+                <AiOutlineLogin
+                  style = {{display : 'inline-flex' , transform : 'translateY(2px)' , marginRight : '2px'}}
+                />
+                  login
                 </Link>
               </span>
             </div>

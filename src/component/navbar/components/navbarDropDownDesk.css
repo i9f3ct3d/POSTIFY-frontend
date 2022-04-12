@@ -43,7 +43,7 @@
     justify-content: center;
     align-items: center;
     transform: translateX(40%) translateY(-45%) translateZ(0) scale(0.1);
-    padding: 30px 5px 10px 5px;
+    padding: 30px 5px 2px 5px;
     background: #121212;
     flex-wrap: nowrap;
     z-index: 1;
@@ -68,25 +68,25 @@
     text-align: center;
     font-size: 1.4rem;
     color: cyan;
-    font-family: 'Comfortaa' , cursive;
-    font-weight: 600;
+    font-family: 'Barlow Condensed' , cursive;
+    font-weight: 400;
 }
 
 .newnavbar-dropdown-desk-aboutus{
+    height: 2rem;
     display: flex;
-    margin-top: 10px;
-    margin-bottom: 20px;
+    /* margin-bottom: 10px; */
     color: rgb(102, 102, 102);
     justify-content: flex-start;
     align-items: center;
     cursor: pointer;
     padding: 5px 10px;
     transform: translateZ(0);
-    transition: transform 300ms ease-in-out;
+    transition: transform 300ms ease-in-out, background-color 200ms ease-in-out;
 }
 
 .newnavbar-dropdown-desk-aboutus:hover{
-    transform: scale(1.05) translateZ(0);
+    background-color: rgba(72, 72, 72, 0.212);
 }
 
 .newnavbar-dropdown-desk-aboutus-icon{
@@ -101,8 +101,7 @@
     text-align: center;
     font-size: 1.2rem;
     margin-left: 15px;
-    font-family: 'Comfortaa' , cursive;
-    /* font-weight: 600; */
+    font-family: 'Barlow Condensed' , cursive;
 }
 
 
