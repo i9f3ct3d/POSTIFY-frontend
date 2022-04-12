@@ -196,7 +196,8 @@ const NavbarDropDownDesk = (props) => {
               // ></i>
               <BsPersonPlus
                 style = {{
-                  marginRight : '10px'
+                  marginRight : '10px',
+                  marginTop : '5px'
                 }}
               />
             }
