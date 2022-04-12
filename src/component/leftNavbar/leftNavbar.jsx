@@ -83,8 +83,8 @@ const LeftNavbar = ({user},ref) => {
                 >
                     <Suspense fallback={<span></span>}>
                         <Avatar
-                            height="2.2rem"
-                            width="2.2rem"
+                            height="2rem"
+                            width="2rem"
                             image={user && user.userProfilePic}
                         />
                     </Suspense>
@@ -92,6 +92,7 @@ const LeftNavbar = ({user},ref) => {
                         {user && user.username}
                     </span>
                 </div>
+                <div style = {{width : 'calc(100% + 50px)' , height : '1px' , backgroundColor : 'rgb(61, 63, 66)'}} className = 'underline' />
                 <Suspense fallback={<></>}>
                     <LeftNavbarLinks
                         key={1}

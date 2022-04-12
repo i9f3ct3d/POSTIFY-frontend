@@ -1,7 +1,8 @@
 import { memo, useRef } from "react";
 
 import "./navbarDropDownDesk.css";
-import { BsCaretDown } from "react-icons/bs";
+import { BsCaretDown, BsPersonPlus } from "react-icons/bs";
+import { AiOutlineIdcard, AiOutlinePhone, AiOutlineLogin, AiOutlineLogout } from "react-icons/ai";
 import Avatar from "../../Avatar/Avatar";
 import Cookies from "js-cookie";
 import GlobalButton from "../../GlobalButton/GlobalButton";
@@ -10,7 +11,6 @@ import { useNavigate } from "react-router-dom";
 const pathNameSet = new Set(["/signup", "/login", "/contact"]);
 
 const NavbarDropDownDesk = (props) => {
-
   const onlineUsersButtonClick = () => {
     const allOnlineUsersBar = document.querySelectorAll(
       ".right-online-users-bar-full-div"
@@ -53,7 +53,7 @@ const NavbarDropDownDesk = (props) => {
         <BsCaretDown />
       </div>
 
-      <div ref={dropDownDeskRef} className="newnavbar-dropdown-desk">
+      <div  ref={dropDownDeskRef} className="newnavbar-dropdown-desk">
         <i
           onClick={() => {
             dropDownDeskCloseHandler();
@@ -89,7 +89,8 @@ const NavbarDropDownDesk = (props) => {
           }}
           className="newnavbar-dropdown-desk-aboutus"
         >
-          <i className="far fa-address-card newnavbar-dropdown-desk-aboutus-icon"></i>
+          {/* <i className="far fa-address-card newnavbar-dropdown-desk-aboutus-icon"></i> */}
+          <AiOutlineIdcard style={{ fontSize: "1.4rem" }} />
           <p className="newnavbar-dropdown-desk-avatar-aboutus-text">
             About me
           </p>
@@ -100,12 +101,19 @@ const NavbarDropDownDesk = (props) => {
           }}
           className="newnavbar-dropdown-desk-aboutus"
         >
-          <i
+          {/* <i
             style={{ color: "rgb(224, 198, 50)" }}
             className="far fa-paper-plane newnavbar-dropdown-desk-aboutus-icon"
-          ></i>
+          ></i> */}
+
+          <AiOutlinePhone
+            style={{
+              fontSize: "1.4rem",
+              transform: "rotate(90deg)",
+            }}
+          />
           <p
-            style={{ color: "rgb(224, 198, 50)" }}
+            // style={{ color: "rgb(224, 198, 50)" }}
             className="newnavbar-dropdown-desk-avatar-aboutus-text"
           >
             Contact me
@@ -128,17 +136,22 @@ const NavbarDropDownDesk = (props) => {
             </p>
           </div>
         )}
-
         {!pathNameSet.has(window.location.pathname) && props.isAuth && (
           <GlobalButton
             icon={
-              <i
-                style={{ marginRight: "10px" }}
-                className="fas fa-sign-out-alt"
-              ></i>
+              // <i
+              //   style={{ marginRight: "10px" }}
+              //   className="fas fa-sign-out-alt"
+              // ></i>
+              <AiOutlineLogout
+                style = {{
+                    marginRight : '10px',
+                    // marginTop : '5px'
+                }}
+              />
             }
             text={"  Log out"}
-            style={{ width: "100%", marginBottom: "5px" }}
+            style={{ width: "100%", marginBottom: "5px", marginTop : '5px' }}
             color="red"
             borderColor="red"
             backgroundColor="red"
@@ -152,33 +165,45 @@ const NavbarDropDownDesk = (props) => {
         {(pathNameSet.has(window.location.pathname) || !props.isAuth) && (
           <GlobalButton
             icon={
-              <i
-                style={{ marginRight: "10px" }}
-                className="fas fa-sign-in-alt"
-              ></i>
+              // <i
+              //   style={{ marginRight: "10px" }}
+              //   className="fas fa-sign-in-alt"
+              // ></i>
+
+              <AiOutlineLogin
+                style ={{
+                  marginRight : '10px',
+                  // marginTop : '5px'
+                }}
+              />
             }
             text={"  Login"}
-            style={{ width: "100%", marginBottom: "5px" }}
+            style={{ width: "100%", marginBottom: "5px", marginTop : '5px' }}
             color="#5CA3DF"
             borderColor="#5CA3DF"
             backgroundColor="#5CA3DF"
             onClick={() => {
-              navigate("/login")
+              navigate("/login");
             }}
           />
         )}
         {(pathNameSet.has(window.location.pathname) || !props.isAuth) && (
           <GlobalButton
             icon={
-              <i
-                style={{ marginRight: "10px" }}
-                className="fas fa-user-plus"
-              ></i>
+              // <i
+              //   style={{ marginRight: "10px" }}
+              //   className="fas fa-user-plus"
+              // ></i>
+              <BsPersonPlus
+                style = {{
+                  marginRight : '10px'
+                }}
+              />
             }
             text={"  Sign up"}
             style={{ width: "100%" }}
             onClick={() => {
-              navigate("/signup")
+              navigate("/signup");
             }}
           />
         )}

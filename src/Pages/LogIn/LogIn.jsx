@@ -7,14 +7,15 @@ import { IoArrowRedo } from "react-icons/io5";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import GlobalButton from "../../component/GlobalButton/GlobalButton";
+const MiniLoader = lazy(() => import("../../component/MiniLoader/MiniLoader"));
 
 const LottiAnimation = lazy(() => import("../lottiAnimation"));
 const Logo = lazy(() => import("../../component/logo/logo"));
 
-const LogIn = ({ hideLeftNavbar , login }) => {
-  
+const LogIn = ({ hideLeftNavbar, login }) => {
   const formEmailRef = useRef("");
   const formPasswordRef = useRef("");
+  const miniLoaderRef = useRef();
 
   const emailOnchangeHandler = (e) => {
     e.preventDefault();
@@ -73,9 +74,18 @@ const LogIn = ({ hideLeftNavbar , login }) => {
       return;
     }
 
-    const response = await login({email , password});
+    miniLoaderRef &&
+      miniLoaderRef.current &&
+      miniLoaderRef.current.fadeIn &&
+      miniLoaderRef.current.fadeIn();
 
-    if(response && response.error){
+    const response = await login({ email, password });
+
+    if (response && response.error) {
+      miniLoaderRef &&
+        miniLoaderRef.current &&
+        miniLoaderRef.current.fadeOut &&
+        miniLoaderRef.current.fadeOut();
       toast.error(response.error, {
         position: "bottom-right",
         autoClose: 5000,
@@ -172,7 +182,6 @@ const LogIn = ({ hideLeftNavbar , login }) => {
   const rightDivRef = useRef();
 
   const observer = new IntersectionObserver(([entry]) => {
-
     rightDivRef.current.style.opacity = "1";
     rightDivRef.current.style.transform = "translate(0,0) scale(1)";
   });
@@ -191,6 +200,7 @@ const LogIn = ({ hideLeftNavbar , login }) => {
 
   return (
     <div style={{ width: "100%", minHeight: "100vh" }}>
+      <MiniLoader ref={miniLoaderRef} />
       <ToastContainer
         position="bottom-right"
         autoClose={5000}
@@ -207,6 +217,11 @@ const LogIn = ({ hideLeftNavbar , login }) => {
         <div ref={leftDivRef} className="loginPage-background-image-div">
           <Suspense fallback={<></>}>
             <LottiAnimation
+              height="calc(100vh - 60px)"
+              // width = '100%'
+              // style = {{
+              // height : '100%'
+              // }}
               lotti={LoginPageLotti}
               className="loginPage-background-image"
             />
@@ -226,7 +241,7 @@ const LogIn = ({ hideLeftNavbar , login }) => {
           <div
             style={{
               borderRadius: "0 50px 50px 0",
-              height: "10px",
+              height: "5px",
               backgroundColor: "cyan",
               marginLeft: "0",
               width: "90%",
@@ -262,9 +277,9 @@ const LogIn = ({ hideLeftNavbar , login }) => {
                 backgroundColor="cyan"
                 style={{
                   width: "276px",
+                  marginBottom : '12px'
                 }}
               />
-              <br />
             </form>
             <br />
             <br />

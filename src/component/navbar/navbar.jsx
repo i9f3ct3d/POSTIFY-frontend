@@ -425,12 +425,12 @@ const Navbar = ({ showLeftNavbar, hideLeftNavbar, isAuth , user }) => {
 
 
                             <GlobalButton
-                                icon={
-                                    <i
-                                        style={{ marginRight: "10px" }}
-                                        className="fas fa-user-plus"
-                                    ></i>
-                                }
+                                // icon={
+                                //     <i
+                                //         style={{ marginRight: "10px" }}
+                                //         className="fas fa-user-plus"
+                                //     ></i>
+                                // }
                                 text={"  Sign up"}
                                 style={{ marginRight: "10px" }}
                                 onClick={() => {
@@ -442,12 +442,12 @@ const Navbar = ({ showLeftNavbar, hideLeftNavbar, isAuth , user }) => {
 
 
                             <GlobalButton
-                                icon={
-                                    <i
-                                        style={{ marginRight: "10px" }}
-                                        className="fas fa-sign-in-alt"
-                                    ></i>
-                                }
+                                // icon={
+                                //     <i
+                                //         style={{ marginRight: "10px" }}
+                                //         className="fas fa-sign-in-alt"
+                                //     ></i>
+                                // }
                                 text={"   Login"}
                                 color="#5CA3DF"
                                 borderColor="#5CA3DF"
