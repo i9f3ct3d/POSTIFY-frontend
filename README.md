@@ -3,9 +3,9 @@
 Positfy is a social media app created using MERN stack. This particular repository is representing the frontend part of Postify that is mainly based on ReactJS.  
 
 # Links
-[Live link](https://postify-sushanta.vercel.app)
-[Link to POSTIFY-backend](https://github.com/i9f3ct3d/POSTIFY-backend)
-[Link to POSTIFY-socket](https://github.com/i9f3ct3d/POSTIFY-socket)
+- [Live link](https://postify-sushanta.vercel.app)
+- [Link to POSTIFY-backend](https://github.com/i9f3ct3d/POSTIFY-backend)
+- [Link to POSTIFY-socket](https://github.com/i9f3ct3d/POSTIFY-socket)
 
 # Features
 
