@@ -29,7 +29,7 @@ Positfy is a social media app created using MERN stack. This particular reposito
 
 ## Working
 
-- This React project is consist of multiple pages. Login and Signup routes are there for handling authentication and storing the auth token as a cookie in your local storage.
+- This React project consists of multiple pages. Login and Signup routes are there for handling authentication and storing the auth token as a cookie in your local storage.
 - If authenticated then you'll get redirected to home route which is the post feed of Postify. There user will get connected to socket to share live status with other users. Users can find out the other online users and get into a live chatting session with them and if any of those users receive a message from other users then they will get notified.
 - If not authenticated user will get redirected to Login page. The authentication is checked in the backend when the frontend sends the user cookie (or token) to the backend where it will get verified using `JWT` and then matched with the hash that is stored in `MongoDB`.
 - While logging out the user cookie gets deleted from the local storage.
